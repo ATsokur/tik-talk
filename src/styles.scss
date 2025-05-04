@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'fonts';
+
+:root {
+  --dark-color: #000000;
+  --light-color: #FFFFFF;
+  --primary-color: #ae7aff;
+  --font-family: "JetBrains Mono", sans-serif;
+  --second-family: "Material Icons", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  font-family: var(--font-family);
+  font-weight: 500;
+}
+
+.skill-tag {
+  display: inline;
+  padding: 4px 8px;
+  border: 1px solid var(--light-color);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  height: 24px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  border: 1px solid var(--dark-color);
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+  color: var(--dark-color);
+}
+
+.h6 {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 133%;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+}
+
