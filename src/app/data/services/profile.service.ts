@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {
+  inject,
+  Injectable,
+} from '@angular/core';
 
 import { Profile } from '../interfaces/profile.interface';
 
