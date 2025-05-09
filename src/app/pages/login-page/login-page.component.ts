@@ -1,7 +1,4 @@
-import {
-  Component,
-  inject,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,9 +8,7 @@ import {
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../auth/auth.service';
-import {
-  isLoginFormValue,
-} from '../../helpers/type-guards/login-form.typeGuard';
+import { isLoginFormValue } from '../../helpers/type-guards/login-form.typeGuard';
 import { LoginForm } from '../interfaces/login-form.interface';
 
 @Component({
@@ -25,6 +20,9 @@ import { LoginForm } from '../interfaces/login-form.interface';
 export class LoginPageComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+
+  isPasswordVisible = signal<boolean>(false);
+
   public form = new FormGroup<LoginForm>({
     username: new FormControl<string>('', {
       validators: Validators.required,

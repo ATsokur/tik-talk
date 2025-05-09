@@ -6,3 +6,35 @@
   margin: 0 5%;
 }
 
+.login-form {
+  width: 440px;
+}
+
+.login-form,
+.big-logo {
+  place-self: center;
+}
+
+.login-input,
+.password-input {
+  position: relative;
+}
+
+.telegram-icon,
+.password-eye-btn {
+  position: absolute;
+  color: var(--light-transparent);
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+}
+
+.password-eye-btn {
+  cursor: pointer;
+}
+
+.password-eye-btn.active {
+  color: var(--primary-color);
+}
