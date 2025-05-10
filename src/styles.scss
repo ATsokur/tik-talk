@@ -7,6 +7,7 @@
   --primary-color: #ae7aff;
   --light-transparent: rgba(255, 255, 255, 0.75);
   --gray-color: #5f646d;
+  --dark-hover-color: #161616;
   --font-family: "JetBrains Mono", sans-serif;
   --second-family: "Material Icons", sans-serif;
 }
@@ -40,7 +41,7 @@ body {
 }
 
 .btn {
-  width: 100%;
+  width: 157px;
   padding: 10px 20px;
   background-color: var(--primary-color);
   border: 1px solid var(--dark-color);
@@ -86,6 +87,12 @@ body {
   line-height: 150%;
 }
 
+.subtitle-semi-bold {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+}
+
 .tt-control-label {
   display: block;
   font-weight: 700;
@@ -106,6 +113,14 @@ body {
   font-weight: 400;
   font-size: 14px;
   line-height: 150%;
+  color: var(--light-transparent);
+}
+
+.medium-text {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 133%;
   color: var(--light-transparent);
 }
 

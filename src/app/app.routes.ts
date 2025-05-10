@@ -14,7 +14,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: '',
+        path: 'search',
         component: SearchPageComponent,
       },
       {
