@@ -3,9 +3,7 @@ import { Routes } from '@angular/router';
 import { canActivateAuth } from './auth/access.guard';
 import { LayoutComponent } from './common-ui/layout/layout.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import {
-  ProfilePageComponent,
-} from './pages/profile-page/profile-page.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 
 export const routes: Routes = [
@@ -18,7 +16,7 @@ export const routes: Routes = [
         component: SearchPageComponent,
       },
       {
-        path: 'profile',
+        path: 'profile/:id',
         component: ProfilePageComponent,
       },
     ],
