@@ -27,7 +27,7 @@ export class ProfileService {
   }
 
   getAccount(id: string) {
-    return this.http.get<Profile>(`${this.baseApiUrl}/account/${id}`);
+    return this.http.get<Profile>(`${this.baseApiUrl}account/${id}`);
   }
 
   getSubscribersShortList(subsAmount = 4) {
@@ -38,5 +38,9 @@ export class ProfileService {
           return res.items.slice(1, subsAmount);
         })
       );
+  }
+
+  patchProfile(profile: Partial<Profile>) {
+    return this.http.patch<Profile>(`${this.baseApiUrl}account/me`, profile);
   }
 }

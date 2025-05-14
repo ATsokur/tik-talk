@@ -5,7 +5,7 @@
   --dark-color: #000000;
   --light-color: #FFFFFF;
   --primary-color: #ae7aff;
-  --light-transparent: rgba(255, 255, 255, 0.75);
+  --light-transparent-color: rgba(255, 255, 255, 0.75);
   --gray-color: #5f646d;
   --dark-hover-color: #161616;
   --font-family: "JetBrains Mono", sans-serif;
@@ -97,7 +97,7 @@ body {
   font-weight: 500;
   font-size: 12px;
   line-height: 133%;
-  color: var(--light-transparent);
+  color: var(--light-transparent-color);
 }
 
 .subtitle-semi-bold {
@@ -126,7 +126,49 @@ body {
   font-weight: 400;
   font-size: 14px;
   line-height: 150%;
-  color: var(--light-transparent);
+  color: var(--light-transparent-color);
 }
 
+.tt-form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tt-form-label__text {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 133%;
+  color: var(--light-transparent-color);
+}
+
+.tt-form-input {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-color);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--light-color);
+  height: 33px;
+
+  &:focus-visible {
+    outline: 1px solid var(--primary-color);
+  }
+
+  &::placeholder {
+    color: var(--light-transparent-color);
+  }
+}
+
+.tt-textarea {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-solid);
+  height: 84px;
+  resize: none;
+}
 
