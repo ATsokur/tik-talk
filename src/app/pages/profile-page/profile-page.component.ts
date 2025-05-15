@@ -30,9 +30,11 @@ export class ProfilePageComponent {
   private readonly route = inject(ActivatedRoute);
   public me$ = toObservable(this.profileService.me);
   public subscribers$ = this.profileService.getSubscribersShortList(7);
+  public routeParamId = '';
 
   profile$ = this.route.params.pipe(
     switchMap(({ id }) => {
+      this.routeParamId = id;
       if (id === 'me') return this.me$;
 
       return this.profileService.getAccount(id);
