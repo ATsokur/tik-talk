@@ -1,11 +1,19 @@
-import { Component, effect, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { firstValueFrom } from 'rxjs';
+import { exhaustMap, firstValueFrom, tap } from 'rxjs';
 
 import { ProfileHeaderComponent } from '../../common-ui/profile-header/profile-header.component';
 import { ProfileService } from '../../data/services/profile.service';
 import { AvatarUploadComponent } from './avatar-upload/avatar-upload.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-page',
@@ -16,6 +24,8 @@ import { AvatarUploadComponent } from './avatar-upload/avatar-upload.component';
 export class SettingsPageComponent {
   private readonly fb = inject(FormBuilder);
   private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
@@ -64,13 +74,18 @@ export class SettingsPageComponent {
     }
 
     //@ts-ignore
-    firstValueFrom(
+    this.profileService
       //@ts-ignore
-      this.profileService.patchProfile({
+      .patchProfile({
         ...this.form.value,
         stack: this.splitStack(this.form.value.stack),
       })
-    );
+      .pipe(
+        exhaustMap(() => this.profileService.getMe()),
+        tap(() => this.router.navigate(['/profile/me'])),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
   }
 
   splitStack(stack: string | null | string[] | undefined): string[] {
