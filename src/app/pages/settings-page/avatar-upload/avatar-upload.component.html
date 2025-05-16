@@ -1,4 +1,6 @@
-<img class="avatar" [src]="preview()" alt="avatar">
+@if (me$ | async) {
+  <img class="avatar" [src]="preview()" alt="avatar">
+}
 
 <div
   dnd
