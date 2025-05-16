@@ -13,6 +13,11 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'profile/me',
+        pathMatch: 'full',
+      },
+      {
         path: 'search',
         component: SearchPageComponent,
       },

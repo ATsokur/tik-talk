@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { SvgIconComponent } from '../../../common-ui/svg-icon/svg-icon.component';
+
 import { DndDirective } from '../../../common-ui/directives/dnd.directive';
+import { SvgIconComponent } from '../../../common-ui/svg-icon/svg-icon.component';
 
 @Component({
   selector: 'app-avatar-upload',
@@ -10,7 +11,6 @@ import { DndDirective } from '../../../common-ui/directives/dnd.directive';
 })
 export class AvatarUploadComponent {
   public preview = signal<string>('/assets/img/avatar-placeholder.png');
-
   avatar: File | null = null;
 
   fileBrowserHandler(event: Event) {

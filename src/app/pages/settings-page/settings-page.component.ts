@@ -1,11 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { firstValueFrom } from 'rxjs';
 
 import { ProfileHeaderComponent } from '../../common-ui/profile-header/profile-header.component';
@@ -31,12 +26,7 @@ export class SettingsPageComponent {
         validators: [Validators.required],
       },
     ],
-    lastName: [
-      '',
-      {
-        validators: [Validators.required],
-      },
-    ],
+    lastName: [''],
     username: [
       {
         value: '',

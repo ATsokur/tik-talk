@@ -1,6 +1,6 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { firstValueFrom } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
     NgForOf,
     AsyncPipe,
     RouterLink,
+    RouterLinkActive,
     SubscriberCardComponent,
     ImgUrlPipe,
   ],

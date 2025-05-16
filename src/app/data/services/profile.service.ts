@@ -13,6 +13,7 @@ export class ProfileService {
   private readonly http = inject(HttpClient);
   private readonly baseApiUrl: string = 'https://icherniakov.ru/yt-course/';
   public me = signal<Profile | null>(null);
+  public filteredProfiles = signal<Profile[]>([]);
 
   constructor() {}
 
@@ -52,5 +53,13 @@ export class ProfileService {
       `${this.baseApiUrl}account/upload_image`,
       fd
     );
+  }
+
+  filterProfiles(params: Record<string, any>) {
+    return this.http
+      .get<Pageble<Profile>>(`${this.baseApiUrl}account/accounts`, {
+        params,
+      })
+      .pipe(tap((res) => this.filteredProfiles.set(res.items)));
   }
 }
