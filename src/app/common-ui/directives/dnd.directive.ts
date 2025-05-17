@@ -8,6 +8,9 @@ import {
 
 @Directive({
   selector: '[dnd]',
+  host: {
+    '(dragover)': 'onDragOver($event)',
+  },
 })
 export class DndDirective {
   @Output() fileDropped = new EventEmitter<File>();
@@ -15,7 +18,10 @@ export class DndDirective {
   @HostBinding('class.fileover')
   fileover: boolean = false;
 
-  @HostListener('dragover', ['$event'])
+  @HostBinding('style.borderStyle') get getborderStyle() {
+    return this.fileover ? 'solid' : 'dashed';
+  }
+
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
