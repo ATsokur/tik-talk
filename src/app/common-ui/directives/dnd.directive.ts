@@ -18,7 +18,7 @@ export class DndDirective {
   @HostBinding('class.fileover')
   fileover: boolean = false;
 
-  @HostBinding('style.borderStyle') get getborderStyle() {
+  @HostBinding('style.borderStyle') get getBorderStyle() {
     return this.fileover ? 'solid' : 'dashed';
   }
 
