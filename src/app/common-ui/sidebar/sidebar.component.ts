@@ -5,7 +5,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { ProfileService } from '../../data/services/profile.service';
-import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
+import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component';
 import { SvgIconComponent } from '../svg-icon/svg-icon.component';
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
 
@@ -18,7 +18,7 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
     RouterLink,
     RouterLinkActive,
     SubscriberCardComponent,
-    ImgUrlPipe,
+    AvatarCircleComponent,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',

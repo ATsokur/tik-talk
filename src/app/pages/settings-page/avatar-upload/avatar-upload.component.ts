@@ -7,10 +7,11 @@ import { tap } from 'rxjs';
 import { DndDirective } from '../../../common-ui/directives/dnd.directive';
 import { SvgIconComponent } from '../../../common-ui/svg-icon/svg-icon.component';
 import { ProfileService } from '../../../data/services/profile.service';
+import { AvatarCircleComponent } from '../../../common-ui/avatar-circle/avatar-circle.component';
 
 @Component({
   selector: 'app-avatar-upload',
-  imports: [SvgIconComponent, DndDirective, AsyncPipe],
+  imports: [SvgIconComponent, DndDirective, AsyncPipe, AvatarCircleComponent],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss',
 })
@@ -21,9 +22,7 @@ export class AvatarUploadComponent {
   public me$ = toObservable(this.profileService.me).pipe(
     tap((profile) => {
       profile?.avatarUrl
-        ? this.preview.set(
-            `https://icherniakov.ru/yt-course/${profile.avatarUrl}`
-          )
+        ? this.preview.set(profile.avatarUrl)
         : this.preview.set('/assets/img/avatar-placeholder.png');
     })
   );

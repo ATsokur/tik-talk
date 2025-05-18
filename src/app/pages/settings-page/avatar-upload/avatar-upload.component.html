@@ -1,5 +1,9 @@
 @if (me$ | async) {
-  <img class="avatar" [src]="preview()" alt="avatar">
+  <app-avatar-circle
+    class="size140"
+    [avatarUrl]="preview()"
+  >
+  </app-avatar-circle>
 }
 
 <div

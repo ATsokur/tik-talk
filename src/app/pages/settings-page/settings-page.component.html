@@ -1,5 +1,10 @@
-<app-profile-header
-></app-profile-header>
+<div class="profile__wrapper">
+  @if (profile(); as profile) {
+  <app-profile-header
+    [profile]="profile"
+  ></app-profile-header>
+}
+</div>
 
 <form
   class="profile-form__wrapper"

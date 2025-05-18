@@ -1,8 +1,11 @@
 @if (profile$ | async; as profile) {
   <header class="profile-page__header">
     <app-profile-header
+      class="profile-me"
+      [routeParamId]="routeParamId"
       [profile]="profile"
-    ></app-profile-header>
+    >
+    </app-profile-header>
 
     @if (routeParamId === 'me') {
       <a class="btn to-settings-btn" [routerLink]="['/settings']">

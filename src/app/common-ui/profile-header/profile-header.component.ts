@@ -1,13 +1,15 @@
-import { Component, input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
+
 import { Profile } from '../../data/interfaces/profile.interface';
-import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
+import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component';
 
 @Component({
   selector: 'app-profile-header',
-  imports: [ImgUrlPipe],
+  imports: [AvatarCircleComponent],
   templateUrl: './profile-header.component.html',
   styleUrl: './profile-header.component.scss',
 })
 export class ProfileHeaderComponent {
+  @Input() routeParamId: string | undefined;
   public profile = input<Profile>();
 }

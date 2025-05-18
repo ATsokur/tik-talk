@@ -1,5 +1,5 @@
-
 .profile-page__header {
+  padding: 24px;
   display: grid;
   grid-template-columns: 1fr 316px;
   align-items: center;
@@ -21,6 +21,7 @@
 }
 
 .profile-page__body {
+  padding: 24px;
   display: grid;
   grid-template-columns: 1fr 340px;
   gap: 64px;
@@ -48,13 +49,11 @@
   }
 }
 
-
 .to-subscribers-search {
   display: grid;
   place-items: center;
   padding: 8px;
 }
-
 
 .to-subscribers-search__btn {
   position: relative;

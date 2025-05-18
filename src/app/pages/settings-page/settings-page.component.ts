@@ -5,15 +5,15 @@ import {
   inject,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { exhaustMap, firstValueFrom, tap } from 'rxjs';
 
 import { ProfileHeaderComponent } from '../../common-ui/profile-header/profile-header.component';
 import { ProfileService } from '../../data/services/profile.service';
 import { AvatarUploadComponent } from './avatar-upload/avatar-upload.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-page',
@@ -26,6 +26,7 @@ export class SettingsPageComponent {
   private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  public profile = this.profileService.me;
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
