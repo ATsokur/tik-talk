@@ -10,7 +10,7 @@
       <strong class="post__author">
         {{ post.author.firstName }} {{ post.author.lastName }}
         <span class="medium-text post-created-at">
-          {{ post.createdAt | date: 'HH:mm dd.MM.YYYY' }}
+          {{ post.createdAt | ttDate }}
         </span>
       </strong>
     </div>
