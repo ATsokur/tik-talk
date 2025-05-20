@@ -1,13 +1,17 @@
-<app-avatar-circle
-  *ngIf="profile() as profile"
-  class="size32"
-  [avatarUrl]="profile.avatarUrl"
->
-</app-avatar-circle>
+<div class="avatar__inner">
+  <app-avatar-circle
+    *ngIf="profile() as profile"
+    class="size32"
+    [avatarUrl]="profile.avatarUrl"
+  >
+  </app-avatar-circle>
+</div>
+
 
 <textarea
+  class="hidden-textarea"
+  [placeholder]="isCommentInput() ? 'Напишите комментарий' : 'Напишите что-нибудь'"
   [(ngModel)]="postText"
-  class="medium-text hidden-textarea"
   (input)="onTextareaInput($event)"
 >
 </textarea>
