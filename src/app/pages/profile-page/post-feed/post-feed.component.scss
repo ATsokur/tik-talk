@@ -4,3 +4,7 @@
   align-content: start;
   overflow-y: scroll;
 }
+
+:host::-webkit-scrollbar {
+  display: none;
+}

@@ -1,12 +1,9 @@
 import {
   Component,
-  inject,
+  EventEmitter,
   input,
-  OnInit,
-  signal,
+  Output,
 } from '@angular/core';
-
-import { firstValueFrom } from 'rxjs';
 
 import {
   AvatarCircleComponent,
@@ -18,10 +15,10 @@ import {
   Post,
   PostComment,
 } from '../../../data/interfaces/post.interface';
-import { PostService } from '../../../data/services/post.service';
+import { TtDatePipe } from '../../../helpers/pipes/tt-date.pipe';
+import { PostInput } from '../post-input/interfaces/post-input.interface';
 import { PostInputComponent } from '../post-input/post-input.component';
 import { CommentComponent } from './comment/comment.component';
-import { TtDatePipe } from '../../../helpers/pipes/tt-date.pipe';
 
 @Component({
   selector: 'app-post',
@@ -35,24 +32,19 @@ import { TtDatePipe } from '../../../helpers/pipes/tt-date.pipe';
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
 })
-export class PostComponent implements OnInit {
-  private readonly postService = inject(PostService);
+export class PostComponent {
   public post = input<Post>();
-  public comments = signal<PostComment[]>([]);
-  public isComment: boolean = false;
+  public comments = input<PostComment[]>([]);
+  public isComments: boolean = false;
+  public inputType: string = 'comment';
+
+  @Output() sended = new EventEmitter<PostInput>()
 
   isCommentInput() {
-    this.isComment = !this.isComment;
+    this.isComments = !this.isComments;
   }
 
-  async onCreated() {
-    const comments = await firstValueFrom(
-      this.postService.getCommentByPostId(this.post()!.id)
-    );
-    this.comments.set(comments);
-  }
-
-  ngOnInit() {
-    this.comments.set(this.post()!.comments);
+  receivePostInput(postInput: PostInput) {
+    this.sended.emit(postInput);
   }
 }

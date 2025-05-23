@@ -10,12 +10,13 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { firstValueFrom } from 'rxjs';
-
-import { AvatarCircleComponent } from '../../../common-ui/avatar-circle/avatar-circle.component';
-import { SvgIconComponent } from '../../../common-ui/svg-icon/svg-icon.component';
-import { PostService } from '../../../data/services/post.service';
-import { ProfileService } from '../../../data/services/profile.service';
+import {
+  AvatarCircleComponent,
+} from '../../../common-ui/avatar-circle/avatar-circle.component';
+import {
+  SvgIconComponent,
+} from '../../../common-ui/svg-icon/svg-icon.component';
+import { PostInput } from './interfaces/post-input.interface';
 
 @Component({
   selector: 'app-post-input',
@@ -25,17 +26,18 @@ import { ProfileService } from '../../../data/services/profile.service';
 })
 export class PostInputComponent {
   private readonly r2 = inject(Renderer2);
-  private readonly postService = inject(PostService);
-  public profile = inject(ProfileService).me;
-  public isCommentInput = input<boolean>(false);
+  public avatarUrl = input<string | null>('');
   public postId = input<number>(0);
-  public postText = '';
 
-  @Output() created = new EventEmitter();
+  public inputType = input<string>('');
+  public inputText = '';
+
+
+  @Output() sended = new EventEmitter<PostInput>();
 
   @HostBinding('class.comment')
   get isComment() {
-    return this.isCommentInput();
+    return this.inputType() === 'comment';
   }
 
   onTextareaInput(event: Event) {
@@ -44,32 +46,12 @@ export class PostInputComponent {
     this.r2.setStyle(textarea, 'height', textarea.scrollHeight + 'px');
   }
 
-  onCreatePost() {
-    if (!this.postText) return;
-
-    if (this.isCommentInput()) {
-      firstValueFrom(
-        this.postService.createComment({
-          text: this.postText,
-          authorId: this.profile()!.id,
-          postId: this.postId(),
-        })
-      ).then(() => {
-        this.postText = '';
-        this.created.emit();
-      });
-      return;
-    }
-
-    firstValueFrom(
-      this.postService.createPost({
-        title: 'Клевый пост',
-        content: this.postText,
-        authorId: this.profile()!.id,
-        communityId: 0,
-      })
-    ).then(() => {
-      this.postText = '';
-    });
+  onSend() {
+    this.sended.emit({
+      type: this.inputType(),
+      text: this.inputText,
+      id: this.postId()
+    })
+    this.inputText = '';
   }
 }

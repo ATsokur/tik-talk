@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    @if (isComment) {
+    @if (isComments) {
       <div class="post__comments-wrapper">
         @for (comment of comments(); track comment.id) {
           <app-comment
@@ -38,9 +38,10 @@
       </div>
 
       <app-post-input
-        (created)="onCreated()"
         class="tt-block"
-        [isCommentInput]="true"
+        (sended)="receivePostInput($event)"
+        [avatarUrl]="post.author.avatarUrl"
+        [inputType]="inputType"
         [postId]="post.id"
       >
       </app-post-input>
