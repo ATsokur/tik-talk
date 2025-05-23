@@ -2,24 +2,23 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
   inject,
   Renderer2,
   signal,
 } from '@angular/core';
 
 import {
-  debounceTime,
+  auditTime,
   firstValueFrom,
   fromEvent,
 } from 'rxjs';
 
+import { PostComment } from '../../../data/interfaces/post.interface';
 import { PostService } from '../../../data/services/post.service';
-import { PostInputComponent } from '../post-input/post-input.component';
-import { PostComponent } from '../post/post.component';
 import { ProfileService } from '../../../data/services/profile.service';
 import { PostInput } from '../post-input/interfaces/post-input.interface';
-import { PostComment } from '../../../data/interfaces/post.interface';
+import { PostInputComponent } from '../post-input/post-input.component';
+import { PostComponent } from '../post/post.component';
 
 @Component({
   selector: 'app-post-feed',
@@ -36,11 +35,6 @@ export class PostFeedComponent implements AfterViewInit {
   public feed = this.postService.posts;
   public inputType: string = 'post';
 
-
-  @HostListener('window:resize')
-  onWindowResize() {
-    this.resizeFeed();
-  }
 
   constructor() {
     firstValueFrom(this.postService.fetchPosts());
@@ -99,7 +93,11 @@ export class PostFeedComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.resizeFeed();
     fromEvent(window, 'resize')
-      .pipe(debounceTime(300))
-      .subscribe();
+      .pipe(
+        auditTime(300)
+      )
+      .subscribe(
+        () => this.resizeFeed()
+      );
   }
 }
