@@ -10,13 +10,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import {
-  AvatarCircleComponent,
-} from '../../../common-ui/avatar-circle/avatar-circle.component';
-import {
-  SvgIconComponent,
-} from '../../../common-ui/svg-icon/svg-icon.component';
-import { PostInput } from './interfaces/post-input.interface';
+import { AvatarCircleComponent } from '../../../common-ui/avatar-circle/avatar-circle.component';
+import { SvgIconComponent } from '../../../common-ui/svg-icon/svg-icon.component';
 
 @Component({
   selector: 'app-post-input',
@@ -27,13 +22,11 @@ import { PostInput } from './interfaces/post-input.interface';
 export class PostInputComponent {
   private readonly r2 = inject(Renderer2);
   public avatarUrl = input<string | null>('');
-  public postId = input<number>(0);
 
   public inputType = input<string>('');
   public inputText = '';
 
-
-  @Output() sended = new EventEmitter<PostInput>();
+  @Output() sended = new EventEmitter<string>();
 
   @HostBinding('class.comment')
   get isComment() {
@@ -47,11 +40,7 @@ export class PostInputComponent {
   }
 
   onSend() {
-    this.sended.emit({
-      type: this.inputType(),
-      text: this.inputText,
-      id: this.postId()
-    })
+    this.sended.emit(this.inputText);
     this.inputText = '';
   }
 }

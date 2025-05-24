@@ -39,10 +39,9 @@
 
       <app-post-input
         class="tt-block"
-        (sended)="receivePostInput($event)"
+        (sended)="getCommentText($event)"
         [avatarUrl]="post.author.avatarUrl"
         [inputType]="inputType"
-        [postId]="post.id"
       >
       </app-post-input>
     }

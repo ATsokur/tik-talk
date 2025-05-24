@@ -7,16 +7,11 @@ import {
   signal,
 } from '@angular/core';
 
-import {
-  auditTime,
-  firstValueFrom,
-  fromEvent,
-} from 'rxjs';
+import { auditTime, firstValueFrom, fromEvent } from 'rxjs';
 
 import { PostComment } from '../../../data/interfaces/post.interface';
 import { PostService } from '../../../data/services/post.service';
 import { ProfileService } from '../../../data/services/profile.service';
-import { PostInput } from '../post-input/interfaces/post-input.interface';
 import { PostInputComponent } from '../post-input/post-input.component';
 import { PostComponent } from '../post/post.component';
 
@@ -31,10 +26,9 @@ export class PostFeedComponent implements AfterViewInit {
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
   public profile = inject(ProfileService).me;
-  public comments = signal<PostComment[]>([])
+  public comments = signal<PostComment[]>([]);
   public feed = this.postService.posts;
   public inputType: string = 'post';
-
 
   constructor() {
     firstValueFrom(this.postService.fetchPosts());
@@ -46,16 +40,8 @@ export class PostFeedComponent implements AfterViewInit {
     this.r2.setStyle(this.hostElement.nativeElement, 'height', `${height}px`);
   }
 
-  receivePostInput(postInput: PostInput) {
-    if (postInput.type === 'post') {
-      this.onCreatePost(postInput.text);
-    }
-
-    if (postInput.type === 'comment') {
-      console.log('post-feed создал коммент');
-      this.onCreateComment(postInput.text, postInput.id)
-        ?.then(() => firstValueFrom(this.postService.fetchPosts()));
-    }
+  getPostText(postText: string) {
+    this.onCreatePost(postText);
   }
 
   onCreatePost(postText: string) {
@@ -68,36 +54,13 @@ export class PostFeedComponent implements AfterViewInit {
         authorId: this.profile()!.id,
         communityId: 0,
       })
-    )
-  }
-
-  onCreateComment(commentText: string, postId: number) {
-    if (!commentText) return;
-
-    return firstValueFrom(
-      this.postService.createComment({
-        text: commentText,
-        authorId: this.profile()!.id,
-        postId: postId,
-      })
-    )
-  }
-
-  async getComments(postId: number) {
-    const comments = await firstValueFrom(
-      this.postService.getCommentByPostId(postId)
     );
-    this.comments.set(comments);
   }
 
   ngAfterViewInit(): void {
     this.resizeFeed();
     fromEvent(window, 'resize')
-      .pipe(
-        auditTime(300)
-      )
-      .subscribe(
-        () => this.resizeFeed()
-      );
+      .pipe(auditTime(300))
+      .subscribe(() => this.resizeFeed());
   }
 }

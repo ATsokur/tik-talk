@@ -3,7 +3,7 @@
     class="tt-block"
     [avatarUrl]="profile.avatarUrl"
     [inputType]="inputType"
-    (sended)="receivePostInput($event)"
+    (sended)="getPostText($event)"
   >
   </app-post-input>
 }
@@ -12,9 +12,7 @@
 @for (post of feed(); track post.id) {
   <app-post
     class="tt-block"
-    [comments]="post.comments"
     [post]="post"
-    (sended)="receivePostInput($event)"
   >
   </app-post>
 }
