@@ -10,7 +10,7 @@ interface TimeNames {
   name: 'ttDate',
 })
 export class TtDatePipe implements PipeTransform {
-  transform(date: string): string | null {
+  transform(date: string | null): string | null {
     if (!date) return null;
 
     const minInHour = 60;
