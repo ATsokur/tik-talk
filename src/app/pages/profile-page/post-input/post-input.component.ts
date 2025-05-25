@@ -40,6 +40,8 @@ export class PostInputComponent {
   }
 
   onSend() {
+    if (!this.inputText) return;
+
     this.sended.emit(this.inputText);
     this.inputText = '';
   }

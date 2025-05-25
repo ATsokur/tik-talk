@@ -40,8 +40,6 @@ export class PostComponent implements OnInit {
   }
 
   onCreateComment(commentText: string) {
-    if (!commentText) return;
-
     return firstValueFrom(
       this.postService.createComment({
         text: commentText,

@@ -45,8 +45,6 @@ export class PostFeedComponent implements AfterViewInit {
   }
 
   onCreatePost(postText: string) {
-    if (!postText) return;
-
     firstValueFrom(
       this.postService.createPost({
         title: 'Клевый пост',
