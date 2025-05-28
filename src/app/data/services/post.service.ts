@@ -7,18 +7,18 @@ import {
   PostCreateDto,
 } from '../interfaces/post.interface';
 import { map, switchMap, tap } from 'rxjs';
+import { BASE_API_URL } from '../../consts';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
   #http = inject(HttpClient);
-  private readonly baseApiUrl: string = 'https://icherniakov.ru/yt-course/';
 
   posts = signal<Post[]>([]);
 
   createPost(payload: PostCreateDto) {
-    return this.#http.post<Post>(`${this.baseApiUrl}post/`, payload).pipe(
+    return this.#http.post<Post>(`${BASE_API_URL}post/`, payload).pipe(
       switchMap(() => {
         return this.fetchPosts();
       })
@@ -27,17 +27,17 @@ export class PostService {
 
   fetchPosts() {
     return this.#http
-      .get<Post[]>(`${this.baseApiUrl}post/`)
+      .get<Post[]>(`${BASE_API_URL}post/`)
       .pipe(tap((res) => this.posts.set(res)));
   }
 
   createComment(payload: CommentCreateDto) {
-    return this.#http.post<PostComment>(`${this.baseApiUrl}comment/`, payload);
+    return this.#http.post<PostComment>(`${BASE_API_URL}comment/`, payload);
   }
 
   getCommentByPostId(postId: number) {
     return this.#http
-      .get<Post>(`${this.baseApiUrl}post/${postId}`)
+      .get<Post>(`${BASE_API_URL}post/${postId}`)
       .pipe(map((res) => res.comments));
   }
 }

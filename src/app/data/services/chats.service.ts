@@ -9,6 +9,7 @@ import {
   Message,
 } from '../interfaces/chats.interface';
 import { ProfileService } from './profile.service';
+import { BASE_API_URL } from '../../consts';
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +18,8 @@ export class ChatsService {
   private readonly http = inject(HttpClient);
   private readonly me = inject(ProfileService).me;
 
-  private readonly baseApiUrl: string = 'https://icherniakov.ru/yt-course/';
-  private readonly chatsUrl: string = `${this.baseApiUrl}chat/`;
-  private readonly messageUrl: string = `${this.baseApiUrl}message/`;
+  private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
+  private readonly messageUrl: string = `${BASE_API_URL}message/`;
 
   public activeChatMessages = signal<Message[]>([]);
 
