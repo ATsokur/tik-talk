@@ -7,7 +7,9 @@
   --primary-color: #ae7aff;
   --light-transparent-color: rgba(255, 255, 255, 0.75);
   --gray-color: #5f646d;
-  --dark-hover-color: #161616;
+  --dark-active-color: #161616;
+  --dark-message-color: #404040;
+  --light-border: 1px solid var(--light-color);
   --font-family: "JetBrains Mono", sans-serif;
   --second-family: "Material Icons", sans-serif;
 }
@@ -192,4 +194,6 @@ body {
   background: var(--dark-color);
   border: 1px solid var(--light-color);
 }
+
+
 

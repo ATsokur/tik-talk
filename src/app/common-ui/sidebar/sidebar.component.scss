@@ -29,7 +29,7 @@
   &.active,
   &:hover,
   &:focus-visible {
-    background: var(--dark-hover-color);
+    background: var(--dark-active-color);
     color: var(--primary-color);
 
     .menu-item svg {
@@ -64,7 +64,7 @@
   position: absolute;
   bottom: 20px;
   width: calc(100% - 20px);
-  background: var(--dark-hover-color);
+  background: var(--dark-active-color);
   border-radius: 2px;
   padding: 4px 16px;
   display: grid;

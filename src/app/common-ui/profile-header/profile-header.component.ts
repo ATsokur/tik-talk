@@ -10,6 +10,6 @@ import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component'
   styleUrl: './profile-header.component.scss',
 })
 export class ProfileHeaderComponent {
-  @Input() routeParamId: string | undefined;
+  public isMyPage = input<boolean>();
   public profile = input<Profile>();
 }

@@ -1,0 +1,36 @@
+:host {
+  display: grid;
+  grid-template-columns: 32px 1fr 96px;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 2px;
+}
+
+.avatar__inner {
+  height: 44px;
+  align-self: start;
+  display: flex;
+  align-items: center;
+}
+
+.hidden-textarea {
+  resize: none;
+  background: var(--dark-color);
+  border: none;
+  height: 21px;
+  align-self: center;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-color);
+
+  &:hover,
+  &:focus-visible {
+    outline: 1px solid var(--primary-color);
+  }
+
+  &::placeholder {
+    color: var(--light-transparent-color);
+  }
+}

@@ -1,6 +1,6 @@
 @if (profile(); as profile) {
   <app-avatar-circle
-    [class]="routeParamId === 'me' ? 'size140' : ''"
+    [class]="isMyPage() ? 'size140' : 'size112'"
     [avatarUrl]="profile.avatarUrl"
   >
   </app-avatar-circle>

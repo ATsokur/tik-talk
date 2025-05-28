@@ -1,7 +1,7 @@
 <div class="avatar__inner">
   <app-avatar-circle
-    *ngIf="avatarUrl() as avatarUrl"
-    [avatarUrl]="avatarUrl"
+    *ngIf="me() as me"
+    [avatarUrl]="me.avatarUrl"
   >
   </app-avatar-circle>
 </div>
