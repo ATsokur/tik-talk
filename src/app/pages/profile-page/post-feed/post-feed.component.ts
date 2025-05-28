@@ -3,11 +3,12 @@ import {
   Component,
   ElementRef,
   inject,
+  OnDestroy,
   Renderer2,
   signal,
 } from '@angular/core';
 
-import { auditTime, firstValueFrom, fromEvent } from 'rxjs';
+import { auditTime, firstValueFrom, fromEvent, Subscription } from 'rxjs';
 
 import { PostComment } from '../../../data/interfaces/post.interface';
 import { PostService } from '../../../data/services/post.service';
@@ -21,10 +22,11 @@ import { PostComponent } from '../post/post.component';
   templateUrl: './post-feed.component.html',
   styleUrl: './post-feed.component.scss',
 })
-export class PostFeedComponent implements AfterViewInit {
+export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly postService = inject(PostService);
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
+  private subscription!: Subscription;
   public profile = inject(ProfileService).me;
   public comments = signal<PostComment[]>([]);
   public feed = this.postService.posts;
@@ -57,8 +59,12 @@ export class PostFeedComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.resizeFeed();
-    fromEvent(window, 'resize')
+    this.subscription = fromEvent(window, 'resize')
       .pipe(auditTime(300))
       .subscribe(() => this.resizeFeed());
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
