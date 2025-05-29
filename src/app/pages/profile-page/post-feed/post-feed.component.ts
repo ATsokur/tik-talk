@@ -26,7 +26,7 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly postService = inject(PostService);
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
-  private subscription!: Subscription;
+  private resizeSubscription!: Subscription;
   public profile = inject(ProfileService).me;
   public comments = signal<PostComment[]>([]);
   public feed = this.postService.posts;
@@ -59,12 +59,12 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.resizeFeed();
-    this.subscription = fromEvent(window, 'resize')
+    this.resizeSubscription = fromEvent(window, 'resize')
       .pipe(auditTime(300))
       .subscribe(() => this.resizeFeed());
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.resizeSubscription.unsubscribe();
   }
 }

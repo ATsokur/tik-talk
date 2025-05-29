@@ -25,7 +25,7 @@ export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   private readonly chatsService = inject(ChatsService);
   private readonly r2 = inject(Renderer2);
   private readonly hostElement = inject(ElementRef);
-  private subscription!: Subscription;
+  private resizeSubscription!: Subscription;
   public chat = input.required<Chat>();
   public messages = this.chatsService.activeChatMessages;
 
@@ -44,12 +44,12 @@ export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.resizeMessageWrapper();
-    this.subscription = fromEvent(window, 'resize')
+    this.resizeSubscription = fromEvent(window, 'resize')
       .pipe(auditTime(300))
       .subscribe(() => this.resizeMessageWrapper());
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.resizeSubscription.unsubscribe();
   }
 }
