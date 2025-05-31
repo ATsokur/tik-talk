@@ -33,4 +33,8 @@
   &::placeholder {
     color: var(--light-transparent-color);
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
