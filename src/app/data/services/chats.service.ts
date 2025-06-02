@@ -10,6 +10,7 @@ import {
 } from '../interfaces/chats.interface';
 import { ProfileService } from './profile.service';
 import { BASE_API_URL } from '../../consts';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class ChatsService {
   private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
   private readonly messageUrl: string = `${BASE_API_URL}message/`;
 
-  public activeChatMessages = signal<Message[]>([]);
+  public activeChatMessages = signal<Message[][]>([]);
 
   createChat(userId: number) {
     return this.http.post<Chat>(`${this.chatsUrl}${userId}`, {});
@@ -46,7 +47,36 @@ export class ChatsService {
             isMine: message.userFromId === this.me()!.id,
           };
         });
-        this.activeChatMessages.set(patchedMessages);
+
+        const groupMessagesByDay = (messages: Message[]): Message[][] => {
+          if (!messages.length) return [];
+
+          const messagesGroupedByDay: Message[][] = [];
+          let messagesGrouped: Message[] = [];
+
+          let messageDay = DateTime.fromISO(messages[0].createdAt).day;
+          let currentMessageDay;
+
+          for (let i = 0; i < messages.length; i++) {
+            currentMessageDay = DateTime.fromISO(messages[i].createdAt).day;
+
+            if (messageDay === currentMessageDay) {
+              messagesGrouped.push(messages[i]);
+            } else {
+              messagesGroupedByDay.push(messagesGrouped);
+              messagesGrouped = [];
+              messagesGrouped.push(messages[i]);
+              messageDay = DateTime.fromISO(messages[i].createdAt).day;
+            }
+          }
+
+          messagesGroupedByDay.push(messagesGrouped);
+
+          return messagesGroupedByDay;
+        };
+
+        this.activeChatMessages.set(groupMessagesByDay(patchedMessages));
+
         return {
           ...chat,
           companion:
