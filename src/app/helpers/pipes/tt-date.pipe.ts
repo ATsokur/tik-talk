@@ -1,4 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DateTime } from 'luxon';
+import { timeNames } from '../../consts';
 
 interface TimeNames {
   pack1: string[];
@@ -10,10 +12,30 @@ interface TimeNames {
   name: 'ttDate',
 })
 export class TtDatePipe implements PipeTransform {
-  transform(date: string | null): string | null {
+  transform(
+    date: string | null,
+    intervalDay?: boolean,
+    hours?: boolean,
+    minutes?: boolean
+  ): string | null {
     if (!date) return null;
 
-    const minInHour = 60;
+    const timeInMin = {
+      hour: 60,
+    };
+    const dateToday = DateTime.local();
+    const dateFromISO = DateTime.fromISO(date);
+    const dateWithTimeZone = DateTime.fromISO(date, { zone: 'utc' }).setZone(
+      dateToday.zone
+    );
+
+    if (hours && minutes) {
+      if (dateFromISO.minute < 10) {
+        return `${dateWithTimeZone.hour}:0${dateWithTimeZone.minute}`;
+      }
+      return `${dateWithTimeZone.hour}:${dateWithTimeZone.minute}`;
+    }
+
     const hourInDay = 24;
     const timeInMs = {
       sec: 1000,
@@ -22,13 +44,7 @@ export class TtDatePipe implements PipeTransform {
       day: 86_400_000,
     };
 
-    const timeNames = {
-      pack1: ['минуту', 'час', 'день'],
-      pack2: ['минуты', 'часа', 'дня'],
-      pack3: ['минут', 'часов', 'дней'],
-    };
-    let offset = new Date().getTimezoneOffset();
-    let passMs = Date.now() - Date.parse(date) + offset * timeInMs.min;
+    let passMs = DateTime.local().toMillis() - dateWithTimeZone.toMillis();
 
     const someNumber = (arr: number[], num: number) =>
       arr.some((el) => el === num);
@@ -53,17 +69,52 @@ export class TtDatePipe implements PipeTransform {
       }
     };
 
+    if (intervalDay) {
+      const monthsPack = [
+        'января',
+        'февраля',
+        'марта',
+        'апреля',
+        'мая',
+        'июня',
+        'июля',
+        'августа',
+        'сентября',
+        'октября',
+        'ноября',
+        'декабря',
+      ];
+      const whenItWas = ['Сегодня', 'Вечера'];
+      const dayOfMonth = dateFromISO.day;
+      const dayOfWeek = dateWithTimeZone.day;
+      const currentDayOfWeek = dateToday.day;
+      const monthForPack = dateWithTimeZone.month - 1;
+
+      if (passMs <= timeInMs.day && currentDayOfWeek === dayOfWeek) {
+        return whenItWas[0];
+      } else if (
+        passMs <= timeInMs.day &&
+        (currentDayOfWeek - dayOfWeek <= 1 ||
+          Math.abs(currentDayOfWeek - dayOfWeek) === 6)
+      ) {
+        return whenItWas[1];
+      } else {
+        return `${dayOfMonth} ${monthsPack[monthForPack]}`;
+      }
+    }
+
+    const passMin = Math.round(passMs / timeInMs.min);
+    const passHour = Math.round(passMs / timeInMs.hour);
+    const passDay = Math.round(passMs / timeInMs.day);
+
     if (passMs < timeInMs.min) {
       return 'меньше минуты назад';
-    } else if (Math.round(passMs / timeInMs.min) < minInHour) {
-      passMs = Math.round(passMs / timeInMs.min);
-      return `${passMs} ${correctTimeName(passMs, timeNames)[0]} назад`;
-    } else if (Math.round(passMs / timeInMs.hour) < hourInDay) {
-      passMs = Math.round(passMs / timeInMs.hour);
-      return `${passMs} ${correctTimeName(passMs, timeNames)[1]} назад`;
+    } else if (passMin < timeInMin.hour) {
+      return `${passMin} ${correctTimeName(passMin, timeNames)[1]} назад`;
+    } else if (passHour < hourInDay) {
+      return `${passHour} ${correctTimeName(passHour, timeNames)[2]} назад`;
     } else {
-      passMs = Math.round(passMs / timeInMs.day);
-      return `${passMs} ${correctTimeName(passMs, timeNames)[2]} назад`;
+      return `${passDay} ${correctTimeName(passDay, timeNames)[3]} назад`;
     }
   }
 }
