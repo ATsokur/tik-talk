@@ -9,12 +9,28 @@
   display: grid;
   gap: 12px 0;
   align-self: start;
-  overflow-y: scroll;
-  height: calc(100% - 16px - 16px);
+  overflow-y: auto;
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.messages-date {
+  padding: 0 30px;
+  border-radius: 1px;
+  justify-self: center;
+  display: grid;
+  align-items: center;
+  background-color: var(--dark-active-color);
+  width: max-content;
+  height: 29px;
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 133%;
+  color: var(--light-color);
 }
 
 .message-input {

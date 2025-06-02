@@ -6,28 +6,60 @@ import {
   input,
   OnDestroy,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { auditTime, firstValueFrom, fromEvent, Subscription } from 'rxjs';
+import {
+  auditTime,
+  firstValueFrom,
+  fromEvent,
+  skip,
+  Subscription,
+  switchMap,
+  timer,
+} from 'rxjs';
 
 import { MessageInputComponent } from '../../../../common-ui/message-input/message-input.component';
 import { Chat } from '../../../../data/interfaces/chats.interface';
 import { ChatsService } from '../../../../data/services/chats.service';
+import { TtDatePipe } from '../../../../helpers/pipes/tt-date.pipe';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 @Component({
   selector: 'app-chat-messages-wrapper',
-  imports: [ChatMessageComponent, MessageInputComponent],
+  imports: [ChatMessageComponent, MessageInputComponent, TtDatePipe],
   templateUrl: './chat-messages-wrapper.component.html',
   styleUrl: './chat-messages-wrapper.component.scss',
 })
 export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   private readonly chatsService = inject(ChatsService);
   private readonly r2 = inject(Renderer2);
-  private readonly hostElement = inject(ElementRef);
   private resizeSubscription!: Subscription;
   public chat = input.required<Chat>();
-  public messages = this.chatsService.activeChatMessages;
+  public messagesGroupedByDay = this.chatsService.activeChatMessages;
+
+  @ViewChild('messagesWrapper')
+  messagesWrapperElement!: ElementRef<HTMLDivElement>;
+
+  constructor() {
+    timer(0, 300000)
+      .pipe(
+        skip(1),
+        switchMap(() => {
+          return this.chatsService.getChatById(this.chat().id);
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
+  }
+
+  onScrollDown() {
+    this.messagesWrapperElement.nativeElement.scrollTo(
+      0,
+      this.messagesWrapperElement.nativeElement.scrollHeight
+    );
+  }
 
   async onSendMessage(messageText: string) {
     await firstValueFrom(
@@ -37,9 +69,14 @@ export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   }
 
   resizeMessageWrapper() {
-    const { top } = this.hostElement.nativeElement.getBoundingClientRect();
-    const height = window.innerHeight - top - 12 - 12;
-    this.r2.setStyle(this.hostElement.nativeElement, 'height', `${height}px`);
+    const { top } =
+      this.messagesWrapperElement.nativeElement.getBoundingClientRect();
+    const height = window.innerHeight - top - 70 - 70;
+    this.r2.setStyle(
+      this.messagesWrapperElement.nativeElement,
+      'max-height',
+      `${height}px`
+    );
   }
 
   ngAfterViewInit(): void {
@@ -47,9 +84,11 @@ export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
     this.resizeSubscription = fromEvent(window, 'resize')
       .pipe(auditTime(300))
       .subscribe(() => this.resizeMessageWrapper());
+    this.onScrollDown();
   }
 
   ngOnDestroy(): void {
     this.resizeSubscription.unsubscribe();
+    console.log('destroy');
   }
 }
