@@ -44,6 +44,11 @@ export class SidebarComponent implements OnInit {
       icon: 'search',
       link: 'search',
     },
+    {
+      label: 'Experimental',
+      icon: '',
+      link: 'experimental',
+    },
   ];
 
   ngOnInit(): void {

@@ -1,0 +1,116 @@
+<form class="technical-service__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h4 class="h4">Запрос на техническое обслуживание</h4>
+
+  <div class="personal-data__wrapper">
+    <h6 class="h6">Данные инициатора обращения</h6>
+
+    <span class="technical-service__subtitle">Сотрудник:</span>
+    <label class="technical-service__label">
+      <input
+        class="technical-service__input"
+        type="text"
+        list="employees"
+        placeholder="Введите ФИО сотрудника"
+        formControlName="employee"
+      >
+      <datalist id="employees">
+        @for (employeeFullName of employeesFullNames(); track $index) {
+          <option [value]="employeeFullName">
+        }
+      </datalist>
+
+      @if (this.form.controls.employee.touched && this.form.controls.employee.hasError('required')) {
+        <div class="error-message mt8">Это поле обязательно</div>
+      }
+    </label>
+
+    <span class="technical-service__subtitle">Контактный номер:</span>
+    <label class="technical-service__label">
+      <input
+        class="technical-service__input"
+        type="tel"
+        placeholder="Введите контактный номер"
+        formControlName="phoneNumber"
+      >
+      @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('required')) {
+        <div class="error-message mt8">Это поле обязательно</div>
+      }
+      @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('minlength')) {
+        <div class="error-message mt8">Минимум 11 цифр</div>
+      }
+
+      @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('maxlength')) {
+        <div class="error-message mt8">Максимум 11 цифр</div>
+      }
+    </label>
+
+    <span class="technical-service__subtitle">Email:</span>
+    <label class="technical-service__label">
+      <input
+        class="technical-service__input"
+        type="email"
+        formControlName="email"
+        [placeholder]="emailPlaceholder"
+      >
+    </label>
+    @if (this.form.controls.email.touched && this.form.controls.email.hasError('required')) {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
+  </div>
+
+
+  <label class="technical-service__label">
+    <h6 class="technical-service__subtitle mb8 h6">Наименование отдела</h6>
+    <select class="technical-service__select" formControlName="department">
+      @for (department of departments(); track $index) {
+        @if ($first) {
+          <option class="technical-service__option" selected disabled [value]="department.value">{{department.name}}</option>
+        } @else {
+          <option class="technical-service__option" [selected]="department.value === null ? department.name : ''" [value]="department.value">{{department.name}}</option>
+        }
+      }
+    </select>
+    @if (this.form.controls.department.touched && this.form.controls.department.value === null) {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
+  </label>
+
+  <label class="technical-service__label">
+    <h6 class="technical-service__subtitle mb8 h6">Описание запроса</h6>
+    <textarea
+      class="technical-service__input technical-service__textarea"
+      rows="6"
+      formControlName="requestDescription"
+    >
+    </textarea>
+    @if (this.form.controls.requestDescription.touched && this.form.controls.requestDescription.hasError('required')) {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
+  </label>
+
+  <label class="technical-service__label">
+    <h6 class="technical-service__subtitle mb8 h6">Услуга</h6>
+    <select class="technical-service__select" formControlName="services">
+      @for (serviceName of servicesName(); track $index) {
+        <option class="technical-service__option" [selected]="serviceName === '--Выберете услугу--' ? serviceName : ''" [value]="serviceName">{{serviceName}}</option>
+      }
+    </select>
+    @if (this.form.controls.services.touched && this.form.controls.services.value === '--Выберете услугу--') {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
+  </label>
+
+  <label class="technical-service__label">
+    <h6 class="technical-service__subtitle mb8 h6">Состав услуги</h6>
+    <select class="technical-service__select" formControlName="compoundServices">
+      @for (compoundService of compoundServices(); track $index) {
+        <option class="technical-service__option" [selected]="compoundService === '--Выберете состав услуги--' ? compoundService : ''" [value]="compoundService">{{compoundService}}</option>
+      }
+    </select>
+    @if (this.form.controls.compoundServices.touched && this.form.controls.compoundServices.value === '--Выберете состав услуги--') {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
+  </label>
+
+  <button class="technical-service__btn" type="submit">Зарегистрировать</button>
+</form>

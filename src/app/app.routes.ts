@@ -7,6 +7,9 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
+import { ExperimentalLayoutComponent } from './experimental/components/experimental-layout/experimental-layout.component';
+import { FormExperimentalComponent } from './experimental/components/form-experimental/form-experimental.component';
+import { HomeTaskFormComponent } from './experimental/components/home-task-form/home-task-form.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +36,20 @@ export const routes: Routes = [
       {
         path: 'settings',
         component: SettingsPageComponent,
+      },
+      {
+        path: 'experimental',
+        component: ExperimentalLayoutComponent,
+        children: [
+          {
+            path: 'form-experimental',
+            component: FormExperimentalComponent,
+          },
+          {
+            path: 'home-task-form',
+            component: HomeTaskFormComponent,
+          },
+        ],
       },
     ],
     canActivate: [canActivateAuth],

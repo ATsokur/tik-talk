@@ -1,0 +1,62 @@
+.technical-service__form {
+  padding: 32px;
+  display: grid;
+  gap: 16px;
+  background-color: #3d3dc7cb;
+  border-radius: 4px;
+}
+
+.personal-data__wrapper {
+  display: grid;
+  gap: 8px;
+}
+
+.technical-service__select,
+.technical-service__input {
+  padding: 10px;
+  background-color: #e0dada;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+
+  &:focus-visible {
+    outline-color: #3d3dc7cb;
+  }
+}
+
+.error-message {
+  color: #ce4d3c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.technical-service__textarea {
+  resize: none;
+  overflow-y: auto;
+}
+
+
+.technical-service__btn {
+  padding: 10px;
+
+  background-color: #73b4bd;
+  font-size: 16px;
+  width: 50%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.technical-service__select,
+.technical-service__input,
+.technical-service__option,
+.technical-service__btn {
+  font-weight: 500;
+  font-family: var(--font-family);
+}
+
+
+
+

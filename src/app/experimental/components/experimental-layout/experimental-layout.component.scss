@@ -1,0 +1,32 @@
+:host {
+  padding: 24px;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  gap: 32px 0;
+  justify-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.experimental-nav {
+  display: grid;
+  justify-content: center;
+  align-self: start;
+}
+
+.nav-list {
+  display: flex;
+  gap: 0 4px;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  width: max-content;
+  text-decoration: none;
+}
+
+.experimental-component {
+  display: grid;
+  place-content: center;
+}
