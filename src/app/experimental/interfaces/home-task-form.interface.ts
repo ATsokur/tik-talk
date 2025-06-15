@@ -1,3 +1,11 @@
+import { FormControl } from '@angular/forms';
+
+export interface Appeal {
+  service: FormControl<string | null>;
+  compound: FormControl<string | null>;
+  requestDescription: FormControl<string | null>;
+}
+
 export interface Employee {
   firstName: string;
   secondName: string;
@@ -5,12 +13,15 @@ export interface Employee {
   email: string;
 }
 
-export interface Department {
-  name: string;
+export interface Option {
+  label: string;
   value: string | null;
 }
-
 export interface Service {
-  serviceName: string;
-  compoundServices: string[];
+  type: Option;
+  compounds: Option[];
+}
+
+export interface CurrentCompounds {
+  [key: string]: Option[];
 }

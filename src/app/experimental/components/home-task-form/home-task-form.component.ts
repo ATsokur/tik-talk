@@ -1,6 +1,14 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -8,6 +16,20 @@ import {
 } from '@angular/forms';
 
 import { HomeTaskFormMockService } from '../../services/home-task-form.mock.service';
+import {
+  Appeal,
+  CurrentCompounds,
+  Option,
+} from '../../interfaces/home-task-form.interface';
+import { Observable, Subscription } from 'rxjs';
+
+function addAppealForm(): FormGroup<Appeal> {
+  return new FormGroup<Appeal>({
+    service: new FormControl<string | null>(null, [Validators.required]),
+    compound: new FormControl<string | null>(null, [Validators.required]),
+    requestDescription: new FormControl<string>('', [Validators.required]),
+  });
+}
 
 @Component({
   selector: 'app-home-task-form',
@@ -17,9 +39,10 @@ import { HomeTaskFormMockService } from '../../services/home-task-form.mock.serv
   providers: [HomeTaskFormMockService],
 })
 export class HomeTaskFormComponent {
-  emailPlaceholder: string =
-    'Email подтянется автоматически при выборе сотрудника';
   #homeTaskFormMockService = inject(HomeTaskFormMockService);
+  #destroyRef = inject(DestroyRef);
+  emailPlaceholder: string =
+    'Email появится автоматически при выборе сотрудника';
   employees = this.#homeTaskFormMockService.employees;
   departments = this.#homeTaskFormMockService.departments;
   employeesFullNames = computed<string[]>(() => {
@@ -27,36 +50,25 @@ export class HomeTaskFormComponent {
       return `${secondName} ${firstName} ${lastName}`;
     });
   });
-  emails = computed<string[]>(() => {
-    return this.employees().map(({ email }) => email);
-  });
-
   services = this.#homeTaskFormMockService.services;
-  servicesName = computed<string[]>(() => {
-    return this.services().map(({ serviceName }) => {
-      return serviceName;
-    });
+  compounds = this.#homeTaskFormMockService.compoundServices;
+  currentCompounds = signal<CurrentCompounds>({});
+  currentCompoundsOptions = computed<Option[][]>(() => {
+    return Object.values(this.currentCompounds());
   });
-
-  compoundServices = this.#homeTaskFormMockService.compoundServices;
+  servicesObservables: Observable<string | null>[] = [];
+  servicesSubscriptions: Subscription[] = [];
 
   form = new FormGroup({
     employee: new FormControl<string>('', [Validators.required]),
     phoneNumber: new FormControl<number | null>(null, [
       Validators.required,
-      Validators.minLength(11),
-      Validators.maxLength(11),
+      Validators.minLength(16),
+      Validators.maxLength(16),
     ]),
     email: new FormControl<string>({ value: '', disabled: true }),
     department: new FormControl<string | null>(null, [Validators.required]),
-    requestDescription: new FormControl<string>('', [Validators.required]),
-    services: new FormControl<string | null>('--Выберете услугу--', [
-      Validators.required,
-    ]),
-    compoundServices: new FormControl<string | null>(
-      '--Выберете состав услуги--',
-      [Validators.required]
-    ),
+    appeal: new FormArray<FormGroup<Appeal>>([]),
   });
 
   constructor() {
@@ -92,26 +104,168 @@ export class HomeTaskFormComponent {
               `${secondName}${firstName}${lastName}`.toLocaleLowerCase();
             if (name === employeeName) {
               this.form.controls.email.patchValue(email, { emitEvent: false });
+              this.form.controls.email.markAsDirty();
             }
           }
         );
       });
-    this.form.controls.services.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe((service) => {
-        this.services().forEach(({ serviceName, compoundServices }) => {
-          if (service === serviceName) {
-            this.compoundServices.set(compoundServices);
-          }
-        });
+  }
 
-        this.form.controls.compoundServices.patchValue(
-          this.compoundServices()[0],
-          {
-            emitEvent: false,
-          }
-        );
+  serviceControlChange(index: number, isDelete?: boolean) {
+    const updateCompound = (index: number, choseService: string | null) => {
+      this.services().forEach(({ type, compounds }) => {
+        if (choseService === type.value) {
+          this.currentCompounds.update((value) => {
+            value[index] = compounds;
+            return { ...value };
+          });
+        }
       });
+      this.form.controls.appeal.controls[index].controls.compound.patchValue(
+        this.currentCompounds()[index][0].value,
+        {
+          emitEvent: false,
+        }
+      );
+    };
+
+    //Заполняю serviceObservables новыми service.valueChanges и подписываюсь на них + заполняю subscriptions
+    const addSubsOnService = () => {
+      this.form.controls.appeal.controls.forEach((formGroup, i) => {
+        if (!this.servicesObservables[i]) {
+          this.servicesObservables.push(
+            formGroup.controls.service.valueChanges
+          );
+          const subscription = formGroup.controls.service.valueChanges
+            .pipe(takeUntilDestroyed(this.#destroyRef))
+            .subscribe((choseService) => {
+              updateCompound(i, choseService);
+            });
+          this.servicesSubscriptions.push(subscription);
+        }
+      });
+    };
+
+    if (isDelete) {
+      this.servicesSubscriptions.forEach((sub, i) => {
+        if (i >= index) sub.unsubscribe();
+      });
+      this.servicesSubscriptions.splice(index);
+
+      this.form.controls.appeal.controls.forEach((_, i) => {
+        if (+Object.keys(this.currentCompounds())[i] !== i) {
+          this.currentCompounds.update((value) => {
+            value[i] = value[i + 1];
+            delete value[i + 1];
+            return { ...value };
+          });
+        }
+      });
+      addSubsOnService();
+      return;
+    } else {
+      this.servicesObservables.push(
+        this.form.controls.appeal.controls[index].controls.service.valueChanges
+      );
+    }
+
+    const subscription = this.servicesObservables[index]
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe((choseService) => {
+        updateCompound(index, choseService);
+      });
+    this.servicesSubscriptions.push(subscription);
+  }
+
+  addAppeal() {
+    const formPosition: number = this.form.controls.appeal.length;
+
+    this.form.controls.appeal.insert(formPosition, addAppealForm());
+    this.currentCompounds.update((value) => {
+      value[formPosition] = [this.compounds()[0][0]];
+      return { ...value };
+    });
+
+    this.serviceControlChange(formPosition);
+  }
+
+  //Удаление работает на конкретную форму, которую мы хотим удалить
+  deleteAppeal(index: number) {
+    let formPositions: string[] = Object.keys(this.currentCompounds());
+
+    formPositions = formPositions.filter((position, i) => {
+      if (index === i) {
+        this.currentCompounds.update((value) => {
+          delete value[position];
+          return { ...value };
+        });
+      }
+      return index !== i;
+    });
+    this.form.controls.appeal.removeAt(index);
+    this.servicesObservables.splice(index);
+    this.serviceControlChange(index, true);
+  }
+
+  onMaskEmployee(event: KeyboardEvent) {
+    const char = event.key;
+    const isString = /(?!^.*[А-Я]{2,}.*$)^[А-Яа-я]*$/.test(char);
+    if (
+      !isString &&
+      char !== 'Backspace' &&
+      char !== 'Delete' &&
+      char !== ' ' &&
+      char !== 'Shift'
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  onMaskPhoneNumber(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const char = event.key;
+    const isNumber = /^[0-9]$/.test(char);
+    const separators = [' ', '-'];
+
+    if (!value.startsWith('+7')) {
+      input.value = '+7';
+    }
+
+    if (value[2] !== separators[0]) {
+      input.value = '+7' + separators[0];
+    }
+
+    if (
+      value.length === 6 &&
+      event.key !== 'Backspace' &&
+      event.key !== 'Delete'
+    ) {
+      input.value = input.value + separators[0];
+    }
+
+    if (
+      (value.length === 10 &&
+        event.key !== 'Backspace' &&
+        event.key !== 'Delete') ||
+      (value.length === 13 &&
+        event.key !== 'Backspace' &&
+        event.key !== 'Delete')
+    ) {
+      input.value = input.value + separators[1];
+    }
+
+    if (!isNumber && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault();
+    }
+
+    if (value.length <= 2 && char === 'Backspace') {
+      event.preventDefault();
+    }
+
+    if (value.length > 15 && char !== 'Backspace' && char !== 'Delete') {
+      event.preventDefault();
+    }
   }
 
   onSubmit() {
@@ -120,6 +274,6 @@ export class HomeTaskFormComponent {
 
     if (this.form.invalid) return;
 
-    console.log(this.form.value);
+    console.log(this.form.getRawValue());
   }
 }

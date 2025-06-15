@@ -25,10 +25,23 @@
   }
 }
 
+.technical-service__input.ng-pristine.ng-touched,
+.technical-service__select.ng-touched.ng-invalid,
+.technical-service__input.ng-touched.ng-invalid {
+  border: 2px solid #ce4d3c;
+}
+
 .error-message {
+  display: none;
   color: #ce4d3c;
   font-size: 14px;
   font-weight: 700;
+}
+
+.technical-service__input.ng-touched.ng-pristine + .error-message,
+.technical-service__select.ng-touched.ng-invalid + .error-message,
+.technical-service__input.ng-touched.ng-invalid + .error-message {
+  display: block;
 }
 
 .technical-service__textarea {
@@ -36,18 +49,27 @@
   overflow-y: auto;
 }
 
+.appeal__wrapper {
+  display: grid;
+  gap: 8px;
+}
 
 .technical-service__btn {
   padding: 10px;
 
   background-color: #73b4bd;
   font-size: 16px;
-  width: 50%;
+  width: 100%;
   border: none;
   border-radius: 4px;
+  color: var(--dark-color);
   cursor: pointer;
-}
 
+  &.appeal-btn {
+    justify-self: end;
+    width: 50%;
+  }
+}
 
 .technical-service__select,
 .technical-service__input,

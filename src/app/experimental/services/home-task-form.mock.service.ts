@@ -3,61 +3,149 @@ import { Injectable, signal } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
 
 import {
-  Department,
   Employee,
+  Option,
   Service,
 } from '../interfaces/home-task-form.interface';
 
-const Departments: Department[] = [
+enum ReceiverDepartments {
+  Analytics = 'Analytics',
+  Accounting = 'Accounting',
+  Logistics = 'Logistics',
+}
+
+enum ReceiverServices {
+  Computer = 'Computer',
+  Printer = 'Printer',
+  Email = 'Email',
+  Apps = 'Apps',
+}
+
+enum ReceiverCompoundServices {
+  NotEnable = 'NotEnable',
+  NetworkDrive = 'NetworkDrive',
+  Monitor = 'Monitor',
+  Other = 'Other',
+  PaperJam = 'PaperJam',
+  MechanicalDamage = 'MechanicalDamage',
+  TonerOut = 'TonerOut',
+  NotOpen = 'NotOpen',
+  NotSend = 'NotSend',
+  NotReceive = 'NotReceive',
+  MsWord = 'MsWord',
+  MsExcel = 'MsExcel',
+}
+
+const Departments: Option[] = [
   {
-    name: 'Аналитика',
-    value: 'Analytics',
+    label: 'Аналитика',
+    value: ReceiverDepartments.Analytics,
   },
   {
-    name: 'Бухгалтерия',
-    value: 'Accounting',
+    label: 'Бухгалтерия',
+    value: ReceiverDepartments.Accounting,
   },
   {
-    name: 'Логистика',
-    value: 'Logistics',
+    label: 'Логистика',
+    value: ReceiverDepartments.Logistics,
   },
 ];
 
 const services: Service[] = [
   {
-    serviceName: 'Персональный компьютер',
-    compoundServices: [
-      'Не включается/Перезагружается',
-      'Недоступен сетевой диск',
-      'Монитор',
-      'Прочее',
+    type: {
+      label: 'Персональный компьютер',
+      value: ReceiverServices.Computer,
+    },
+    compounds: [
+      {
+        label: 'Не включается/Перезагружается',
+        value: ReceiverCompoundServices.NotEnable,
+      },
+      {
+        label: 'Недоступен сетевой диск',
+        value: ReceiverCompoundServices.NetworkDrive,
+      },
+      {
+        label: 'Монитор',
+        value: ReceiverCompoundServices.Monitor,
+      },
+      {
+        label: 'Прочее',
+        value: ReceiverCompoundServices.Other,
+      },
     ],
   },
   {
-    serviceName: 'Принтер',
-    compoundServices: [
-      'Не включается',
-      'Замятие бумаги',
-      'Механическое повреждение',
-      'Закончился тонер',
-      'Прочее',
+    type: {
+      label: 'Принтер',
+      value: ReceiverServices.Printer,
+    },
+    compounds: [
+      {
+        label: 'Не включается',
+        value: ReceiverCompoundServices.NotEnable,
+      },
+      {
+        label: 'Замятие бумаги',
+        value: ReceiverCompoundServices.PaperJam,
+      },
+      {
+        label: 'Механическое повреждение',
+        value: ReceiverCompoundServices.MechanicalDamage,
+      },
+      {
+        label: 'Закончился тонер',
+        value: ReceiverCompoundServices.TonerOut,
+      },
+      {
+        label: 'Прочее',
+        value: ReceiverCompoundServices.Other,
+      },
     ],
   },
   {
-    serviceName: 'Электронная почта',
-    compoundServices: [
-      'Не открывается',
-      'Не отправляются письма',
-      'Не приходят письма',
-      'Прочее',
+    type: {
+      label: 'Электронная почта',
+      value: ReceiverServices.Email,
+    },
+    compounds: [
+      {
+        label: 'Не открывается',
+        value: ReceiverCompoundServices.NotOpen,
+      },
+      {
+        label: 'Не отправляются письма',
+        value: ReceiverCompoundServices.NotSend,
+      },
+      {
+        label: 'Не приходят письма',
+        value: ReceiverCompoundServices.NotReceive,
+      },
+      {
+        label: 'Прочее',
+        value: ReceiverCompoundServices.Other,
+      },
     ],
   },
   {
-    serviceName: 'Специальное ПО',
-    compoundServices: [
-      'Не открывается MS Word',
-      'Не открывается MS Excel',
-      'Прочее',
+    type: {
+      label: 'Специальное ПО',
+      value: ReceiverServices.Apps,
+    },
+    compounds: [
+      {
+        label: 'Не открывается MS Word',
+        value: ReceiverCompoundServices.MsWord,
+      },
+      {
+        label: 'Не открывается MS Excel',
+        value: ReceiverCompoundServices.MsExcel,
+      },
+      {
+        label: 'Прочее',
+        value: ReceiverCompoundServices.Other,
+      },
     ],
   },
 ];
@@ -66,41 +154,44 @@ const services: Service[] = [
 export class HomeTaskFormMockService {
   services = signal<Service[]>([]);
   serviceName = signal<string[]>([]);
-  departments = signal<Department[]>([]);
+  departments = signal<Option[]>([]);
   employees = signal<Employee[]>([]);
-  compoundServices = signal<string[]>([]);
+  compoundServices = signal<Option[][]>([[]]);
 
   getSectionServices() {
     return of(services).pipe(
       map((services) => {
-        const voidService = {
-          serviceName: '--Выберете услугу--',
-          compoundServices: ['--Выберете состав услуги--'],
+        const voidService: Service = {
+          type: {
+            label: '--Выберете услугу--',
+            value: null,
+          },
+          compounds: [
+            {
+              label: '--Выберете состав услуги--',
+              value: null,
+            },
+          ],
         };
-        this.compoundServices.set(voidService.compoundServices);
-        const patchServices = services.map(
-          ({ serviceName, compoundServices }) => {
-            return {
-              serviceName,
-              compoundServices: [
-                ...voidService.compoundServices,
-                ...compoundServices,
-              ],
-            };
-          }
-        );
-
+        const patchServices = services.map(({ type, compounds }) => {
+          return {
+            type,
+            compounds: [...voidService.compounds, ...compounds],
+          };
+        });
+        const allCompounds = patchServices.map(({ compounds }) => compounds);
+        this.compoundServices.set(allCompounds);
         return [voidService, ...patchServices];
       }),
       tap((services) => this.services.set(services))
     );
   }
 
-  getDepartments(): Observable<Department[]> {
+  getDepartments(): Observable<Option[]> {
     return of(Departments).pipe(
       map((departments) => {
         const patchDepartment = {
-          name: '--Выберете отдел--',
+          label: '--Выберете отдел--',
           value: null,
         };
         return [patchDepartment, ...departments];
