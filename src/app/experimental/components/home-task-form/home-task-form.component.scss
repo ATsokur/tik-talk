@@ -39,8 +39,8 @@
 }
 
 .technical-service__input.ng-touched.ng-pristine + .error-message,
-.technical-service__select.ng-touched.ng-invalid + .error-message,
-.technical-service__input.ng-touched.ng-invalid + .error-message {
+.technical-service__input.ng-touched.ng-invalid ~ .error-message,
+.technical-service__select.ng-touched.ng-invalid + .error-message {
   display: block;
 }
 

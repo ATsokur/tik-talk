@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   DestroyRef,
@@ -22,6 +23,7 @@ import {
   Option,
 } from '../../interfaces/home-task-form.interface';
 import { Observable, Subscription } from 'rxjs';
+import { ValidateFullName } from './fullName.validator';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
@@ -36,9 +38,10 @@ function addAppealForm(): FormGroup<Appeal> {
   imports: [ReactiveFormsModule],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',
-  providers: [HomeTaskFormMockService],
+  providers: [HomeTaskFormMockService, ValidateFullName],
 })
 export class HomeTaskFormComponent {
+  #validateEmployee = inject(ValidateFullName);
   #homeTaskFormMockService = inject(HomeTaskFormMockService);
   #destroyRef = inject(DestroyRef);
   emailPlaceholder: string =
@@ -59,15 +62,21 @@ export class HomeTaskFormComponent {
   servicesObservables: Observable<string | null>[] = [];
   servicesSubscriptions: Subscription[] = [];
 
+  test!: string[];
+
   form = new FormGroup({
-    employee: new FormControl<string>('', [Validators.required]),
+    employee: new FormControl<string>(
+      '',
+      Validators.required,
+      this.#validateEmployee.validate.bind(this.#validateEmployee)
+    ),
     phoneNumber: new FormControl<number | null>(null, [
       Validators.required,
       Validators.minLength(16),
       Validators.maxLength(16),
     ]),
     email: new FormControl<string>({ value: '', disabled: true }),
-    department: new FormControl<string | null>(null, [Validators.required]),
+    department: new FormControl<string | null>(null, Validators.required),
     appeal: new FormArray<FormGroup<Appeal>>([]),
   });
 

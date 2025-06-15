@@ -20,7 +20,13 @@
         }
       </datalist>
 
-      <div class="error-message mt8">Это поле обязательно</div>
+      @if (this.form.controls.employee.touched && this.form.controls.employee.hasError('employee')) {
+        <div class="error-message mt8">{{ this.form.controls.employee.getError('employee')?.message }}</div>
+      }
+
+      @if (this.form.controls.employee.touched && this.form.controls.employee.hasError('required')) {
+        <div class="error-message mt8">Это поле обязательно</div>
+      }
     </label>
 
     <span class="technical-service__subtitle">Контактный номер:</span>
@@ -32,7 +38,9 @@
         formControlName="phoneNumber"
         (keydown)="onMaskPhoneNumber($event)"
       >
-      <div class="error-message mt8">Это поле обязательно</div>
+      @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('required')) {
+        <div class="error-message mt8">Это поле обязательно</div>
+      }
       @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('minlength')) {
         <div class="error-message mt8">Минимум 11 цифр</div>
       }
