@@ -1,4 +1,13 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  Renderer2,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormArray,
@@ -8,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { Observable, Subscription } from 'rxjs';
+import { debounceTime, fromEvent, Observable, Subscription } from 'rxjs';
 
 import {
   Appeal,
@@ -34,7 +43,10 @@ function addAppealForm(): FormGroup<Appeal> {
   styleUrl: './home-task-form.component.scss',
   providers: [HomeTaskFormMockService, ValidateFullName],
 })
-export class HomeTaskFormComponent {
+export class HomeTaskFormComponent implements AfterViewInit {
+  #hostElement = inject(ElementRef);
+  #r2 = inject(Renderer2);
+
   #validateEmployee = inject(ValidateFullName);
   #homeTaskFormMockService = inject(HomeTaskFormMockService);
   #destroyRef = inject(DestroyRef);
@@ -277,5 +289,18 @@ export class HomeTaskFormComponent {
     if (this.form.invalid) return;
 
     console.log(this.form.getRawValue());
+  }
+
+  resizeForm() {
+    const { top } = this.#hostElement.nativeElement.getBoundingClientRect();
+    const height = window.innerHeight - top - 36 - 36;
+    this.#r2.setStyle(this.#hostElement.nativeElement, 'height', `${height}px`);
+  }
+
+  ngAfterViewInit() {
+    this.resizeForm();
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(300))
+      .subscribe(() => this.resizeForm());
   }
 }
