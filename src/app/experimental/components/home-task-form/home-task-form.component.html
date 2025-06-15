@@ -48,6 +48,10 @@
       @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('maxlength')) {
         <div class="error-message mt8">Максимум 11 цифр</div>
       }
+
+      @if (this.form.controls.phoneNumber.touched && this.form.controls.phoneNumber.hasError('phoneNumber') && this.form.controls.phoneNumber.value) {
+        <div class="error-message mt8">{{ this.form.controls.phoneNumber.getError('phoneNumber')?.message }}</div>
+      }
     </label>
 
     <span class="technical-service__subtitle">Email:</span>
