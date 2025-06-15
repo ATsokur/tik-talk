@@ -46,7 +46,7 @@ export class SidebarComponent implements OnInit {
     },
     {
       label: 'Experimental',
-      icon: '',
+      icon: 'experiment',
       link: 'experimental',
     },
   ];
