@@ -1,0 +1,80 @@
+.technical-service__form {
+  padding: 32px;
+  display: grid;
+  gap: 16px;
+  background-color: #3d3dc7cb;
+  border-radius: 4px;
+}
+
+.personal-data__wrapper {
+  display: grid;
+  gap: 8px;
+}
+
+.technical-service__select,
+.technical-service__input {
+  padding: 10px;
+  background-color: #e0dada;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+
+  &:focus-visible {
+    outline-color: #3d3dc7cb;
+  }
+}
+
+.technical-service__input.ng-pristine.ng-touched,
+.technical-service__select.ng-touched.ng-invalid,
+.technical-service__input.ng-touched.ng-invalid {
+  border: 2px solid #ce4d3c;
+}
+
+.error-message {
+  display: none;
+  color: #ce4d3c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.technical-service__input.ng-touched.ng-pristine + .error-message,
+.technical-service__input.ng-touched.ng-invalid ~ .error-message,
+.technical-service__select.ng-touched.ng-invalid + .error-message {
+  display: block;
+}
+
+.technical-service__textarea {
+  resize: none;
+  overflow-y: auto;
+}
+
+.appeal__wrapper {
+  display: grid;
+  gap: 8px;
+}
+
+.technical-service__btn {
+  padding: 10px;
+
+  background-color: #73b4bd;
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  color: var(--dark-color);
+  cursor: pointer;
+
+  &.appeal-btn {
+    justify-self: end;
+    width: 50%;
+  }
+}
+
+.technical-service__select,
+.technical-service__input,
+.technical-service__option,
+.technical-service__btn {
+  font-weight: 500;
+  font-family: var(--font-family);
+}

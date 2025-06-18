@@ -1,0 +1,18 @@
+:host,
+.avatar-circle__img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+:host.size112,
+:host.size112 .avatar-circle__img {
+  width: 112px;
+  height: 112px;
+}
+
+:host.size140,
+:host.size140 .avatar-circle__img {
+  width: 140px;
+  height: 140px;
+}

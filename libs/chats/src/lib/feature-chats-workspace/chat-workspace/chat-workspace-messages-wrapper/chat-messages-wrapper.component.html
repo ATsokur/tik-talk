@@ -1,0 +1,16 @@
+<div #messagesWrapper class="messages-wrapper">
+  @for (messageGroup of messagesGroupedByDay(); track $index) { @for (message of
+  messageGroup; track message.id) { @if($first) {
+  <div class="messages-date">
+    {{ message.createdAt | ttDate : true }}
+  </div>
+  }
+  <app-chat-message [message]="message"> </app-chat-message>
+  } }
+</div>
+<app-message-input
+  class="tt-block message-input"
+  (sended)="onSendMessage($event)"
+  (focusin)="onScrollDown()"
+>
+</app-message-input>

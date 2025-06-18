@@ -1,0 +1,42 @@
+@if (post(); as post) {
+<app-avatar-circle [avatarUrl]="post.author.avatarUrl"> </app-avatar-circle>
+
+<main class="post-body">
+  <div class="post-header">
+    <strong class="post__author">
+      {{ post.author.firstName }} {{ post.author.lastName }}
+      <span class="medium-text post-created-at">
+        {{ post.createdAt | ttDate }}
+      </span>
+    </strong>
+  </div>
+  <p class="post-descr">{{ post.content }}</p>
+
+  <div class="post-counters">
+    <div class="counter-inner" (click)="isCommentInput()">
+      <svg class="comments-icon svg16" icon="comments"></svg>
+      <span class="comments-count">{{ comments().length }}</span>
+    </div>
+    <div class="counter-inner">
+      <svg class="likes-icon svg16" icon="likes"></svg>
+      <span class="likes-count">{{ post.likes }}</span>
+    </div>
+  </div>
+
+  @if (isComments) {
+  <div class="post__comments-wrapper">
+    @for (comment of comments(); track comment.id) {
+    <app-comment [comment]="comment"> </app-comment>
+    }
+  </div>
+
+  <app-post-input
+    class="tt-block"
+    (sended)="getCommentText($event)"
+    [avatarUrl]="post.author.avatarUrl"
+    [inputType]="inputType"
+  >
+  </app-post-input>
+  }
+</main>
+}

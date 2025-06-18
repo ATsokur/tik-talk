@@ -1,0 +1,67 @@
+:host {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 0 12px;
+}
+
+:host.is-mine {
+  grid-template-columns: 1fr 32px;
+  justify-self: end;
+
+  .message-header {
+    justify-content: end;
+  }
+
+  .message-container,
+  .message-time {
+    order: -1;
+  }
+
+  .message-text {
+    background: var(--primary-color);
+    mask: linear-gradient(var(--dark-color) 0 0),
+      linear-gradient(-135deg, var(--dark-color) 50%, #0000 0) border-box 100%
+        100% / 200% 200% no-repeat;
+    mask-composite: exclude;
+    mask-position: 100% 0%;
+    mask-size: 10px 10px;
+  }
+}
+
+.message-header {
+  display: flex;
+  gap: 0 4px;
+}
+
+.message-person {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 133%;
+}
+
+.message-time {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+}
+
+.message-text {
+  max-width: 460px;
+  border-radius: 1px;
+  padding: 8px 16px;
+  background: var(--dark-message-color);
+  justify-self: start;
+  overflow-wrap: anywhere;
+
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-color);
+
+  mask: linear-gradient(var(--dark-color) 0 0),
+    linear-gradient(135deg, var(--dark-color) 50%, #0000 0) border-box 100% 100% /
+      200% 200% no-repeat;
+  mask-composite: exclude;
+  mask-position: 0% 0%;
+  mask-size: 10px 10px;
+}

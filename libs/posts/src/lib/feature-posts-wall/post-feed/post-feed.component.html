@@ -1,0 +1,11 @@
+@if (profile(); as profile) {
+<app-post-input
+  class="tt-block"
+  [avatarUrl]="profile.avatarUrl"
+  [inputType]="inputType"
+  (sended)="getPostText($event)"
+>
+</app-post-input>
+} @for (post of feed(); track post.id) {
+<app-post class="tt-block" [post]="post"> </app-post>
+}
