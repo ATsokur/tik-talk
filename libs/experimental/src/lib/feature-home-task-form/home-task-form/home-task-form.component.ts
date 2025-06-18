@@ -26,6 +26,9 @@ import {
   Option
 } from '../../data';
 import { ValidateFullName, validatePhoneNumber } from '../../validators';
+import { MaskitoOptions } from '@maskito/core';
+import { MaskitoDirective } from '@maskito/angular';
+import phoneMask from './phone-mask';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
@@ -37,7 +40,7 @@ function addAppealForm(): FormGroup<Appeal> {
 
 @Component({
   selector: 'app-home-task-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MaskitoDirective],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',
   providers: [HomeTaskFormMockService, ValidateFullName]
@@ -45,7 +48,6 @@ function addAppealForm(): FormGroup<Appeal> {
 export class HomeTaskFormComponent implements AfterViewInit {
   #hostElement = inject(ElementRef);
   #r2 = inject(Renderer2);
-
   #validateEmployee = inject(ValidateFullName);
   #homeTaskFormMockService = inject(HomeTaskFormMockService);
   #destroyRef = inject(DestroyRef);
@@ -65,6 +67,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
   });
   servicesObservables: Observable<string | null>[] = [];
   servicesSubscriptions: Subscription[] = [];
+  readonly maskitoPhoneOptions: MaskitoOptions = phoneMask;
 
   form = new FormGroup({
     employee: new FormControl<string>(
@@ -233,52 +236,56 @@ export class HomeTaskFormComponent implements AfterViewInit {
     }
   }
 
-  onMaskPhoneNumber(event: KeyboardEvent) {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-    const char = event.key;
-    const isNumber = /^[0-9]$/.test(char);
-    const separators = [' ', '-'];
+  /**
+   * До переезда на Maskito
+   * @param event
+   */
+  // onMaskPhoneNumber(event: KeyboardEvent) {
+  //   const input = event.target as HTMLInputElement;
+  //   const value = input.value;
+  //   const char = event.key;
+  //   const isNumber = /^[0-9]$/.test(char);
+  //   const separators = [' ', '-'];
 
-    if (!value.startsWith('+7')) {
-      input.value = '+7';
-    }
+  //   if (!value.startsWith('+7')) {
+  //     input.value = '+7';
+  //   }
 
-    if (value[2] !== separators[0]) {
-      input.value = '+7' + separators[0];
-    }
+  //   if (value[2] !== separators[0]) {
+  //     input.value = '+7' + separators[0];
+  //   }
 
-    if (
-      value.length === 6 &&
-      event.key !== 'Backspace' &&
-      event.key !== 'Delete'
-    ) {
-      input.value = input.value + separators[0];
-    }
+  //   if (
+  //     value.length === 6 &&
+  //     event.key !== 'Backspace' &&
+  //     event.key !== 'Delete'
+  //   ) {
+  //     input.value = input.value + separators[0];
+  //   }
 
-    if (
-      (value.length === 10 &&
-        event.key !== 'Backspace' &&
-        event.key !== 'Delete') ||
-      (value.length === 13 &&
-        event.key !== 'Backspace' &&
-        event.key !== 'Delete')
-    ) {
-      input.value = input.value + separators[1];
-    }
+  //   if (
+  //     (value.length === 10 &&
+  //       event.key !== 'Backspace' &&
+  //       event.key !== 'Delete') ||
+  //     (value.length === 13 &&
+  //       event.key !== 'Backspace' &&
+  //       event.key !== 'Delete')
+  //   ) {
+  //     input.value = input.value + separators[1];
+  //   }
 
-    if (!isNumber && event.key !== 'Backspace' && event.key !== 'Delete') {
-      event.preventDefault();
-    }
+  //   if (!isNumber && event.key !== 'Backspace' && event.key !== 'Delete') {
+  //     event.preventDefault();
+  //   }
 
-    if (value.length <= 2 && char === 'Backspace') {
-      event.preventDefault();
-    }
+  //   if (value.length <= 2 && char === 'Backspace') {
+  //     event.preventDefault();
+  //   }
 
-    if (value.length > 15 && char !== 'Backspace' && char !== 'Delete') {
-      event.preventDefault();
-    }
-  }
+  //   if (value.length > 15 && char !== 'Backspace' && char !== 'Delete') {
+  //     event.preventDefault();
+  //   }
+  // }
 
   onSubmit() {
     this.form.markAllAsTouched();

@@ -40,7 +40,7 @@
         type="tel"
         placeholder="Введите контактный номер"
         formControlName="phoneNumber"
-        (keydown)="onMaskPhoneNumber($event)" />
+        [maskito]="maskitoPhoneOptions" />
       @if (this.form.controls.phoneNumber.touched &&
       this.form.controls.phoneNumber.hasError('required')) {
       <div class="error-message mt8">Это поле обязательно</div>
