@@ -6,7 +6,7 @@ import {
   ElementRef,
   inject,
   Renderer2,
-  signal,
+  signal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -14,7 +14,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 
 import { debounceTime, fromEvent, Observable, Subscription } from 'rxjs';
@@ -22,17 +22,16 @@ import { debounceTime, fromEvent, Observable, Subscription } from 'rxjs';
 import {
   Appeal,
   CurrentCompounds,
-  Option,
-} from '../../interfaces/home-task-form.interface';
-import { HomeTaskFormMockService } from '../../services/home-task-form.mock.service';
-import { ValidateFullName } from './validators/fullname.validator';
-import { validatePhoneNumber } from './validators/phone-number.validator';
+  HomeTaskFormMockService,
+  Option
+} from '../../data';
+import { ValidateFullName, validatePhoneNumber } from '../../validators';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
     service: new FormControl<string | null>(null, [Validators.required]),
     compound: new FormControl<string | null>(null, [Validators.required]),
-    requestDescription: new FormControl<string>('', [Validators.required]),
+    requestDescription: new FormControl<string>('', [Validators.required])
   });
 }
 
@@ -41,7 +40,7 @@ function addAppealForm(): FormGroup<Appeal> {
   imports: [ReactiveFormsModule],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',
-  providers: [HomeTaskFormMockService, ValidateFullName],
+  providers: [HomeTaskFormMockService, ValidateFullName]
 })
 export class HomeTaskFormComponent implements AfterViewInit {
   #hostElement = inject(ElementRef);
@@ -77,11 +76,11 @@ export class HomeTaskFormComponent implements AfterViewInit {
       Validators.required,
       Validators.minLength(16),
       Validators.maxLength(16),
-      validatePhoneNumber('+7 9'),
+      validatePhoneNumber('+7 9')
     ]),
     email: new FormControl<string>({ value: '', disabled: true }),
-    department: new FormControl<string | null>(null, Validators.required),
-    appeal: new FormArray<FormGroup<Appeal>>([]),
+    department: new FormControl<string | null>('', Validators.required),
+    appeal: new FormArray<FormGroup<Appeal>>([])
   });
 
   constructor() {
@@ -105,7 +104,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
       .subscribe((fullName) => {
         if (!fullName) {
           this.form.controls.email.patchValue(this.emailPlaceholder, {
-            emitEvent: false,
+            emitEvent: false
           });
         }
 
@@ -137,7 +136,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
       this.form.controls.appeal.controls[index].controls.compound.patchValue(
         this.currentCompounds()[index][0].value,
         {
-          emitEvent: false,
+          emitEvent: false
         }
       );
     };

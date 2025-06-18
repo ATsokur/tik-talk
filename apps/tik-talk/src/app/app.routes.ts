@@ -6,11 +6,9 @@ import { chatsRouters } from '@tt/chats';
 import {
   ProfilePageComponent,
   SearchPageComponent,
-  SettingsPageComponent,
+  SettingsPageComponent
 } from '@tt/profile';
-import { ExperimentalLayoutComponent } from './experimental/components/experimental-layout/experimental-layout.component';
-import { FormExperimentalComponent } from './experimental/components/form-experimental/form-experimental.component';
-import { HomeTaskFormComponent } from './experimental/components/home-task-form/home-task-form.component';
+import { experimentalRoutes } from '@tt/experimental';
 
 export const routes: Routes = [
   {
@@ -20,43 +18,33 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'profile/me',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'chats',
-        loadChildren: () => chatsRouters,
+        loadChildren: () => chatsRouters
       },
       {
         path: 'search',
-        component: SearchPageComponent,
+        component: SearchPageComponent
       },
       {
         path: 'profile/:id',
-        component: ProfilePageComponent,
+        component: ProfilePageComponent
       },
       {
         path: 'settings',
-        component: SettingsPageComponent,
+        component: SettingsPageComponent
       },
       {
         path: 'experimental',
-        component: ExperimentalLayoutComponent,
-        children: [
-          {
-            path: 'form-experimental',
-            component: FormExperimentalComponent,
-          },
-          {
-            path: 'home-task-form',
-            component: HomeTaskFormComponent,
-          },
-        ],
-      },
+        loadChildren: () => experimentalRoutes
+      }
     ],
-    canActivate: [canActivateAuth],
+    canActivate: [canActivateAuth]
   },
   {
     path: 'login',
-    component: LoginPageComponent,
-  },
+    component: LoginPageComponent
+  }
 ];

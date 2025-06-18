@@ -7,11 +7,9 @@ import {
   FormGroup,
   FormRecord,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
-
-import { Feature } from '../../interfaces/feature.interface';
-import { FormExperimentalMockService } from '../../services/form-experimental.mock.service';
+import { Feature, FormExperimentalMockService } from '../../data';
 
 interface InitialValue {
   city?: string;
@@ -22,7 +20,7 @@ interface InitialValue {
 
 export enum ReceiverType {
   PERSON = 'PERSON',
-  LEGAL = 'LEGAL',
+  LEGAL = 'LEGAL'
 }
 
 function getAddresses(initialValue: InitialValue = {}) {
@@ -30,7 +28,7 @@ function getAddresses(initialValue: InitialValue = {}) {
     city: new FormControl<string>(initialValue.city ?? ''),
     street: new FormControl<string>(initialValue.street ?? ''),
     building: new FormControl<number | null>(initialValue.building ?? null),
-    apartment: new FormControl<number | null>(initialValue.apartment ?? null),
+    apartment: new FormControl<number | null>(initialValue.apartment ?? null)
   });
 }
 
@@ -39,7 +37,7 @@ function getAddresses(initialValue: InitialValue = {}) {
   imports: [ReactiveFormsModule, KeyValuePipe],
   templateUrl: './form-experimental.component.html',
   styleUrl: './form-experimental.component.scss',
-  providers: [FormExperimentalMockService],
+  providers: [FormExperimentalMockService]
 })
 export class FormExperimentalComponent {
   ReceiverType = ReceiverType;
@@ -47,7 +45,7 @@ export class FormExperimentalComponent {
     // city: 'Kdqw',
     // street: 'dwqdqw',
     building: 1231,
-    apartment: 2313,
+    apartment: 2313
   };
 
   features: Feature[] = [];
@@ -62,7 +60,7 @@ export class FormExperimentalComponent {
     lastName: new FormControl<string>(''),
     inn: new FormControl<string>(''),
     addresses: new FormArray([getAddresses()]),
-    feature: new FormRecord({}),
+    feature: new FormRecord({})
   });
 
   constructor() {
@@ -74,7 +72,7 @@ export class FormExperimentalComponent {
           this.form.controls.inn.setValidators([
             Validators.required,
             Validators.minLength(10),
-            Validators.maxLength(10),
+            Validators.maxLength(10)
           ]);
         }
       });
@@ -91,7 +89,7 @@ export class FormExperimentalComponent {
           );
         }
 
-        console.log(this.form.controls.feature);
+        // console.log(this.form.controls.feature);
       });
 
     // this.form.controls.name.patchValue('Ann');

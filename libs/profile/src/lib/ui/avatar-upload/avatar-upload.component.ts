@@ -7,7 +7,7 @@ import { tap } from 'rxjs';
 import {
   AvatarCircleComponent,
   DndDirective,
-  SvgIconComponent,
+  SvgIconComponent
 } from '@tt/common-ui';
 import { ProfileService } from '../../data';
 
@@ -15,7 +15,7 @@ import { ProfileService } from '../../data';
   selector: 'app-avatar-upload',
   imports: [SvgIconComponent, DndDirective, AsyncPipe, AvatarCircleComponent],
   templateUrl: './avatar-upload.component.html',
-  styleUrl: './avatar-upload.component.scss',
+  styleUrl: './avatar-upload.component.scss'
 })
 export class AvatarUploadComponent {
   private readonly profileService = inject(ProfileService);
@@ -51,6 +51,7 @@ export class AvatarUploadComponent {
     };
 
     reader.readAsDataURL(file);
+
     this.avatar = file;
   }
 }

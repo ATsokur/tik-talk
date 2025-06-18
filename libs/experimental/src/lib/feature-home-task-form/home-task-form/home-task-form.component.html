@@ -1,8 +1,7 @@
 <form
   class="technical-service__form"
   [formGroup]="form"
-  (ngSubmit)="onSubmit()"
->
+  (ngSubmit)="onSubmit()">
   <h4 class="h4">Запрос на техническое обслуживание</h4>
 
   <div class="personal-data__wrapper">
@@ -16,11 +15,10 @@
         list="employees"
         placeholder="Введите ФИО сотрудника"
         formControlName="employee"
-        (keydown)="onMaskEmployee($event)"
-      />
+        (keydown)="onMaskEmployee($event)" />
       <datalist id="employees">
         @for (employeeFullName of employeesFullNames(); track $index) {
-          <option [value]="employeeFullName"></option>
+        <option [value]="employeeFullName"></option>
         }
       </datalist>
 
@@ -42,8 +40,7 @@
         type="tel"
         placeholder="Введите контактный номер"
         formControlName="phoneNumber"
-        (keydown)="onMaskPhoneNumber($event)"
-      />
+        (keydown)="onMaskPhoneNumber($event)" />
       @if (this.form.controls.phoneNumber.touched &&
       this.form.controls.phoneNumber.hasError('required')) {
       <div class="error-message mt8">Это поле обязательно</div>
@@ -68,8 +65,7 @@
         class="technical-service__input"
         type="email"
         formControlName="email"
-        [placeholder]="emailPlaceholder"
-      />
+        [placeholder]="emailPlaceholder" />
       <div class="error-message mt8">Это поле обязательно</div>
     </label>
 
@@ -77,20 +73,14 @@
     <label class="technical-service__label">
       <select class="technical-service__select" formControlName="department">
         @for (department of departments(); track $index) { @if ($first) {
-        <option
-          class="technical-service__option"
-          selected
-          disabled
-          [value]="department.value"
-        >
+        <option class="technical-service__option" selected disabled value="">
           {{ department.label }}
         </option>
         } @else {
         <option
           class="technical-service__option"
           [selected]="department.value === null ? department.label : ''"
-          [value]="department.value"
-        >
+          [value]="department.value">
           {{ department.label }}
         </option>
         } }
@@ -105,8 +95,7 @@
   <button
     class="technical-service__btn appeal-btn"
     type="button"
-    (click)="addAppeal()"
-  >
+    (click)="addAppeal()">
     Добавить обращение
   </button>
   @for (control of this.form.controls.appeal.controls; track indexAppeal; let
@@ -121,8 +110,7 @@
           class="technical-service__option"
           selected
           disabled
-          [value]="service.type.value"
-        >
+          [value]="service.type.value">
           {{ service.type.label }}
         </option>
         } @else {
@@ -146,8 +134,7 @@
           class="technical-service__option"
           selected
           disabled
-          [value]="compound.value"
-        >
+          [value]="compound.value">
           {{ compound.label }}
         </option>
         } @else {
@@ -167,8 +154,7 @@
       <textarea
         class="technical-service__input technical-service__textarea"
         rows="6"
-        formControlName="requestDescription"
-      >
+        formControlName="requestDescription">
       </textarea>
 
       <div class="error-message mt8">Это поле обязательно</div>
@@ -177,8 +163,7 @@
   <button
     class="technical-service__btn appeal-btn mb32"
     type="button"
-    (click)="deleteAppeal(indexAppeal)"
-  >
+    (click)="deleteAppeal(indexAppeal)">
     Удалить обращение
   </button>
   } @if (form.controls.appeal.controls.length) {

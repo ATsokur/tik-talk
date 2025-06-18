@@ -2,15 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
-  ValidationErrors,
+  ValidationErrors
 } from '@angular/forms';
 
 import { map, Observable } from 'rxjs';
-
-import { HomeTaskFormMockService } from '../../../services/home-task-form.mock.service';
+import { HomeTaskFormMockService } from '../data';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ValidateFullName implements AsyncValidator {
   #homeTaskFormMockService = inject(HomeTaskFormMockService);
