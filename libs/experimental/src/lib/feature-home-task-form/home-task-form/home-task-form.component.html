@@ -86,7 +86,7 @@
         } }
       </select>
       @if (this.form.controls.department.touched &&
-      this.form.controls.department.value === null) {
+      !this.form.controls.department.value) {
       <div class="error-message mt8">Это поле обязательно</div>
       }
     </label>
