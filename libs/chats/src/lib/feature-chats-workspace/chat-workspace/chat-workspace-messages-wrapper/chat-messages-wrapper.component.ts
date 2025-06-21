@@ -6,7 +6,7 @@ import {
   input,
   OnDestroy,
   Renderer2,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -17,20 +17,20 @@ import {
   skip,
   Subscription,
   switchMap,
-  timer,
+  timer
 } from 'rxjs';
 
 import { TtDatePipe } from '@tt/common-ui';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 
-import { Chat, ChatsService } from '../../../data';
 import { MessageInputComponent } from '../../../ui';
+import { Chat, ChatsService } from '@tt/data-access';
 
 @Component({
   selector: 'app-chat-messages-wrapper',
   imports: [ChatMessageComponent, MessageInputComponent, TtDatePipe],
   templateUrl: './chat-messages-wrapper.component.html',
-  styleUrl: './chat-messages-wrapper.component.scss',
+  styleUrl: './chat-messages-wrapper.component.scss'
 })
 export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   private readonly chatsService = inject(ChatsService);

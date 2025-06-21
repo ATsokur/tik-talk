@@ -4,7 +4,7 @@ import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, startWith, switchMap } from 'rxjs';
-import { ChatsService } from '../../data';
+import { ChatsService } from '@tt/data-access';
 
 @Component({
   selector: 'app-chats-list',
@@ -13,10 +13,10 @@ import { ChatsService } from '../../data';
     AsyncPipe,
     RouterLink,
     RouterLinkActive,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './chats-list.component.html',
-  styleUrl: './chats-list.component.scss',
+  styleUrl: './chats-list.component.scss'
 })
 export class ChatsListComponent {
   private readonly chatsService = inject(ChatsService);

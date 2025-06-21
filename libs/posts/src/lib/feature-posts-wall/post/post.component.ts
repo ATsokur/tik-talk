@@ -4,12 +4,13 @@ import { firstValueFrom } from 'rxjs';
 
 import { PostInputComponent } from '../../ui/post-input/post-input.component';
 import { CommentComponent } from '../../ui/comment/comment.component';
-import { Post, PostComment, PostService } from '../../data';
+
 import {
   AvatarCircleComponent,
   SvgIconComponent,
-  TtDatePipe,
+  TtDatePipe
 } from '@tt/common-ui';
+import { Post, PostComment, PostService } from '@tt/data-access';
 
 @Component({
   selector: 'app-post',
@@ -18,10 +19,10 @@ import {
     TtDatePipe,
     SvgIconComponent,
     PostInputComponent,
-    CommentComponent,
+    CommentComponent
   ],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.scss',
+  styleUrl: './post.component.scss'
 })
 export class PostComponent implements OnInit {
   private readonly postService = inject(PostService);
@@ -45,7 +46,7 @@ export class PostComponent implements OnInit {
       this.postService.createComment({
         text: commentText,
         authorId: this.post()!.author.id,
-        postId: this.post()!.id,
+        postId: this.post()!.id
       })
     );
   }

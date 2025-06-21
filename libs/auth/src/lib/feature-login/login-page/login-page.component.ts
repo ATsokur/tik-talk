@@ -3,18 +3,18 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../auth/auth.service';
-import { isLoginFormValue, LoginForm } from '../../data';
+import { isLoginFormValue, LoginForm } from '@tt/data-access';
+import { AuthService } from '@tt/data-access';
 
 @Component({
   selector: 'app-login-page',
   imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss',
+  styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
   private readonly authService = inject(AuthService);
@@ -25,12 +25,12 @@ export class LoginPageComponent {
   public form = new FormGroup<LoginForm>({
     username: new FormControl<string>('', {
       validators: Validators.required,
-      nonNullable: true,
+      nonNullable: true
     }),
     password: new FormControl<string>('', {
       validators: Validators.required,
-      nonNullable: true,
-    }),
+      nonNullable: true
+    })
   });
 
   public onSubmit(): void {

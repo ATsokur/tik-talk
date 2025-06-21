@@ -9,6 +9,9 @@ import {
   SettingsPageComponent
 } from '@tt/profile';
 import { experimentalRoutes } from '@tt/experimental';
+import { provideState } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { ProfileEffects, profileFeature } from '@tt/data-access';
 
 export const routes: Routes = [
   {
@@ -26,7 +29,11 @@ export const routes: Routes = [
       },
       {
         path: 'search',
-        component: SearchPageComponent
+        component: SearchPageComponent,
+        providers: [
+          provideState(profileFeature),
+          provideEffects(ProfileEffects)
+        ]
       },
       {
         path: 'profile/:id',

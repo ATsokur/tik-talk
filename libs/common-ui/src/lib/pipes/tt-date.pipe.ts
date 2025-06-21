@@ -1,10 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DateTime } from 'luxon';
-import { timeNames } from '@tt/shared';
-import { TimeNames } from '../data';
+import { TimeNames } from '@tt/data-access';
 
 @Pipe({
-  name: 'ttDate',
+  name: 'ttDate'
 })
 export class TtDatePipe implements PipeTransform {
   transform(
@@ -16,7 +15,7 @@ export class TtDatePipe implements PipeTransform {
     if (!date) return null;
 
     const timeInMin = {
-      hour: 60,
+      hour: 60
     };
     const dateToday = DateTime.local();
     const dateFromISO = DateTime.fromISO(date);
@@ -31,12 +30,18 @@ export class TtDatePipe implements PipeTransform {
       return `${dateWithTimeZone.hour}:${dateWithTimeZone.minute}`;
     }
 
+    const timeNames = {
+      pack1: ['секунду', 'минуту', 'час', 'день'],
+      pack2: ['секунды', 'минуты', 'часа', 'дня'],
+      pack3: ['секунд', 'минут', 'часов', 'дней']
+    };
+
     const hourInDay = 24;
     const timeInMs = {
       sec: 1000,
       min: 60_000,
       hour: 3_600_000,
-      day: 86_400_000,
+      day: 86_400_000
     };
 
     const passMs = DateTime.local().toMillis() - dateWithTimeZone.toMillis();
@@ -49,7 +54,7 @@ export class TtDatePipe implements PipeTransform {
       const preLastNumber = Number(passTime.toString().slice(-2));
       const numbers = {
         forPack2: [2, 3, 4],
-        forPack3: [12, 13, 14],
+        forPack3: [12, 13, 14]
       };
 
       if (lastNumber === 1 && preLastNumber !== 11) {
@@ -77,7 +82,7 @@ export class TtDatePipe implements PipeTransform {
         'сентября',
         'октября',
         'ноября',
-        'декабря',
+        'декабря'
       ];
       const whenItWas = ['Сегодня', 'Вечера'];
       const dayOfMonth = dateFromISO.day;

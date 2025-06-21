@@ -14,5 +14,8 @@
     "jest.config.ts",
     "src/**/*.test.ts"
   ],
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "../data-access/src/lib/common-ui/time-names.interface.ts"
+  ]
 }

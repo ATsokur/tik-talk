@@ -19,16 +19,16 @@ import {
 
 import { debounceTime, fromEvent, Observable, Subscription } from 'rxjs';
 
+import { ValidateFullName, validatePhoneNumber } from '../../validators';
+import { MaskitoOptions } from '@maskito/core';
+import { MaskitoDirective } from '@maskito/angular';
+import phoneMask from './phone-mask';
 import {
   Appeal,
   CurrentCompounds,
   HomeTaskFormMockService,
   Option
-} from '../../data';
-import { ValidateFullName, validatePhoneNumber } from '../../validators';
-import { MaskitoOptions } from '@maskito/core';
-import { MaskitoDirective } from '@maskito/angular';
-import phoneMask from './phone-mask';
+} from '@tt/data-access';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({

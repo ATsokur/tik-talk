@@ -3,7 +3,7 @@ import {
   DestroyRef,
   effect,
   inject,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,13 +12,13 @@ import { Router } from '@angular/router';
 import { exhaustMap, firstValueFrom, tap } from 'rxjs';
 
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
-import { ProfileService } from '../../data';
+import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-settings-page',
   imports: [ProfileHeaderComponent, ReactiveFormsModule, AvatarUploadComponent],
   templateUrl: './settings-page.component.html',
-  styleUrl: './settings-page.component.scss',
+  styleUrl: './settings-page.component.scss'
 })
 export class SettingsPageComponent {
   private readonly fb = inject(FormBuilder);
@@ -33,21 +33,21 @@ export class SettingsPageComponent {
     firstName: [
       '',
       {
-        validators: [Validators.required],
-      },
+        validators: [Validators.required]
+      }
     ],
     lastName: [''],
     username: [
       {
         value: '',
-        disabled: true,
+        disabled: true
       },
       {
-        validators: [Validators.required],
-      },
+        validators: [Validators.required]
+      }
     ],
     description: [''],
-    stack: [''],
+    stack: ['']
   });
 
   constructor() {
@@ -56,7 +56,7 @@ export class SettingsPageComponent {
       this.form.patchValue({
         ...this.profileService.me(),
         //@ts-ignore
-        stack: this.mergeStack(this.profileService.me()?.stack),
+        stack: this.mergeStack(this.profileService.me()?.stack)
       });
     });
   }
@@ -78,7 +78,7 @@ export class SettingsPageComponent {
       //@ts-ignore
       .patchProfile({
         ...this.form.value,
-        stack: this.splitStack(this.form.value.stack),
+        stack: this.splitStack(this.form.value.stack)
       })
       .pipe(
         exhaustMap(() => this.profileService.getMe()),

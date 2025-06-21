@@ -34,6 +34,8 @@
     "@maskito/angular": "^3.9.0",
     "@maskito/core": "^3.9.0",
     "@maskito/phone": "^3.9.0",
+    "@ngrx/effects": "^19.2.1",
+    "@ngrx/store": "^19.2.1",
     "@nx/angular": "21.2.0",
     "@nx/eslint": "21.2.0",
     "@nx/eslint-plugin": "21.2.0",

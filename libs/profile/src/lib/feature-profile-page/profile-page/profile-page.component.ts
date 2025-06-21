@@ -8,8 +8,9 @@ import { switchMap } from 'rxjs';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
 
 import { PostFeedComponent } from '@tt/posts';
-import { ProfileService } from '../../data';
+
 import { ProfileHeaderComponent } from '../../ui';
+import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-profile-page',

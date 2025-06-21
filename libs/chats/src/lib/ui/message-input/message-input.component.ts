@@ -5,17 +5,17 @@ import {
   inject,
   input,
   Output,
-  Renderer2,
+  Renderer2
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { ProfileService } from '@tt/profile';
+import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-message-input',
   imports: [AvatarCircleComponent, SvgIconComponent, FormsModule, NgIf],
   templateUrl: './message-input.component.html',
-  styleUrl: './message-input.component.scss',
+  styleUrl: './message-input.component.scss'
 })
 export class MessageInputComponent {
   private readonly r2 = inject(Renderer2);

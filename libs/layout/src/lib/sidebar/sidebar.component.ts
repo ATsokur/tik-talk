@@ -4,9 +4,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { firstValueFrom } from 'rxjs';
 
-import { ProfileService } from '@tt/profile';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
+import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,10 +17,10 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
     RouterLink,
     RouterLinkActive,
     SubscriberCardComponent,
-    AvatarCircleComponent,
+    AvatarCircleComponent
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+  styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
@@ -31,23 +31,23 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Моя страница',
       icon: 'home',
-      link: 'profile/me',
+      link: 'profile/me'
     },
     {
       label: 'Чаты',
       icon: 'chats',
-      link: 'chats',
+      link: 'chats'
     },
     {
       label: 'Поиск',
       icon: 'search',
-      link: 'search',
+      link: 'search'
     },
     {
       label: 'Experimental',
       icon: 'experiment',
-      link: 'experimental',
-    },
+      link: 'experimental'
+    }
   ];
 
   ngOnInit(): void {

@@ -9,7 +9,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Feature, FormExperimentalMockService } from '../../data';
+import { Feature, FormExperimentalMockService } from '@tt/data-access';
 
 interface InitialValue {
   city?: string;

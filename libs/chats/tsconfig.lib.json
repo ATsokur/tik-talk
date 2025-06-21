@@ -14,5 +14,5 @@
     "jest.config.ts",
     "src/**/*.test.ts"
   ],
-  "include": ["src/**/*.ts", "src/lib/data/interfaces/chats.interface.ts"]
+  "include": ["src/**/*.ts", "../data-access/src/lib/chats/chats.interface.ts"]
 }

@@ -5,28 +5,28 @@ import {
   inject,
   OnDestroy,
   Renderer2,
-  signal,
+  signal
 } from '@angular/core';
 
 import { auditTime, firstValueFrom, fromEvent, Subscription } from 'rxjs';
 
 import { PostInputComponent } from '../../ui/post-input/post-input.component';
 import { PostComponent } from '../post/post.component';
-import { PostComment, PostService } from '../../data';
-import { GlobalStoreService } from '@tt/shared';
+
+import { PostComment, PostService, ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-post-feed',
   imports: [PostInputComponent, PostComponent],
   templateUrl: './post-feed.component.html',
-  styleUrl: './post-feed.component.scss',
+  styleUrl: './post-feed.component.scss'
 })
 export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly postService = inject(PostService);
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
   private resizeSubscription!: Subscription;
-  public profile = inject(GlobalStoreService).me;
+  public profile = inject(ProfileService).me;
   public comments = signal<PostComment[]>([]);
   public feed = this.postService.posts;
   public inputType = 'post';
@@ -51,7 +51,7 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
         title: 'Клевый пост',
         content: postText,
         authorId: this.profile()!.id,
-        communityId: 0,
+        communityId: 0
       })
     );
   }
