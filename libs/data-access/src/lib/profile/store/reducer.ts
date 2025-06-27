@@ -7,7 +7,7 @@ export interface ProfileState {
   profileFilters: Record<string, any>;
 }
 
-export const initialState: ProfileState = {
+const initialState: ProfileState = {
   profiles: [],
   profileFilters: {}
 };
@@ -19,6 +19,7 @@ export const initialState: ProfileState = {
  * Все последующие reducers будут on(action_name, callbackFn(state,payload)) Прописываются через запятую после initialState
  * on() как eventListener. 1 аргумент - название события, 2 аргумент - что необходимо сделать.
  * из фун-ии reducer мы должны вернуть новое значение всего state
+ * payload (actionPayload) - данные, которые мы передали в action
  * profiles: payload.profiles запрашиваем на сервере
  * on() return актуальный state
  */
@@ -32,10 +33,10 @@ export const profileFeature = createFeature({
         profiles: payload.profiles
       };
     }),
-    on(profileActions.filterEvents, (state, payload) => {
+    on(profileActions.filterEvents, (state, { filters }) => {
       return {
         ...state,
-        profileFilters: payload.filters
+        profileFilters: filters
       };
     })
   )

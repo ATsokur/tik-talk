@@ -1,16 +1,15 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 
-import { firstValueFrom } from 'rxjs';
-
-import { PostInputComponent } from '../../ui/post-input/post-input.component';
-import { CommentComponent } from '../../ui/comment/comment.component';
-
+import { Store } from '@ngrx/store';
 import {
   AvatarCircleComponent,
   SvgIconComponent,
   TtDatePipe
 } from '@tt/common-ui';
-import { Post, PostComment, PostService } from '@tt/data-access';
+import { commentsActions, Post, postsFeature } from '@tt/data-access';
+
+import { CommentComponent } from '../../ui/comment/comment.component';
+import { PostInputComponent } from '../../ui/post-input/post-input.component';
 
 @Component({
   selector: 'app-post',
@@ -24,10 +23,10 @@ import { Post, PostComment, PostService } from '@tt/data-access';
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
-export class PostComponent implements OnInit {
-  private readonly postService = inject(PostService);
+export class PostComponent {
+  #store = inject(Store);
   public post = input<Post>();
-  public comments = signal<PostComment[]>([]);
+  public comments = this.#store.selectSignal(postsFeature.selectComments);
   public isComments = false;
   public inputType = 'comment';
 
@@ -36,29 +35,18 @@ export class PostComponent implements OnInit {
   }
 
   getCommentText(commentText: string) {
-    this.onCreateComment(commentText)?.then(async (res) =>
-      this.getComments(res.postId)
-    );
+    this.onCreateComment(commentText);
   }
 
   onCreateComment(commentText: string) {
-    return firstValueFrom(
-      this.postService.createComment({
-        text: commentText,
-        authorId: this.post()!.author.id,
-        postId: this.post()!.id
+    return this.#store.dispatch(
+      commentsActions.createComment({
+        payload: {
+          text: commentText,
+          authorId: this.post()!.author.id,
+          postId: this.post()!.id
+        }
       })
     );
-  }
-
-  async getComments(postId: number) {
-    const comments = await firstValueFrom(
-      this.postService.getCommentByPostId(postId)
-    );
-    this.comments.set(comments);
-  }
-
-  ngOnInit() {
-    this.comments.set(this.post()!.comments);
   }
 }

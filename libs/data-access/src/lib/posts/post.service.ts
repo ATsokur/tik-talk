@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+
+import { BASE_API_URL } from '@tt/shared';
+
 import {
-  PostComment,
   CommentCreateDto,
   Post,
+  PostComment,
   PostCreateDto
 } from './post.interface';
-import { map, switchMap, tap } from 'rxjs';
-import { BASE_API_URL } from '@tt/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -15,20 +16,12 @@ import { BASE_API_URL } from '@tt/shared';
 export class PostService {
   #http = inject(HttpClient);
 
-  posts = signal<Post[]>([]);
-
   createPost(payload: PostCreateDto) {
-    return this.#http.post<Post>(`${BASE_API_URL}post/`, payload).pipe(
-      switchMap(() => {
-        return this.fetchPosts();
-      })
-    );
+    return this.#http.post<Post>(`${BASE_API_URL}post/`, payload);
   }
 
   fetchPosts() {
-    return this.#http
-      .get<Post[]>(`${BASE_API_URL}post/`)
-      .pipe(tap((res) => this.posts.set(res)));
+    return this.#http.get<Post[]>(`${BASE_API_URL}post/`);
   }
 
   createComment(payload: CommentCreateDto) {
@@ -36,8 +29,6 @@ export class PostService {
   }
 
   getCommentByPostId(postId: number) {
-    return this.#http
-      .get<Post>(`${BASE_API_URL}post/${postId}`)
-      .pipe(map((res) => res.comments));
+    return this.#http.get<Post>(`${BASE_API_URL}post/${postId}`);
   }
 }

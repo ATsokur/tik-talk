@@ -4,16 +4,22 @@ import {
   ElementRef,
   inject,
   OnDestroy,
-  Renderer2,
-  signal
+  Renderer2
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { auditTime, firstValueFrom, fromEvent, Subscription } from 'rxjs';
+import { auditTime, fromEvent, map, Subscription } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import {
+  postsActions,
+  postsFeature,
+  ProfileService,
+  selectPosts
+} from '@tt/data-access';
 
 import { PostInputComponent } from '../../ui/post-input/post-input.component';
 import { PostComponent } from '../post/post.component';
-
-import { PostComment, PostService, ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-post-feed',
@@ -22,17 +28,26 @@ import { PostComment, PostService, ProfileService } from '@tt/data-access';
   styleUrl: './post-feed.component.scss'
 })
 export class PostFeedComponent implements AfterViewInit, OnDestroy {
-  private readonly postService = inject(PostService);
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
+  #store = inject(Store);
   private resizeSubscription!: Subscription;
   public profile = inject(ProfileService).me;
-  public comments = signal<PostComment[]>([]);
-  public feed = this.postService.posts;
+  public feed = this.#store.selectSignal(selectPosts);
   public inputType = 'post';
 
   constructor() {
-    firstValueFrom(this.postService.fetchPosts());
+    this.#store
+      .select(postsFeature.selectPosts)
+      .pipe(
+        map((posts) => !posts.length),
+        takeUntilDestroyed()
+      )
+      .subscribe((isEmptyPosts) => {
+        if (isEmptyPosts) {
+          this.#store.dispatch(postsActions.fetchPosts());
+        }
+      });
   }
 
   resizeFeed(): void {
@@ -46,12 +61,14 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   }
 
   onCreatePost(postText: string) {
-    firstValueFrom(
-      this.postService.createPost({
-        title: 'Клевый пост',
-        content: postText,
-        authorId: this.profile()!.id,
-        communityId: 0
+    this.#store.dispatch(
+      postsActions.createPost({
+        postPayload: {
+          title: 'Клевый пост',
+          content: postText,
+          authorId: this.profile()!.id,
+          communityId: 0
+        }
       })
     );
   }
