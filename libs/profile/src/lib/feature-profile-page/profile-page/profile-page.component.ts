@@ -39,10 +39,11 @@ export class ProfilePageComponent implements OnInit {
   public me$ = this.#store.select(selectMe);
   public subscribers$ = this.#store.select(selectSubscribers);
   public isMyPage = signal<boolean>(false);
+  public isProfilePage = signal<boolean>(true);
 
   profile$ = this.route.params.pipe(
     tap(({ id }) => {
-      this.isMyPage.set(!!id);
+      this.isMyPage.set(id && id === 'me');
     }),
     switchMap(({ id }) => {
       if (id === 'me') return this.me$;

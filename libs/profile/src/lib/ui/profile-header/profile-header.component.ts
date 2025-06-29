@@ -10,6 +10,6 @@ import { Profile } from '@tt/data-access';
   styleUrl: './profile-header.component.scss'
 })
 export class ProfileHeaderComponent {
-  public isMyPage = input<boolean>();
+  public isProfilePage = input<boolean>();
   public profile = input<Profile>();
 }

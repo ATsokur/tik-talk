@@ -1,8 +1,7 @@
 @if (profile(); as profile) {
 <app-avatar-circle
-  [class]="isMyPage() ? 'size140' : 'size112'"
-  [avatarUrl]="profile.avatarUrl"
->
+  [class]="isProfilePage() ? 'size140' : 'size112'"
+  [avatarUrl]="profile.avatarUrl">
 </app-avatar-circle>
 <div class="profile-name__wrapper">
   <h1 class="h4 profile-name">
