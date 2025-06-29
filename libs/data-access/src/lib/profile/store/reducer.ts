@@ -5,11 +5,17 @@ import { profileActions } from './actions';
 export interface ProfileState {
   profiles: Profile[];
   profileFilters: Record<string, any>;
+  me: Profile | null;
+  account: Profile | null;
+  subscribers: Profile[];
 }
 
 const initialState: ProfileState = {
   profiles: [],
-  profileFilters: {}
+  profileFilters: {},
+  me: null,
+  account: null,
+  subscribers: []
 };
 
 /**
@@ -37,6 +43,24 @@ export const profileFeature = createFeature({
       return {
         ...state,
         profileFilters: filters
+      };
+    }),
+    on(profileActions.meLoaded, (state, { me }) => {
+      return {
+        ...state,
+        me
+      };
+    }),
+    on(profileActions.accountLoaded, (state, { account }) => {
+      return {
+        ...state,
+        account
+      };
+    }),
+    on(profileActions.subscribersLoaded, (state, { subscribers }) => {
+      return {
+        ...state,
+        subscribers
       };
     })
   )

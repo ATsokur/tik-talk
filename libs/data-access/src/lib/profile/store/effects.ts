@@ -1,8 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { ProfileService } from '../profile.service';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { profileActions } from './actions';
+
 import { map, switchMap } from 'rxjs';
+
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+
+import { ProfileService } from '../profile.service';
+import { profileActions } from './actions';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +28,56 @@ export class ProfileEffects {
         return this.#profileService.filterProfiles(filters);
       }),
       map((res) => profileActions.profilesLoaded({ profiles: res.items }))
+    );
+  });
+
+  fetchMe = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.fetchMe, profileActions.saveSettings),
+      switchMap(() => {
+        return this.#profileService.getMe();
+      }),
+      map((me) => profileActions.meLoaded({ me }))
+    );
+  });
+
+  fetchAccount = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.fetchAccount),
+      switchMap(({ id }) => {
+        return this.#profileService.getAccount(String(id));
+      }),
+      map((account) => profileActions.accountLoaded({ account }))
+    );
+  });
+
+  fetchSubscribers = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.fetchSubscribers),
+      switchMap(({ amount }) => {
+        return this.#profileService.getSubscribersShortList(amount);
+      }),
+      map((subscribers) => profileActions.subscribersLoaded({ subscribers }))
+    );
+  });
+
+  patchProfile = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.patchProfile),
+      switchMap(({ profile }) => {
+        return this.#profileService.patchProfile(profile);
+      }),
+      map(() => profileActions.saveSettings())
+    );
+  });
+
+  uploadAvatar = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.uploadAvatar),
+      switchMap(({ file }) => {
+        return this.#profileService.uploadAvatar(file);
+      }),
+      map(() => profileActions.saveSettings())
     );
   });
 }

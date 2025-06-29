@@ -8,8 +8,10 @@ import {
   Renderer2
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
+import { Store } from '@ngrx/store';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { ProfileService } from '@tt/data-access';
+import { selectMe } from '@tt/data-access';
 
 @Component({
   selector: 'app-message-input',
@@ -19,7 +21,8 @@ import { ProfileService } from '@tt/data-access';
 })
 export class MessageInputComponent {
   private readonly r2 = inject(Renderer2);
-  public me = inject(ProfileService).me;
+  #store = inject(Store);
+  public me = this.#store.selectSignal(selectMe);
   public avatarUrl = input<string | null>('');
 
   public inputType = input<string>('');

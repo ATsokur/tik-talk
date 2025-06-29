@@ -1,12 +1,12 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
-import { firstValueFrom } from 'rxjs';
-
+import { Store } from '@ngrx/store';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
+import { selectMe, selectSubscribers } from '@tt/data-access';
+
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
-import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,10 +22,10 @@ import { ProfileService } from '@tt/data-access';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent implements OnInit {
-  private readonly profileService = inject(ProfileService);
-  public subscribers$ = this.profileService.getSubscribersShortList();
-  public me = this.profileService.me;
+export class SidebarComponent {
+  #store = inject(Store);
+  public subscribers$ = this.#store.select(selectSubscribers);
+  public me = this.#store.selectSignal(selectMe);
 
   public readonly menuItems = [
     {
@@ -49,8 +49,4 @@ export class SidebarComponent implements OnInit {
       link: 'experimental'
     }
   ];
-
-  ngOnInit(): void {
-    firstValueFrom(this.profileService.getMe());
-  }
 }

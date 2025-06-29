@@ -1,6 +1,5 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 import { tap } from 'rxjs';
 
@@ -9,7 +8,8 @@ import {
   DndDirective,
   SvgIconComponent
 } from '@tt/common-ui';
-import { ProfileService } from '@tt/data-access';
+import { selectMe } from '@tt/data-access';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-avatar-upload',
@@ -18,10 +18,10 @@ import { ProfileService } from '@tt/data-access';
   styleUrl: './avatar-upload.component.scss'
 })
 export class AvatarUploadComponent {
-  private readonly profileService = inject(ProfileService);
+  #store = inject(Store);
   public preview = signal<string>('');
 
-  public me$ = toObservable(this.profileService.me).pipe(
+  public me$ = this.#store.select(selectMe).pipe(
     tap((profile) => {
       profile?.avatarUrl
         ? this.preview.set(profile.avatarUrl)

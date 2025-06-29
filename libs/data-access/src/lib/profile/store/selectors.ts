@@ -19,3 +19,24 @@ export const selectFilteredProfiles = createSelector(
     };
   }
 );
+
+export const selectMe = createSelector(
+  profileFeature.selectMe,
+  (me: Profile | null) => {
+    return me;
+  }
+);
+
+export const selectAccount = createSelector(
+  profileFeature.selectAccount,
+  (profile: Profile | null) => {
+    return profile;
+  }
+);
+
+export const selectSubscribers = createSelector(
+  profileFeature.selectSubscribers,
+  (subscribers: Profile[]) => {
+    return subscribers;
+  }
+);

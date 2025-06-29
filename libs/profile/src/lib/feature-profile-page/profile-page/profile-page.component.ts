@@ -1,16 +1,21 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { switchMap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 
+import { Store } from '@ngrx/store';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
-
+import {
+  profileActions,
+  selectMe,
+  selectAccount,
+  selectSubscribers
+} from '@tt/data-access';
 import { PostFeedComponent } from '@tt/posts';
 
 import { ProfileHeaderComponent } from '../../ui';
-import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-profile-page',
@@ -26,24 +31,47 @@ import { ProfileService } from '@tt/data-access';
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss'
 })
-export class ProfilePageComponent {
-  private readonly profileService = inject(ProfileService);
+export class ProfilePageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  public me$ = toObservable(this.profileService.me);
-  public subscribers$ = this.profileService.getSubscribersShortList(7);
+  #destroy = inject(DestroyRef);
+  #store = inject(Store);
+  public me$ = this.#store.select(selectMe);
+  public subscribers$ = this.#store.select(selectSubscribers);
   public isMyPage = signal<boolean>(false);
 
   profile$ = this.route.params.pipe(
+    tap(({ id }) => {
+      this.isMyPage.set(!!id);
+    }),
     switchMap(({ id }) => {
-      this.isMyPage.set(id === 'me' || id === this.profileService.me()?.id);
       if (id === 'me') return this.me$;
-
-      return this.profileService.getAccount(id);
+      this.#store.dispatch(profileActions.fetchAccount({ id }));
+      return this.#store.select(selectAccount);
     })
   );
 
   async sendMessage(userId: number) {
     this.router.navigate(['chats/', 'new'], { queryParams: { userId } });
+  }
+
+  ngOnInit(): void {
+    this.#store
+      .select(selectSubscribers)
+      .pipe(takeUntilDestroyed(this.#destroy))
+      .subscribe((subscribers) => {
+        if (!subscribers.length) {
+          this.#store.dispatch(profileActions.fetchSubscribers({ amount: 7 }));
+        }
+      });
+
+    this.#store
+      .select(selectMe)
+      .pipe(takeUntilDestroyed(this.#destroy))
+      .subscribe((me) => {
+        if (!me) {
+          this.#store.dispatch(profileActions.fetchMe());
+        }
+      });
   }
 }

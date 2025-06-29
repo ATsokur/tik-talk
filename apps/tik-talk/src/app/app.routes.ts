@@ -43,7 +43,12 @@ export const routes: Routes = [
       {
         path: 'profile/:id',
         component: ProfilePageComponent,
-        providers: [provideState(postsFeature), provideEffects(PostsEffects)]
+        providers: [
+          provideState(profileFeature),
+          provideEffects(ProfileEffects),
+          provideState(postsFeature),
+          provideEffects(PostsEffects)
+        ]
       },
       {
         path: 'settings',

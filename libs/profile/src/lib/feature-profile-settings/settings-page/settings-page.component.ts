@@ -1,18 +1,11 @@
-import {
-  Component,
-  DestroyRef,
-  effect,
-  inject,
-  ViewChild
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { exhaustMap, firstValueFrom, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { profileActions, selectMe } from '@tt/data-access';
 
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
-import { ProfileService } from '@tt/data-access';
 
 @Component({
   selector: 'app-settings-page',
@@ -22,10 +15,9 @@ import { ProfileService } from '@tt/data-access';
 })
 export class SettingsPageComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
-  public profile = this.profileService.me;
+  #store = inject(Store);
+  public profile = this.#store.selectSignal(selectMe);
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
@@ -54,9 +46,9 @@ export class SettingsPageComponent {
     effect(() => {
       //@ts-ignore
       this.form.patchValue({
-        ...this.profileService.me(),
+        ...this.profile(),
         //@ts-ignore
-        stack: this.mergeStack(this.profileService.me()?.stack)
+        stack: this.mergeStack(this.profile()?.stack)
       });
     });
   }
@@ -68,24 +60,22 @@ export class SettingsPageComponent {
     if (this.form.invalid) return;
 
     if (this.avatarUploader.avatar) {
-      firstValueFrom(
-        this.profileService.uploadAvatar(this.avatarUploader.avatar)
+      this.#store.dispatch(
+        profileActions.uploadAvatar({ file: this.avatarUploader.avatar })
       );
     }
 
     //@ts-ignore
-    this.profileService
-      //@ts-ignore
-      .patchProfile({
-        ...this.form.value,
-        stack: this.splitStack(this.form.value.stack)
+    this.#store.dispatch(
+      profileActions.patchProfile({
+        //@ts-ignore
+        profile: {
+          ...this.form.value,
+          stack: this.splitStack(this.form.value.stack)
+        }
       })
-      .pipe(
-        exhaustMap(() => this.profileService.getMe()),
-        tap(() => this.router.navigate(['/profile/me'])),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe();
+    );
+    this.router.navigate(['/profile/me']);
   }
 
   splitStack(stack: string | null | string[] | undefined): string[] {

@@ -5,15 +5,17 @@ import { map } from 'rxjs';
 
 import { DateTime } from 'luxon';
 import { Chat, LastMessageResponse, Message } from './chats.interface';
-import { ProfileService } from '../profile';
+import { selectMe } from '../profile';
 import { BASE_API_URL } from '@tt/shared';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatsService {
   private readonly http = inject(HttpClient);
-  private readonly me = inject(ProfileService).me;
+  #store = inject(Store);
+  private readonly me = this.#store.selectSignal(selectMe);
 
   private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
   private readonly messageUrl: string = `${BASE_API_URL}message/`;

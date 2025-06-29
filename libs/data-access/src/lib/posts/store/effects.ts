@@ -7,6 +7,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { PostService } from '../post.service';
 import { commentsActions, postsActions } from './actions';
 import { PostComment } from '../post.interface';
+import { profileActions } from '../../profile';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class PostsEffects {
 
   fetchPosts = createEffect(() => {
     return this.actions$.pipe(
-      ofType(postsActions.fetchPosts),
+      ofType(postsActions.fetchPosts, profileActions.saveSettings),
       switchMap(() => {
         return this.#postService.fetchPosts();
       }),

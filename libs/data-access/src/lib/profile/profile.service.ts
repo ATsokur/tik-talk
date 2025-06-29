@@ -1,30 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
-import { map, tap } from 'rxjs';
+import { map } from 'rxjs';
 
-import { Profile } from './profile.interface';
+import { BASE_API_URL } from '@tt/shared';
 
 import { Pageble } from '../shared';
-import { BASE_API_URL } from '@tt/shared';
+import { Profile } from './profile.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
   private readonly http = inject(HttpClient);
-  public me = signal<Profile | null>(null);
 
   getTestAccounts() {
     return this.http.get<Profile[]>(`${BASE_API_URL}account/test_accounts`);
   }
 
   getMe() {
-    return this.http.get<Profile>(`${BASE_API_URL}account/me`).pipe(
-      tap((res) => {
-        this.me.set(res);
-      })
-    );
+    return this.http.get<Profile>(`${BASE_API_URL}account/me`);
   }
 
   getAccount(id: string) {

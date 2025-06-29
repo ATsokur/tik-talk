@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import {
   postsActions,
   postsFeature,
-  ProfileService,
+  selectMe,
   selectPosts
 } from '@tt/data-access';
 
@@ -32,7 +32,7 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly r2 = inject(Renderer2);
   #store = inject(Store);
   private resizeSubscription!: Subscription;
-  public profile = inject(ProfileService).me;
+  public profile = this.#store.selectSignal(selectMe);
   public feed = this.#store.selectSignal(selectPosts);
   public inputType = 'post';
 
