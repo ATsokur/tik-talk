@@ -65,14 +65,5 @@ export class ProfilePageComponent implements OnInit {
           this.#store.dispatch(profileActions.fetchSubscribers({ amount: 7 }));
         }
       });
-
-    this.#store
-      .select(selectMe)
-      .pipe(takeUntilDestroyed(this.#destroy))
-      .subscribe((me) => {
-        if (!me) {
-          this.#store.dispatch(profileActions.fetchMe());
-        }
-      });
   }
 }

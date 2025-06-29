@@ -1,10 +1,11 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { selectMe, selectSubscribers } from '@tt/data-access';
+import { profileActions, selectMe, selectSubscribers } from '@tt/data-access';
 
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
 
@@ -22,8 +23,9 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   #store = inject(Store);
+  #destroy$ = inject(DestroyRef);
   public subscribers$ = this.#store.select(selectSubscribers);
   public me = this.#store.selectSignal(selectMe);
 
@@ -49,4 +51,15 @@ export class SidebarComponent {
       link: 'experimental'
     }
   ];
+
+  ngOnInit(): void {
+    this.#store
+      .select(selectMe)
+      .pipe(takeUntilDestroyed(this.#destroy$))
+      .subscribe((me) => {
+        if (!me) {
+          this.#store.dispatch(profileActions.fetchMe());
+        }
+      });
+  }
 }
