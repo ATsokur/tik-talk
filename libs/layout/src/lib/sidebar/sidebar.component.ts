@@ -61,5 +61,13 @@ export class SidebarComponent implements OnInit {
           this.#store.dispatch(profileActions.fetchMe());
         }
       });
+    this.#store
+      .select(selectSubscribers)
+      .pipe(takeUntilDestroyed(this.#destroy$))
+      .subscribe((subscribers) => {
+        if (!subscribers.length) {
+          this.#store.dispatch(profileActions.fetchSubscribers({ amount: 7 }));
+        }
+      });
   }
 }

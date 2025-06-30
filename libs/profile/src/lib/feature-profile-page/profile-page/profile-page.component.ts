@@ -1,6 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { switchMap, tap } from 'rxjs';
@@ -9,8 +8,8 @@ import { Store } from '@ngrx/store';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
 import {
   profileActions,
-  selectMe,
   selectAccount,
+  selectMe,
   selectSubscribers
 } from '@tt/data-access';
 import { PostFeedComponent } from '@tt/posts';
@@ -31,10 +30,9 @@ import { ProfileHeaderComponent } from '../../ui';
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss'
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  #destroy = inject(DestroyRef);
   #store = inject(Store);
   public me$ = this.#store.select(selectMe);
   public subscribers$ = this.#store.select(selectSubscribers);
@@ -54,16 +52,5 @@ export class ProfilePageComponent implements OnInit {
 
   async sendMessage(userId: number) {
     this.router.navigate(['chats/', 'new'], { queryParams: { userId } });
-  }
-
-  ngOnInit(): void {
-    this.#store
-      .select(selectSubscribers)
-      .pipe(takeUntilDestroyed(this.#destroy))
-      .subscribe((subscribers) => {
-        if (!subscribers.length) {
-          this.#store.dispatch(profileActions.fetchSubscribers({ amount: 7 }));
-        }
-      });
   }
 }

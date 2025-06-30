@@ -22,6 +22,7 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    providers: [provideState(profileFeature), provideEffects(ProfileEffects)],
     children: [
       {
         path: '',
@@ -34,11 +35,7 @@ export const routes: Routes = [
       },
       {
         path: 'search',
-        component: SearchPageComponent,
-        providers: [
-          provideState(profileFeature),
-          provideEffects(ProfileEffects)
-        ]
+        component: SearchPageComponent
       },
       {
         path: 'profile/:id',

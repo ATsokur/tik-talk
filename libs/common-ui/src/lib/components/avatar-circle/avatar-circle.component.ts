@@ -5,7 +5,7 @@ import { ImgUrlPipe } from '../../pipes';
   selector: 'app-avatar-circle',
   imports: [ImgUrlPipe],
   templateUrl: './avatar-circle.component.html',
-  styleUrl: './avatar-circle.component.scss',
+  styleUrl: './avatar-circle.component.scss'
 })
 export class AvatarCircleComponent {
   public avatarUrl = input<string | null>();
