@@ -1,10 +1,12 @@
 @if(profile) {
 <div class="profile-card">
   <div class="avatar-name">
-    <img
-      class="profile-card__avatar"
-      [src]="profile.avatarUrl | imgUrl"
-      [alt]="profile.lastName" />
+    <a [routerLink]="`/profile/${profile.id}`">
+      <img
+        class="profile-card__avatar"
+        [src]="profile.avatarUrl | imgUrl"
+        [alt]="profile.lastName" />
+    </a>
     <div class="profile-card__name">
       <strong class="h6">{{ profile.firstName }} {{ profile.lastName }}</strong>
       <span class="subtitle">{{ profile.username }}</span>
@@ -22,7 +24,20 @@
   </div>
 
   <div class="profile-card__action-btns">
-    <button class="btn subscribe-btn">Подписаться</button>
+    @if (isSubscribed()) {
+    <button class="subscribed-btn" (click)="toSubscribe()">
+      <svg class="subscribed-icon" icon="subscribed"></svg>
+    </button>
+    <button class="btn send-message-btn" (click)="toChat(profile.id)">
+      <span>Написать</span>
+      <svg class="send-message-icon" icon="send-message"></svg>
+    </button>
+    } @else {
+    <button class="btn to-subscribe-btn" (click)="toSubscribe()">
+      <span>Подписаться</span>
+      <svg class="to-subscribe-icon" icon="subscribe"></svg>
+    </button>
+    }
   </div>
 </div>
 }

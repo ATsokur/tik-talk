@@ -2,6 +2,8 @@
 
 <div class="profile-card__wrapper">
   @for(profile of profiles().profiles.slice(0, 9); track profile.id) {
-  <app-profile-card [profile]="profile"></app-profile-card>
+  <app-profile-card
+    [profile]="profile"
+    (chat)="toChat($event)"></app-profile-card>
   }
 </div>

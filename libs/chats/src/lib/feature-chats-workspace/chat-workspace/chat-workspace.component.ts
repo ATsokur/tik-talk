@@ -23,6 +23,11 @@ export class ChatWorkspaceComponent {
   #router = inject(Router);
   private readonly chatsService = inject(ChatsService);
 
+  /**
+   * Сначала мы обрабатываем id === 'new', а потом при переходе на 40 строчке в chats
+   * у нас меняется route params на chat.id, т.к. он изменил, то это значение пошло по потоку
+   * и далее будет перехвачено и обработано в switchMap. Так мы сделаем запрос getChatById
+   */
   public activeChat$ = this.route.params.pipe(
     switchMap(({ id }) => {
       if (id === 'new') {

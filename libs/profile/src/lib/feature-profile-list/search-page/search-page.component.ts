@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { ProfileFiltersComponent } from '../profile-filters/profile-filters.component';
-import { ProfileCardComponent } from '../../ui';
-import { selectFilteredProfiles } from '@tt/data-access';
 import { Store } from '@ngrx/store';
+import { selectFilteredProfiles } from '@tt/data-access';
+
+import { ProfileCardComponent } from '../../ui';
+import { ProfileFiltersComponent } from '../profile-filters/profile-filters.component';
 
 @Component({
   selector: 'app-search-page',
@@ -13,5 +15,10 @@ import { Store } from '@ngrx/store';
 })
 export class SearchPageComponent {
   #store = inject(Store);
+  #router = inject(Router);
   public profiles = this.#store.selectSignal(selectFilteredProfiles);
+
+  toChat(userId: number) {
+    this.#router.navigate(['chats/', 'new'], { queryParams: { userId } });
+  }
 }
