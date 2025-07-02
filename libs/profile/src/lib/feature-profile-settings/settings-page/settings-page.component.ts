@@ -75,7 +75,9 @@ export class SettingsPageComponent {
         }
       })
     );
-    this.router.navigate(['/profile/me']);
+    this.router.navigate(['/profile/me'], {
+      queryParams: { param: 'save-settings' }
+    });
   }
 
   splitStack(stack: string | null | string[] | undefined): string[] {

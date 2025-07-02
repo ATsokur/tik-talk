@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { map, switchMap, take } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
@@ -33,8 +33,7 @@ export class ProfileEffects {
 
   fetchMe = createEffect(() => {
     return this.actions$.pipe(
-      ofType(profileActions.fetchMe, profileActions.saveSettings),
-      take(1),
+      ofType(profileActions.fetchMe),
       switchMap(() => {
         return this.#profileService.getMe();
       }),
@@ -68,7 +67,7 @@ export class ProfileEffects {
       switchMap(({ profile }) => {
         return this.#profileService.patchProfile(profile);
       }),
-      map(() => profileActions.saveSettings())
+      map(() => profileActions.fetchMe())
     );
   });
 
@@ -78,7 +77,7 @@ export class ProfileEffects {
       switchMap(({ file }) => {
         return this.#profileService.uploadAvatar(file);
       }),
-      map(() => profileActions.saveSettings())
+      map(() => profileActions.saveAvatar())
     );
   });
 }

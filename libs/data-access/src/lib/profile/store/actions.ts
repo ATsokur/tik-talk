@@ -21,7 +21,7 @@ export const profileActions = createActionGroup({
     'subscribers loaded': props<{ subscribers: Profile[] }>(),
 
     'patch profile': props<{ profile: Partial<Profile> }>(),
-    'save settings': emptyProps(),
+    'save avatar': emptyProps(),
     'upload avatar': props<{ file: File }>()
   }
 });

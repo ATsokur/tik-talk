@@ -8,7 +8,14 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { auditTime, fromEvent, map, Subscription } from 'rxjs';
+import {
+  auditTime,
+  filter,
+  fromEvent,
+  map,
+  Subscription,
+  switchMap
+} from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import {
@@ -20,6 +27,7 @@ import {
 
 import { PostInputComponent } from '../../ui/post-input/post-input.component';
 import { PostComponent } from '../post/post.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-feed',
@@ -31,12 +39,18 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly hostElement = inject(ElementRef);
   private readonly r2 = inject(Renderer2);
   #store = inject(Store);
+  #route = inject(ActivatedRoute);
+  #router = inject(Router);
   private resizeSubscription!: Subscription;
   public profile = this.#store.selectSignal(selectMe);
   public feed = this.#store.selectSignal(selectPosts);
   public inputType = 'post';
 
   constructor() {
+    this.getPosts();
+  }
+
+  getPosts() {
     this.#store
       .select(postsFeature.selectPosts)
       .pipe(
@@ -48,6 +62,16 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
           this.#store.dispatch(postsActions.fetchPosts());
         }
       });
+    this.#route.queryParams
+      .pipe(
+        filter(({ param }) => param === 'save-settings'),
+        switchMap(() => {
+          this.#store.dispatch(postsActions.fetchPosts());
+          return this.#router.navigate(['profile/me']);
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
   }
 
   resizeFeed(): void {

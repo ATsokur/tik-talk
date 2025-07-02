@@ -4,7 +4,10 @@
   }
 </div>
 
-<form class="profile-form__wrapper tt-block" [formGroup]="form">
+<form
+  class="profile-form__wrapper tt-block"
+  [formGroup]="form"
+  (ngSubmit)="onSave()">
   <div class="profile-form">
     <div class="two-columns">
       <label class="tt-form-label">
@@ -14,8 +17,7 @@
           type="text"
           class="tt-form-input"
           placeholder="Введите данные"
-          formControlName="firstName"
-        />
+          formControlName="firstName" />
       </label>
       <label class="tt-form-label">
         <span class="tt-form-label__text">Фамилия</span>
@@ -24,8 +26,7 @@
           type="text"
           class="tt-form-input"
           placeholder="Введите данные"
-          formControlName="lastName"
-        />
+          formControlName="lastName" />
       </label>
     </div>
 
@@ -41,8 +42,7 @@
       <textarea
         class="tt-form-input tt-textarea"
         rows="4"
-        formControlName="description"
-      >
+        formControlName="description">
       </textarea>
     </label>
 
@@ -58,14 +58,13 @@
         type="text"
         class="tt-form-input"
         placeholder="Введите данные"
-        formControlName="stack"
-      />
+        formControlName="stack" />
     </label>
   </div>
 
   <div>
     <div>
-      <button class="btn" (click)="onSave()">Сохранить</button>
+      <button type="submit" class="btn">Сохранить</button>
     </div>
   </div>
 </form>
