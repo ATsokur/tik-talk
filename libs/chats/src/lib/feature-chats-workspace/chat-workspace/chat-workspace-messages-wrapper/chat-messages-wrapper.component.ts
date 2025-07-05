@@ -21,10 +21,10 @@ import {
 } from 'rxjs';
 
 import { TtDatePipe } from '@tt/common-ui';
-import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { Chat, ChatsService } from '@tt/data-access';
 
 import { MessageInputComponent } from '../../../ui';
-import { Chat, ChatsService } from '@tt/data-access';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 @Component({
   selector: 'app-chat-messages-wrapper',
@@ -62,9 +62,7 @@ export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   }
 
   async onSendMessage(messageText: string) {
-    await firstValueFrom(
-      this.chatsService.sendMessage(this.chat().id, messageText)
-    );
+    this.chatsService.wsAdapter.sendMessage(messageText, this.chat().id);
     await firstValueFrom(this.chatsService.getChatById(this.chat().id));
   }
 

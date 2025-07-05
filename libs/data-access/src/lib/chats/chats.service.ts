@@ -3,11 +3,17 @@ import { inject, Injectable, signal } from '@angular/core';
 
 import { map } from 'rxjs';
 
-import { DateTime } from 'luxon';
-import { Chat, LastMessageResponse, Message } from './chats.interface';
-import { selectMe } from '../profile';
-import { BASE_API_URL } from '@tt/shared';
 import { Store } from '@ngrx/store';
+import { BASE_API_URL } from '@tt/shared';
+
+import { AuthService } from '../auth';
+import { selectMe } from '../profile';
+import { ChatWSMessage } from './chat-ws-message.interface';
+import { ChatWSNativeService } from './chat-ws-native.service';
+import { ChatWSService } from './chat-ws-service.interface';
+import { Chat, LastMessageResponse, Message } from './chats.interface';
+import { groupMessagesByDay, updateActiveChatMessages } from './helpers';
+import { isNewMessage, isUnreadMessage } from './type-guards';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +21,44 @@ import { Store } from '@ngrx/store';
 export class ChatsService {
   private readonly http = inject(HttpClient);
   #store = inject(Store);
+  #authService = inject(AuthService);
   private readonly me = this.#store.selectSignal(selectMe);
+  private readonly chatById = signal<Chat | null>(null);
 
   private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
   private readonly messageUrl: string = `${BASE_API_URL}message/`;
 
+  wsAdapter: ChatWSService = new ChatWSNativeService();
+
   public activeChatMessages = signal<Message[][]>([]);
+
+  //TODO Token протухнет. Нужно закрыть соединение и открыть с новым token
+  connectWS() {
+    this.wsAdapter.connect({
+      url: `${BASE_API_URL}chat/ws`,
+      token: this.#authService.token ?? '',
+      handleMessage: this.handleWSMessage
+    });
+  }
+
+  handleWSMessage = (message: ChatWSMessage) => {
+    if (!('action' in message)) return;
+
+    if (isUnreadMessage(message)) {
+      //TODO ДЗ. Вынести в app.component
+    }
+
+    if (isNewMessage(message)) {
+      this.activeChatMessages.update((activeMessages) => {
+        return updateActiveChatMessages(
+          activeMessages,
+          message,
+          this.me(),
+          this.chatById()
+        );
+      });
+    }
+  };
 
   createChat(userId: number) {
     return this.http.post<Chat>(`${this.chatsUrl}${userId}`, {});
@@ -46,36 +84,8 @@ export class ChatsService {
           };
         });
 
-        const groupMessagesByDay = (messages: Message[]): Message[][] => {
-          if (!messages.length) return [];
-
-          const messagesGroupedByDay: Message[][] = [];
-          let messagesGrouped: Message[] = [];
-
-          let messageDay = DateTime.fromISO(messages[0].createdAt).day;
-          let currentMessageDay;
-
-          for (let i = 0; i < messages.length; i++) {
-            currentMessageDay = DateTime.fromISO(messages[i].createdAt).day;
-
-            if (messageDay === currentMessageDay) {
-              messagesGrouped.push(messages[i]);
-            } else {
-              messagesGroupedByDay.push(messagesGrouped);
-              messagesGrouped = [];
-              messagesGrouped.push(messages[i]);
-              messageDay = DateTime.fromISO(messages[i].createdAt).day;
-            }
-          }
-
-          messagesGroupedByDay.push(messagesGrouped);
-
-          return messagesGroupedByDay;
-        };
-
         this.activeChatMessages.set(groupMessagesByDay(patchedMessages));
-
-        return {
+        const chatById = {
           ...chat,
           companion:
             chat.userFirst.id === this.me()?.id
@@ -83,6 +93,8 @@ export class ChatsService {
               : chat.userFirst,
           messages: patchedMessages
         };
+        this.chatById.set(chatById);
+        return chatById;
       })
     );
   }
