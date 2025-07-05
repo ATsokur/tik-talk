@@ -8,13 +8,15 @@ import { finalize, Observable, tap } from 'rxjs';
 
 export class ChatWsRxjsService implements ChatWSService {
   #socket: WebSocketSubject<ChatWSMessage> | null = null;
+  isDisconnected = false;
 
   connect(params: ChatConnectionWSPrams): Observable<ChatWSMessage> {
-    if (!this.#socket) {
+    if (!this.#socket || this.isDisconnected) {
       this.#socket = webSocket({
         url: params.url,
         protocol: [params.token]
       });
+      console.log('Го, я создал');
     }
 
     return this.#socket.asObservable().pipe(
@@ -32,5 +34,6 @@ export class ChatWsRxjsService implements ChatWSService {
 
   disconnect(): void {
     this.#socket?.complete();
+    this.isDisconnected = true;
   }
 }

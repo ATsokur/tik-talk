@@ -6,7 +6,6 @@ import { map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { BASE_API_URL } from '@tt/shared';
 
-import { AuthService } from '../auth';
 import { selectMe } from '../profile';
 import { ChatWSMessage } from './chat-ws-message.interface';
 import { ChatWsRxjsService } from './chat-ws-rxjs.service';
@@ -21,7 +20,6 @@ import { isNewMessage, isUnreadMessage } from './type-guards';
 export class ChatsService {
   private readonly http = inject(HttpClient);
   #store = inject(Store);
-  #authService = inject(AuthService);
   private readonly me = this.#store.selectSignal(selectMe);
   private readonly chatById = signal<Chat | null>(null);
 
@@ -33,10 +31,10 @@ export class ChatsService {
   public activeChatMessages = signal<Message[][]>([]);
 
   //TODO Token протухнет. Нужно закрыть соединение и открыть с новым token
-  connectWS() {
+  connectWS(token: string | null) {
     return this.wsAdapter.connect({
       url: `${BASE_API_URL}chat/ws`,
-      token: this.#authService.token ?? '',
+      token: token ?? '',
       handleMessage: this.handleWSMessage
     }) as Observable<ChatWSMessage>;
   }

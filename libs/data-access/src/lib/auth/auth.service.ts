@@ -3,10 +3,11 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+
+import { BASE_API_URL } from '@tt/shared';
 
 import { TokenResponse } from './auth.interface';
-import { BASE_API_URL } from '@tt/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,13 @@ export class AuthService {
 
   public token: string | null = null;
   public refreshToken: string | null = null;
+  public testToken = new BehaviorSubject<string | null>(null);
 
   get isAuth(): boolean {
     if (!this.token) {
       this.token = this.cookieService.get('token');
       this.refreshToken = this.cookieService.get('refreshToken');
+      this.testToken.next(this.cookieService.get('token'));
     }
     return !!this.token;
   }
@@ -61,6 +64,7 @@ export class AuthService {
   saveTokens(res: TokenResponse) {
     this.token = res.access_token;
     this.refreshToken = res.refresh_token;
+    this.testToken.next(res.access_token);
 
     this.cookieService.set('token', this.token);
     this.cookieService.set('refreshToken', this.refreshToken);
