@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { BASE_API_URL } from '@tt/shared';
@@ -9,7 +9,7 @@ import { BASE_API_URL } from '@tt/shared';
 import { AuthService } from '../auth';
 import { selectMe } from '../profile';
 import { ChatWSMessage } from './chat-ws-message.interface';
-import { ChatWSNativeService } from './chat-ws-native.service';
+import { ChatWsRxjsService } from './chat-ws-rxjs.service';
 import { ChatWSService } from './chat-ws-service.interface';
 import { Chat, LastMessageResponse, Message } from './chats.interface';
 import { groupMessagesByDay, updateActiveChatMessages } from './helpers';
@@ -28,17 +28,17 @@ export class ChatsService {
   private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
   private readonly messageUrl: string = `${BASE_API_URL}message/`;
 
-  wsAdapter: ChatWSService = new ChatWSNativeService();
+  wsAdapter: ChatWSService = new ChatWsRxjsService();
 
   public activeChatMessages = signal<Message[][]>([]);
 
   //TODO Token протухнет. Нужно закрыть соединение и открыть с новым token
   connectWS() {
-    this.wsAdapter.connect({
+    return this.wsAdapter.connect({
       url: `${BASE_API_URL}chat/ws`,
       token: this.#authService.token ?? '',
       handleMessage: this.handleWSMessage
-    });
+    }) as Observable<ChatWSMessage>;
   }
 
   handleWSMessage = (message: ChatWSMessage) => {
