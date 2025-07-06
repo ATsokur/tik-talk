@@ -22,15 +22,14 @@ export class ChatsService {
   #store = inject(Store);
   private readonly me = this.#store.selectSignal(selectMe);
   private readonly chatById = signal<Chat | null>(null);
+  public activeChatMessages = signal<Message[][]>([]);
+  public amountUnreadMessages = signal<number>(0);
 
   private readonly chatsUrl: string = `${BASE_API_URL}chat/`;
   private readonly messageUrl: string = `${BASE_API_URL}message/`;
 
   wsAdapter: ChatWSService = new ChatWsRxjsService();
 
-  public activeChatMessages = signal<Message[][]>([]);
-
-  //TODO Token протухнет. Нужно закрыть соединение и открыть с новым token
   connectWS(token: string | null) {
     return this.wsAdapter.connect({
       url: `${BASE_API_URL}chat/ws`,
@@ -43,7 +42,7 @@ export class ChatsService {
     if (!('action' in message)) return;
 
     if (isUnreadMessage(message)) {
-      //TODO ДЗ. Вынести в app.component
+      this.amountUnreadMessages.set(message.data.count);
     }
 
     if (isNewMessage(message)) {

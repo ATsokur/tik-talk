@@ -3,14 +3,24 @@
 <nav class="mb20">
   <ul class="main-menu-list">
     <li *ngFor="let menuItem of menuItems">
+      @if (menuItem.label === 'Чаты' && amountUnreadMessages()) {
+      <a
+        class="menu-item menu-item-chats subtitle-semi-bold"
+        [routerLink]="[menuItem.link]"
+        routerLinkActive="active">
+        <svg [icon]="menuItem.icon"></svg>
+        <span>{{ menuItem.label }}</span>
+        <div class="tt-messages-count">{{ amountUnreadMessages() }}</div>
+      </a>
+      } @else {
       <a
         class="menu-item subtitle-semi-bold"
         [routerLink]="[menuItem.link]"
-        routerLinkActive="active"
-      >
+        routerLinkActive="active">
         <svg [icon]="menuItem.icon"></svg>
         <span>{{ menuItem.label }}</span>
       </a>
+      }
     </li>
   </ul>
 </nav>

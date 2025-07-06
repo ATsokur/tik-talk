@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ChatsBtnComponent } from '../chats-btn/chats-btn.component';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, startWith, switchMap } from 'rxjs';
 import { ChatsService } from '@tt/data-access';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chats-list',
@@ -20,6 +21,7 @@ import { ChatsService } from '@tt/data-access';
 })
 export class ChatsListComponent {
   private readonly chatsService = inject(ChatsService);
+  #destroy$ = inject(DestroyRef);
 
   public filterChatsControl = new FormControl<string>('');
 
@@ -34,7 +36,8 @@ export class ChatsListComponent {
               .toLocaleLowerCase()
               .includes(inputValue!.toLocaleLowerCase());
           });
-        })
+        }),
+        takeUntilDestroyed(this.#destroy$)
       );
     })
   );

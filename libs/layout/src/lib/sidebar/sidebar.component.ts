@@ -5,7 +5,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { profileActions, selectMe, selectSubscribers } from '@tt/data-access';
+import {
+  ChatsService,
+  profileActions,
+  selectMe,
+  selectSubscribers
+} from '@tt/data-access';
 
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
 
@@ -28,6 +33,7 @@ export class SidebarComponent implements OnInit {
   #destroy$ = inject(DestroyRef);
   public subscribers$ = this.#store.select(selectSubscribers);
   public me = this.#store.selectSignal(selectMe);
+  public amountUnreadMessages = inject(ChatsService).amountUnreadMessages;
 
   public readonly menuItems = [
     {

@@ -17,12 +17,18 @@
 }
 
 .last-message__wrapper {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   text-align: left;
 }
 
 .chat-text {
+  align-self: center;
   color: var(--light-color);
+}
+
+.chat-date,
+.chat-count-message {
+  justify-self: end;
 }

@@ -195,3 +195,17 @@ body {
   background: var(--dark-color);
   border: 1px solid var(--light-color);
 }
+
+.tt-messages-count {
+  display: grid;
+  place-content: center;
+  background-color: var(--primary-color);
+  min-width: 26px;
+  height: 18px;
+
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 133%;
+  color: var(--dark-color);
+}

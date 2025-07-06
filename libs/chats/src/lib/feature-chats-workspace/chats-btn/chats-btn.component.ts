@@ -11,4 +11,5 @@ import { LastMessageResponse } from '@tt/data-access';
 })
 export class ChatsBtnComponent {
   public chat = input<LastMessageResponse>();
+  public isRead = input<number>();
 }

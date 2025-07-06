@@ -5,11 +5,16 @@
   <div class="chat-user medium-text">
     {{ chat.userFrom.firstName }} {{ chat.userFrom.lastName }}
   </div>
-  <div class="medium-text">
+  <div class="chat-date medium-text">
     {{ chat.createdAt | ttDate }}
   </div>
   <div class="chat-text medium-text">
     {{ chat.message ?? '...' }}
   </div>
+  @if (chat.unreadMessages) {
+  <div class="chat-count-message tt-messages-count">
+    {{ chat.unreadMessages }}
+  </div>
+  }
 </div>
 }
