@@ -49,7 +49,7 @@ export const updateActiveChatMessages = (
         userFromId: message.data.author,
         personalChatId: message.data.chat_id,
         text: message.data.message,
-        createdAt: message.data.created_at,
+        createdAt: toISO(message.data.created_at) ?? '',
         isRead: false,
         isMine: false
       }
