@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CookieService } from 'ngx-cookie-service';
-import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 
 import { BASE_API_URL } from '@tt/shared';
 
@@ -17,17 +17,16 @@ export class AuthService {
   private readonly cookieService = inject(CookieService);
   private readonly router = inject(Router);
 
-  public token: string | null = null;
+  public token = signal<string | null>(null);
   public refreshToken: string | null = null;
-  public testToken = new BehaviorSubject<string | null>(null);
 
   get isAuth(): boolean {
-    if (!this.token) {
-      this.token = this.cookieService.get('token');
+    if (!this.token()) {
+      this.token.set(this.cookieService.get('token'));
       this.refreshToken = this.cookieService.get('refreshToken');
-      this.testToken.next(this.cookieService.get('token'));
+      this.token.set(this.cookieService.get('token'));
     }
-    return !!this.token;
+    return !!this.token();
   }
 
   login(payload: { username: string; password: string }) {
@@ -56,17 +55,17 @@ export class AuthService {
 
   logout() {
     this.cookieService.deleteAll();
-    this.token = null;
+    this.token.set(null);
     this.refreshToken = null;
     this.router.navigate(['/login']);
   }
 
   saveTokens(res: TokenResponse) {
-    this.token = res.access_token;
+    this.token.set(res.access_token);
     this.refreshToken = res.refresh_token;
-    this.testToken.next(res.access_token);
+    this.token.set(res.access_token);
 
-    this.cookieService.set('token', this.token);
+    this.cookieService.set('token', res.access_token);
     this.cookieService.set('refreshToken', this.refreshToken);
   }
 }

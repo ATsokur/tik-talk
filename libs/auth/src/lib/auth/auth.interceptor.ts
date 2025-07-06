@@ -20,7 +20,7 @@ const isRefreshing$ = new BehaviorSubject<boolean>(false);
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = authService.token;
+  const token = authService.token();
 
   if (!token) return next(req);
 
@@ -56,12 +56,12 @@ const refreshAndProceed = (
   }
 
   if (req.url.includes('refresh'))
-    return next(addToken(req, authService.token!));
+    return next(addToken(req, authService.token()!));
 
   return isRefreshing$.pipe(
     filter((isRefreshing) => !isRefreshing),
     switchMap((res) => {
-      return next(addToken(req, authService.token!));
+      return next(addToken(req, authService.token()!));
     })
   );
 };
