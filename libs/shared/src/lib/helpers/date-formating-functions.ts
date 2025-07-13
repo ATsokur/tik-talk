@@ -5,7 +5,9 @@ export const toFormatDate = (
   format: string = 'dd LL yyyy'
 ): string | undefined => {
   if (DateTime.fromISO(date).isValid) {
-    return DateTime.fromISO(date).toFormat(format);
+    return DateTime.fromISO(date, { zone: 'utc' })
+      .setZone(DateTime.local().zone)
+      .toFormat(format);
   }
 
   const fromMsToISO = DateTime.fromMillis(Date.parse(date)).toISO();
