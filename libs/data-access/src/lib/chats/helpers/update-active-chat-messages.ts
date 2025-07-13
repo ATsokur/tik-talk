@@ -14,6 +14,7 @@ export const updateActiveChatMessages = (
     lastMessageGroup[lastMessageGroup.length - 1].createdAt
   );
   const currentMessageDate = toFormatDate(message.data.created_at);
+
   if (lastMessageGroupDate === currentMessageDate) {
     if (message.data.author === me?.id) {
       lastMessageGroup.push({
@@ -50,6 +51,7 @@ export const updateActiveChatMessages = (
         personalChatId: message.data.chat_id,
         text: message.data.message,
         createdAt: toISO(message.data.created_at) ?? '',
+        user: chatById?.companion ?? undefined,
         isRead: false,
         isMine: false
       }

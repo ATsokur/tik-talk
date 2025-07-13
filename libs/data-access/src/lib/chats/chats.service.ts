@@ -13,6 +13,7 @@ import { ChatWSService } from './chat-ws-service.interface';
 import { Chat, LastMessageResponse, Message } from './chats.interface';
 import { groupMessagesByDay, updateActiveChatMessages } from './helpers';
 import { isNewMessage, isUnreadMessage } from './type-guards';
+import { AuthService } from '../auth';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ import { isNewMessage, isUnreadMessage } from './type-guards';
 export class ChatsService {
   private readonly http = inject(HttpClient);
   #store = inject(Store);
+  #authService = inject(AuthService);
   private readonly me = this.#store.selectSignal(selectMe);
   private readonly chatById = signal<Chat | null>(null);
   public activeChatMessages = signal<Message[][]>([]);
@@ -30,10 +32,10 @@ export class ChatsService {
 
   wsAdapter: ChatWSService = new ChatWsRxjsService();
 
-  connectWS(token: string | null) {
+  connectWS() {
     return this.wsAdapter.connect({
       url: `${BASE_API_URL}chat/ws`,
-      token: token ?? '',
+      token: this.#authService.token ?? '',
       handleMessage: this.handleWSMessage
     }) as Observable<ChatWSMessage>;
   }
