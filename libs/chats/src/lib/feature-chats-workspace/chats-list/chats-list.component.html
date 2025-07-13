@@ -4,16 +4,16 @@
       type="text"
       class="tt-form-input"
       placeholder="Искать..."
-      [formControl]="filterChatsControl"
-    />
+      [formControl]="filterChatsControl" />
   </label>
 </div>
 
-@for (chat of chats$ | async; track chat.id) {
-<button
-  chats
-  [chat]="chat"
-  [routerLink]="[chat.id]"
-  routerLinkActive="active"
-></button>
-}
+<div #chatsWrap class="chats__wrapper">
+  @for (chat of chats$ | async; track chat.id) {
+  <button
+    chats
+    [chat]="chat"
+    [routerLink]="[chat.id]"
+    routerLinkActive="active"></button>
+  }
+</div>

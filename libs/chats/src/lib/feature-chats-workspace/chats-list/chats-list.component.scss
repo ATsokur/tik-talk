@@ -7,3 +7,11 @@
   padding: 16px 20px;
   border-bottom: var(--light-border);
 }
+
+.chats__wrapper {
+  overflow-y: auto;
+}
+
+.chats__wrapper::-webkit-scrollbar {
+  display: none;
+}
