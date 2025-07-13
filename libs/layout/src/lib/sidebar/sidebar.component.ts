@@ -13,7 +13,7 @@ import {
   profileActions,
   ProfileService,
   selectMe,
-  selectSubscribers
+  selectMySubscribers
 } from '@tt/data-access';
 
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit {
   #store = inject(Store);
   #destroy$ = inject(DestroyRef);
   #profileService = inject(ProfileService);
-  public subscribers$ = this.#store.select(selectSubscribers);
+  public mySubscribers$ = this.#store.select(selectMySubscribers);
   public me = this.#store.selectSignal(selectMe);
   public amountUnreadMessages = inject(ChatsService).amountUnreadMessages;
 
@@ -98,11 +98,13 @@ export class SidebarComponent implements OnInit {
         }
       });
     this.#store
-      .select(selectSubscribers)
+      .select(selectMySubscribers)
       .pipe(takeUntilDestroyed(this.#destroy$))
       .subscribe((subscribers) => {
         if (!subscribers.length) {
-          this.#store.dispatch(profileActions.fetchSubscribers({ amount: 7 }));
+          this.#store.dispatch(
+            profileActions.fetchMySubscribers({ amount: 20 })
+          );
         }
       });
     this.connectWS();

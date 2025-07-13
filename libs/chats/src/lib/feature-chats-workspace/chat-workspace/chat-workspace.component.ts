@@ -7,6 +7,7 @@ import { filter, of, switchMap } from 'rxjs';
 import { ChatWorkspaceHeaderComponent } from './chat-workspace-header/chat-workspace-header.component';
 import { ChatMessagesWrapperComponent } from './chat-workspace-messages-wrapper/chat-messages-wrapper.component';
 import { ChatsService } from '@tt/data-access';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chat-workspace',
@@ -45,6 +46,7 @@ export class ChatWorkspaceComponent {
         );
       }
       return this.chatsService.getChatById(id);
-    })
+    }),
+    takeUntilDestroyed()
   );
 }

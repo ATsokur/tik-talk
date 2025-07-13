@@ -7,7 +7,8 @@ export interface ProfileState {
   profileFilters: Record<string, any>;
   me: Profile | null;
   account: Profile | null;
-  subscribers: Profile[];
+  mySubscribers: Profile[];
+  subscribersById: Profile[];
 }
 
 const initialState: ProfileState = {
@@ -15,7 +16,8 @@ const initialState: ProfileState = {
   profileFilters: {},
   me: null,
   account: null,
-  subscribers: []
+  mySubscribers: [],
+  subscribersById: []
 };
 
 /**
@@ -57,10 +59,16 @@ export const profileFeature = createFeature({
         account
       };
     }),
-    on(profileActions.subscribersLoaded, (state, { subscribers }) => {
+    on(profileActions.mySubscribersLoaded, (state, { mySubscribers }) => {
       return {
         ...state,
-        subscribers
+        mySubscribers
+      };
+    }),
+    on(profileActions.subscribersByIdLoaded, (state, { subscribersById }) => {
+      return {
+        ...state,
+        subscribersById
       };
     })
   )

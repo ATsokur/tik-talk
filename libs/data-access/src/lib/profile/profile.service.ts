@@ -37,6 +37,17 @@ export class ProfileService {
       );
   }
 
+  getSubscribersShortListById(subsAmount = 4, accountId: number) {
+    return this.http
+      .get<Pageble<Profile>>(`${BASE_API_URL}account/subscribers/${accountId}`)
+      .pipe(
+        map((res) => {
+          const accounts = res.items.filter(({ id }) => id !== 500);
+          return accounts.slice(0, subsAmount);
+        })
+      );
+  }
+
   patchProfile(profile: Partial<Profile>) {
     return this.http.patch<Profile>(`${BASE_API_URL}account/me`, profile);
   }

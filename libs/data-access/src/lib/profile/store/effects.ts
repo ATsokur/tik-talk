@@ -37,7 +37,10 @@ export class ProfileEffects {
       switchMap(() => {
         return this.#profileService.getMe();
       }),
-      map((me) => profileActions.meLoaded({ me }))
+      map((me) => {
+        console.log('me', me);
+        return profileActions.meLoaded({ me });
+      })
     );
   });
 
@@ -53,11 +56,29 @@ export class ProfileEffects {
 
   fetchSubscribers = createEffect(() => {
     return this.actions$.pipe(
-      ofType(profileActions.fetchSubscribers),
+      ofType(profileActions.fetchMySubscribers),
       switchMap(({ amount }) => {
+        console.log('amount', amount);
         return this.#profileService.getSubscribersShortList(amount);
       }),
-      map((subscribers) => profileActions.subscribersLoaded({ subscribers }))
+      map((mySubscribers) =>
+        profileActions.mySubscribersLoaded({ mySubscribers })
+      )
+    );
+  });
+
+  fetchSubscribersById = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.fetchSubscribersById),
+      switchMap(({ amount, accountId }) => {
+        return this.#profileService.getSubscribersShortListById(
+          amount,
+          accountId
+        );
+      }),
+      map((subscribersById) =>
+        profileActions.subscribersByIdLoaded({ subscribersById })
+      )
     );
   });
 

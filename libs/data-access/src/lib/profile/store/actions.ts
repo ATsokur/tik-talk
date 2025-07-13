@@ -17,8 +17,11 @@ export const profileActions = createActionGroup({
       filters: Record<string, any>;
     }>(),
     'profiles loaded': props<{ profiles: Profile[] }>(),
-    'fetch subscribers': props<{ amount: number }>(),
-    'subscribers loaded': props<{ subscribers: Profile[] }>(),
+
+    'fetch my subscribers': props<{ amount: number }>(),
+    'my subscribers loaded': props<{ mySubscribers: Profile[] }>(),
+    'fetch subscribers by id': props<{ amount: number; accountId: number }>(),
+    'subscribers by id loaded': props<{ subscribersById: Profile[] }>(),
 
     'patch profile': props<{ profile: Partial<Profile> }>(),
     'save avatar': emptyProps(),

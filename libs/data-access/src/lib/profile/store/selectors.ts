@@ -34,9 +34,16 @@ export const selectAccount = createSelector(
   }
 );
 
-export const selectSubscribers = createSelector(
-  profileFeature.selectSubscribers,
-  (subscribers: Profile[]) => {
-    return subscribers;
+export const selectMySubscribers = createSelector(
+  profileFeature.selectMySubscribers,
+  (mySubscribers: Profile[]) => {
+    return mySubscribers;
+  }
+);
+
+export const selectSubscribersById = createSelector(
+  profileFeature.selectSubscribersById,
+  (subscribersById: Profile[]) => {
+    return subscribersById;
   }
 );

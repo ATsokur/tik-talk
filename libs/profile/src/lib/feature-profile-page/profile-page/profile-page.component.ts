@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { switchMap, tap } from 'rxjs';
@@ -10,7 +11,8 @@ import {
   profileActions,
   selectAccount,
   selectMe,
-  selectSubscribers
+  selectMySubscribers,
+  selectSubscribersById
 } from '@tt/data-access';
 import { PostFeedComponent } from '@tt/posts';
 
@@ -30,27 +32,46 @@ import { ProfileHeaderComponent } from '../../ui';
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss'
 })
-export class ProfilePageComponent {
+export class ProfilePageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   #store = inject(Store);
   public me$ = this.#store.select(selectMe);
-  public subscribers$ = this.#store.select(selectSubscribers);
   public isMyPage = signal<boolean>(false);
   public isProfilePage = signal<boolean>(true);
 
-  profile$ = this.route.params.pipe(
+  public profile$ = this.route.params.pipe(
     tap(({ id }) => {
+      console.log('paramProf', id);
       this.isMyPage.set(id && id === 'me');
     }),
     switchMap(({ id }) => {
       if (id === 'me') return this.me$;
       this.#store.dispatch(profileActions.fetchAccount({ id }));
+
       return this.#store.select(selectAccount);
-    })
+    }),
+    takeUntilDestroyed()
+  );
+
+  public subscribers$ = this.route.params.pipe(
+    switchMap(({ id }) => {
+      if (id === 'me') {
+        return this.#store.select(selectMySubscribers);
+      }
+      this.#store.dispatch(
+        profileActions.fetchSubscribersById({ amount: 7, accountId: id })
+      );
+      return this.#store.select(selectSubscribersById);
+    }),
+    takeUntilDestroyed()
   );
 
   async sendMessage(userId: number) {
     this.router.navigate(['chats/', 'new'], { queryParams: { userId } });
+  }
+
+  ngOnInit(): void {
+    this.subscribers$.subscribe(console.log);
   }
 }
