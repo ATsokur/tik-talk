@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
@@ -12,14 +12,20 @@ import { Profile } from '@tt/data-access';
 })
 export class ProfileCardComponent {
   @Input() profile!: Profile;
-  @Output() chat = new EventEmitter<number>();
-  isSubscribed = signal<boolean>(false);
+  @Output() chatted = new EventEmitter<number>();
+  @Output() subscriptionCreated = new EventEmitter<number>();
+  @Output() subscriptionDeleted = new EventEmitter<number>();
+  isSubscribed = input<boolean>();
 
-  toSubscribe() {
-    this.isSubscribed.update((value) => !value);
+  toSubscribe(accountId: number) {
+    this.subscriptionCreated.emit(accountId);
+  }
+
+  toUnsubscribe(accountId: number) {
+    this.subscriptionDeleted.emit(accountId);
   }
 
   toChat(profileId: number) {
-    this.chat.emit(profileId);
+    this.chatted.emit(profileId);
   }
 }

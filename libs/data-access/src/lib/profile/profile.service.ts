@@ -48,6 +48,25 @@ export class ProfileService {
       );
   }
 
+  toSubscribe(accountId: number) {
+    return this.http.post<string>(
+      `${BASE_API_URL}account/subscribe/${accountId}`,
+      {}
+    );
+  }
+
+  toUnsubscribe(accountId: number) {
+    return this.http.delete<string>(
+      `${BASE_API_URL}account/subscribe/${accountId}`
+    );
+  }
+
+  getSubscriptions() {
+    return this.http.get<Pageble<Profile>>(
+      `${BASE_API_URL}account/subscriptions/`
+    );
+  }
+
   patchProfile(profile: Partial<Profile>) {
     return this.http.patch<Profile>(`${BASE_API_URL}account/me`, profile);
   }

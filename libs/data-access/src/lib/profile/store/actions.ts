@@ -1,4 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
+
 import { Profile } from '../profile.interface';
 
 /**
@@ -22,6 +23,12 @@ export const profileActions = createActionGroup({
     'my subscribers loaded': props<{ mySubscribers: Profile[] }>(),
     'fetch subscribers by id': props<{ amount: number; accountId: number }>(),
     'subscribers by id loaded': props<{ subscribersById: Profile[] }>(),
+
+    'fetch my subscriptions': emptyProps(),
+    'my subscriptions loaded': props<{ mySubscriptions: Profile[] }>(),
+    'to subscribe': props<{ accountId: number }>(),
+    'to unsubscribe': props<{ accountId: number }>(),
+    'profiles with subscriptions loaded': props<{ profiles: Profile[] }>(),
 
     'patch profile': props<{ profile: Partial<Profile> }>(),
     'save avatar': emptyProps(),

@@ -25,7 +25,7 @@
 
   <div class="profile-card__action-btns">
     @if (isSubscribed()) {
-    <button class="subscribed-btn" (click)="toSubscribe()">
+    <button class="subscribed-btn" (click)="toUnsubscribe(profile.id)">
       <svg class="subscribed-icon" icon="subscribed"></svg>
     </button>
     <button class="btn send-message-btn" (click)="toChat(profile.id)">
@@ -33,7 +33,7 @@
       <svg class="send-message-icon" icon="send-message"></svg>
     </button>
     } @else {
-    <button class="btn to-subscribe-btn" (click)="toSubscribe()">
+    <button class="btn to-subscribe-btn" (click)="toSubscribe(profile.id)">
       <span>Подписаться</span>
       <svg class="to-subscribe-icon" icon="subscribe"></svg>
     </button>

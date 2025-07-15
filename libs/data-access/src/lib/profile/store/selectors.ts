@@ -47,3 +47,10 @@ export const selectSubscribersById = createSelector(
     return subscribersById;
   }
 );
+
+export const selectMySubscriptions = createSelector(
+  profileFeature.selectMySubscriptions,
+  (mySubscriptions: Profile[]) => {
+    return mySubscriptions;
+  }
+);

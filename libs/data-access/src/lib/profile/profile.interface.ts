@@ -9,4 +9,5 @@ export interface Profile {
   stack: string[];
   city: string | null;
   description: string;
+  isSubscription?: boolean;
 }

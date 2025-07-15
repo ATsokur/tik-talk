@@ -4,6 +4,10 @@
   @for(profile of profiles().profiles.slice(0, 9); track profile.id) {
   <app-profile-card
     [profile]="profile"
-    (chat)="toChat($event)"></app-profile-card>
+    [isSubscribed]="profile.isSubscription ?? false"
+    (chatted)="toChat($event)"
+    (subscriptionCreated)="toSubscribe($event)"
+    (subscriptionDeleted)="toUnsubscribe($event)">
+  </app-profile-card>
   }
 </div>

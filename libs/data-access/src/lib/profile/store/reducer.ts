@@ -9,6 +9,7 @@ export interface ProfileState {
   account: Profile | null;
   mySubscribers: Profile[];
   subscribersById: Profile[];
+  mySubscriptions: Profile[];
 }
 
 const initialState: ProfileState = {
@@ -17,7 +18,8 @@ const initialState: ProfileState = {
   me: null,
   account: null,
   mySubscribers: [],
-  subscribersById: []
+  subscribersById: [],
+  mySubscriptions: []
 };
 
 /**
@@ -36,6 +38,12 @@ export const profileFeature = createFeature({
   reducer: createReducer(
     initialState,
     on(profileActions.profilesLoaded, (state, payload) => {
+      return {
+        ...state,
+        profiles: payload.profiles
+      };
+    }),
+    on(profileActions.profilesWithSubscriptionsLoaded, (state, payload) => {
       return {
         ...state,
         profiles: payload.profiles
@@ -69,6 +77,12 @@ export const profileFeature = createFeature({
       return {
         ...state,
         subscribersById
+      };
+    }),
+    on(profileActions.mySubscriptionsLoaded, (state, { mySubscriptions }) => {
+      return {
+        ...state,
+        mySubscriptions
       };
     })
   )
