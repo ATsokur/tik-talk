@@ -85,7 +85,7 @@ export class TtDatePipe implements PipeTransform {
         'декабря'
       ];
       const whenItWas = ['Сегодня', 'Вечера'];
-      const dayOfMonth = dateFromISO.day;
+      const dayOfMonth = dateWithTimeZone.day;
       const dayOfWeek = dateWithTimeZone.day;
       const currentDayOfWeek = dateToday.day;
       const monthForPack = dateWithTimeZone.month - 1;
