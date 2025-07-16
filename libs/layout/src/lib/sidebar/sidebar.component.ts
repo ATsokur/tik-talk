@@ -1,5 +1,11 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -30,7 +36,8 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
     AvatarCircleComponent
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit {
   #chatService = inject(ChatsService);
@@ -103,7 +110,7 @@ export class SidebarComponent implements OnInit {
       .subscribe((subscribers) => {
         if (!subscribers.length) {
           this.#store.dispatch(
-            profileActions.fetchMySubscribers({ amount: 20 })
+            profileActions.fetchMySubscribers({ amount: 8 })
           );
         }
       });

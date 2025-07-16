@@ -1,4 +1,11 @@
-import { Component, EventEmitter, input, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  input,
+  Input,
+  Output
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
@@ -8,7 +15,8 @@ import { Profile } from '@tt/data-access';
   selector: 'app-profile-card',
   imports: [ImgUrlPipe, SvgIconComponent, RouterLink],
   templateUrl: './profile-card.component.html',
-  styleUrl: './profile-card.component.scss'
+  styleUrl: './profile-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileCardComponent {
   @Input() profile!: Profile;

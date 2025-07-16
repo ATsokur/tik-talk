@@ -1,5 +1,5 @@
 import { KeyValuePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormArray,
@@ -37,7 +37,8 @@ function getAddresses(initialValue: InitialValue = {}) {
   imports: [ReactiveFormsModule, KeyValuePipe],
   templateUrl: './form-experimental.component.html',
   styleUrl: './form-experimental.component.scss',
-  providers: [FormExperimentalMockService]
+  providers: [FormExperimentalMockService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormExperimentalComponent {
   ReceiverType = ReceiverType;

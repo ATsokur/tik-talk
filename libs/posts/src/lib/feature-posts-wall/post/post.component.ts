@@ -1,4 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input
+} from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import {
@@ -21,7 +26,8 @@ import { PostInputComponent } from '../../ui/post-input/post-input.component';
     CommentComponent
   ],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.scss'
+  styleUrl: './post.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostComponent {
   #store = inject(Store);

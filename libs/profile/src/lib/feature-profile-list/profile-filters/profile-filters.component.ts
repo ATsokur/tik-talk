@@ -1,4 +1,9 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import {
@@ -17,7 +22,8 @@ import { profileActions, selectFilteredProfiles } from '@tt/data-access';
   selector: 'app-profile-filters',
   imports: [ReactiveFormsModule],
   templateUrl: './profile-filters.component.html',
-  styleUrl: './profile-filters.component.scss'
+  styleUrl: './profile-filters.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileFiltersComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);

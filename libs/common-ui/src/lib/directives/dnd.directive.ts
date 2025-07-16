@@ -3,20 +3,20 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
-  Output,
+  Output
 } from '@angular/core';
 
 @Directive({
   selector: '[dnd]',
   host: {
-    '(dragover)': 'onDragOver($event)',
-  },
+    '(dragover)': 'onDragOver($event)'
+  }
 })
 export class DndDirective {
   @Output() fileDropped = new EventEmitter<File>();
 
   @HostBinding('class.fileover')
-  fileover: boolean = false;
+  fileover = false;
 
   @HostBinding('style.borderStyle') get getBorderStyle() {
     return this.fileover ? 'solid' : 'dashed';

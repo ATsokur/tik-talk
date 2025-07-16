@@ -1,5 +1,10 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal
+} from '@angular/core';
 
 import { tap } from 'rxjs';
 
@@ -15,7 +20,8 @@ import { Store } from '@ngrx/store';
   selector: 'app-avatar-upload',
   imports: [SvgIconComponent, DndDirective, AsyncPipe, AvatarCircleComponent],
   templateUrl: './avatar-upload.component.html',
-  styleUrl: './avatar-upload.component.scss'
+  styleUrl: './avatar-upload.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarUploadComponent {
   #store = inject(Store);

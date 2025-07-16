@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -17,7 +18,8 @@ import { selectMe } from '@tt/data-access';
   selector: 'app-message-input',
   imports: [AvatarCircleComponent, SvgIconComponent, FormsModule, NgIf],
   templateUrl: './message-input.component.html',
-  styleUrl: './message-input.component.scss'
+  styleUrl: './message-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageInputComponent {
   private readonly r2 = inject(Renderer2);

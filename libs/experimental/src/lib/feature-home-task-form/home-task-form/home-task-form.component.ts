@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
@@ -43,7 +44,8 @@ function addAppealForm(): FormGroup<Appeal> {
   imports: [ReactiveFormsModule, MaskitoDirective],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',
-  providers: [HomeTaskFormMockService, ValidateFullName]
+  providers: [HomeTaskFormMockService, ValidateFullName],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeTaskFormComponent implements AfterViewInit {
   #hostElement = inject(ElementRef);

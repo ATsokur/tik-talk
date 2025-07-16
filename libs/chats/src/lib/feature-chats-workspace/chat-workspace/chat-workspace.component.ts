@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, of, switchMap } from 'rxjs';
@@ -17,7 +17,8 @@ import { ChatMessagesWrapperComponent } from './chat-workspace-messages-wrapper/
     AsyncPipe
   ],
   templateUrl: './chat-workspace.component.html',
-  styleUrl: './chat-workspace.component.scss'
+  styleUrl: './chat-workspace.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatWorkspaceComponent {
   private readonly route = inject(ActivatedRoute);

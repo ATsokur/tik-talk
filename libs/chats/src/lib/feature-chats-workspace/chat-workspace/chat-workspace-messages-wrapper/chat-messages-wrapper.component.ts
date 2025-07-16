@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -30,7 +31,8 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
   selector: 'app-chat-messages-wrapper',
   imports: [ChatMessageComponent, MessageInputComponent, TtDatePipe],
   templateUrl: './chat-messages-wrapper.component.html',
-  styleUrl: './chat-messages-wrapper.component.scss'
+  styleUrl: './chat-messages-wrapper.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatMessagesWrapperComponent implements AfterViewInit, OnDestroy {
   private readonly chatsService = inject(ChatsService);

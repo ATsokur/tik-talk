@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -33,7 +34,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-post-feed',
   imports: [PostInputComponent, PostComponent],
   templateUrl: './post-feed.component.html',
-  styleUrl: './post-feed.component.scss'
+  styleUrl: './post-feed.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostFeedComponent implements AfterViewInit, OnDestroy {
   private readonly hostElement = inject(ElementRef);

@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -35,7 +36,8 @@ import { ChatsBtnComponent } from '../chats-btn/chats-btn.component';
     ReactiveFormsModule
   ],
   templateUrl: './chats-list.component.html',
-  styleUrl: './chats-list.component.scss'
+  styleUrl: './chats-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatsListComponent implements AfterViewInit {
   private readonly chatsService = inject(ChatsService);

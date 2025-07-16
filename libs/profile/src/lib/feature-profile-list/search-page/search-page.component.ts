@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -16,7 +22,8 @@ import { ProfileFiltersComponent } from '../profile-filters/profile-filters.comp
   selector: 'app-search-page',
   imports: [ProfileCardComponent, ProfileFiltersComponent],
   templateUrl: './search-page.component.html',
-  styleUrl: './search-page.component.scss'
+  styleUrl: './search-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchPageComponent implements OnInit {
   #store = inject(Store);
