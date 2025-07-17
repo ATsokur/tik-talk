@@ -39,7 +39,7 @@ import { ProfileHeaderComponent } from '../../ui';
   styleUrl: './profile-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   #store = inject(Store);
@@ -49,7 +49,6 @@ export class ProfilePageComponent implements OnInit {
 
   public profile$ = this.route.params.pipe(
     tap(({ id }) => {
-      console.log('paramProf', id);
       this.isMyPage.set(id && id === 'me');
     }),
     switchMap(({ id }) => {
@@ -76,9 +75,5 @@ export class ProfilePageComponent implements OnInit {
 
   async sendMessage(userId: number) {
     this.router.navigate(['chats/', 'new'], { queryParams: { userId } });
-  }
-
-  ngOnInit(): void {
-    this.subscribers$.subscribe(console.log);
   }
 }
