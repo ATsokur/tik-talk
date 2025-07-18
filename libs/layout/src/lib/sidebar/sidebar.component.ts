@@ -110,7 +110,7 @@ export class SidebarComponent implements OnInit {
       .subscribe((subscribers) => {
         if (!subscribers.length) {
           this.#store.dispatch(
-            profileActions.fetchMySubscribers({ amount: 8 })
+            profileActions.fetchMySubscribers({ amount: 6 })
           );
         }
       });

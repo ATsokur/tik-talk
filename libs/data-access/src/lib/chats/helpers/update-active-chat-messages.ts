@@ -15,47 +15,25 @@ export const updateActiveChatMessages = (
   );
   const currentMessageDate = toFormatDate(message.data.created_at);
 
+  //TODO Еще раз проверить чат на следующий день или откатить изменения
+  const lastMessage = {
+    id: message.data.id,
+    userFromId: message.data.author,
+    personalChatId: message.data.chat_id,
+    text: message.data.message,
+    createdAt: toISO(message.data.created_at) ?? '',
+    user: message.data.author === me?.id ? me : chatById?.companion,
+    isRead: false,
+    isMine: false
+  };
   if (lastMessageGroupDate === currentMessageDate) {
-    if (message.data.author === me?.id) {
-      lastMessageGroup.push({
-        id: message.data.id,
-        userFromId: message.data.author,
-        personalChatId: message.data.chat_id,
-        text: message.data.message,
-        createdAt: toISO(message.data.created_at) ?? '',
-        user: me ?? undefined,
-        isRead: false,
-        isMine: false
-      });
-    } else {
-      lastMessageGroup.push({
-        id: message.data.id,
-        userFromId: message.data.author,
-        personalChatId: message.data.chat_id,
-        text: message.data.message,
-        createdAt: toISO(message.data.created_at) ?? '',
-        user: chatById?.companion ?? undefined,
-        isRead: false,
-        isMine: false
-      });
-    }
+    lastMessageGroup.push(lastMessage);
     activeMessages.pop();
     return [...activeMessages, lastMessageGroup];
   }
 
   if (lastMessageGroupDate !== currentMessageDate) {
-    activeMessages.push([
-      {
-        id: message.data.id,
-        userFromId: message.data.author,
-        personalChatId: message.data.chat_id,
-        text: message.data.message,
-        createdAt: toISO(message.data.created_at) ?? '',
-        user: chatById?.companion ?? undefined,
-        isRead: false,
-        isMine: false
-      }
-    ]);
+    activeMessages.push([lastMessage]);
     return [...activeMessages];
   }
   return [];

@@ -48,13 +48,13 @@ export class ChatsService {
     }
 
     if (isNewMessage(message)) {
+      const me = this.me();
+      const chatById = this.chatById();
+
+      if (!me || !chatById) return;
+
       this.activeChatMessages.update((activeMessages) => {
-        return updateActiveChatMessages(
-          activeMessages,
-          message,
-          this.me(),
-          this.chatById()
-        );
+        return updateActiveChatMessages(activeMessages, message, me, chatById);
       });
     }
   };
@@ -79,7 +79,7 @@ export class ChatsService {
               chat.userFirst.id === message.userFromId
                 ? chat.userFirst
                 : chat.userSecond,
-            isMine: message.userFromId === this.me()!.id
+            isMine: message.userFromId === this.me()?.id
           };
         });
 
