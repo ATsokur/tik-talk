@@ -1,1 +1,1 @@
-export const BASE_API_URL = 'https://icherniakov.ru/yt-course/';
+export const BASE_API_URL = '/yt-course/';
