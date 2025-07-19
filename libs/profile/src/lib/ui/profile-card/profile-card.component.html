@@ -23,6 +23,7 @@
     }
   </div>
 
+  @if (!me()) {
   <div class="profile-card__action-btns">
     @if (isSubscribed()) {
     <button class="subscribed-btn" (click)="toUnsubscribe(profile.id)">
@@ -39,5 +40,6 @@
     </button>
     }
   </div>
+  }
 </div>
 }

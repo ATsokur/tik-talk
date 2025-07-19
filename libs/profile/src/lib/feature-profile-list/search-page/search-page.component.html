@@ -8,13 +8,14 @@
   [infiniteScrollContainer]="'app-search-page'"
   [fromRoot]="true"
   (scrolled)="onScroll()">
-  @for(profile of profiles().profiles; track $index) {
+  @for(profile of profiles().profiles; track $index) { @if (me(); as me) {
   <app-profile-card
+    [me]="me.id === profile.id ? me : null"
     [profile]="profile"
     [isSubscribed]="profile.isSubscription ?? false"
     (chatted)="toChat($event)"
     (subscriptionCreated)="toSubscribe($event)"
     (subscriptionDeleted)="toUnsubscribe($event)">
   </app-profile-card>
-  }
+  } }
 </div>

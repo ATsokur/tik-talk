@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import {
   profileActions,
   selectFilteredProfiles,
+  selectMe,
   selectMySubscriptions
 } from '@tt/data-access';
 
@@ -34,7 +35,8 @@ export class SearchPageComponent implements OnInit {
   #store = inject(Store);
   #router = inject(Router);
   #destroy$ = inject(DestroyRef);
-  public profiles = this.#store.selectSignal(selectFilteredProfiles);
+  profiles = this.#store.selectSignal(selectFilteredProfiles);
+  me = this.#store.selectSignal(selectMe);
 
   toChat(userId: number) {
     this.#router.navigate(['chats/', 'new'], { queryParams: { userId } });

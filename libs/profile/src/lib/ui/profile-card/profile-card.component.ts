@@ -24,6 +24,7 @@ export class ProfileCardComponent {
   @Output() subscriptionCreated = new EventEmitter<number>();
   @Output() subscriptionDeleted = new EventEmitter<number>();
   isSubscribed = input<boolean>();
+  me = input<Profile | null>();
 
   toSubscribe(accountId: number) {
     this.subscriptionCreated.emit(accountId);
