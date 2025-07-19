@@ -2,25 +2,19 @@
 
 <div
   class="profile-card__wrapper"
-  waIntersectionObserver
-  waIntersectionThreshold="0.5">
-  @for(profile of profiles().profiles; track $index; let last = $last) {
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  [infiniteScrollContainer]="'app-search-page'"
+  [fromRoot]="true"
+  (scrolled)="onScroll()">
+  @for(profile of profiles().profiles; track $index) {
   <app-profile-card
     [profile]="profile"
     [isSubscribed]="profile.isSubscription ?? false"
-    (waIntersectionObservee)="last ? onIntersection($event) : null"
     (chatted)="toChat($event)"
     (subscriptionCreated)="toSubscribe($event)"
     (subscriptionDeleted)="toUnsubscribe($event)">
   </app-profile-card>
   }
 </div>
-
-<!-- @if (last) {
-  @defer (on viewport) {
-    <tt-infinite-scroll-trigger
-      (loaded)="timeToFetch()"></tt-infinite-scroll-trigger>
-    } @placeholder {
-    <div></div>
-    }
-} -->
