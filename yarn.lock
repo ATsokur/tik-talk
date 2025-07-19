@@ -2988,6 +2988,20 @@
     "@emnapi/runtime" "^1.4.3"
     "@tybys/wasm-util" "^0.10.0"
 
+"@ng-web-apis/common@^4.12.0":
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/@ng-web-apis/common/-/common-4.12.0.tgz#3213d8c49b7242a5fd815eb48c88af423a982130"
+  integrity sha512-OG4ChsEWQ0IbGJ+WrJAiOY5X4jF8f5YUCss961taPeiyhvwtUo4zAuX3UvtV/iJSt8XZ41jaOYFTyMIBGubv4Q==
+  dependencies:
+    tslib "^2.3.0"
+
+"@ng-web-apis/intersection-observer@^4.12.0":
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/@ng-web-apis/intersection-observer/-/intersection-observer-4.12.0.tgz#9ed65719474ceca27b98044390d5c8f8f34525e9"
+  integrity sha512-7MW0y6BrjLKCTUGb5YfsEPYpn17wPmGj8J+2A980ntGNveo9+DILz3KpFHkpS6G6bJGtnD36exU2YvfTUKiyXA==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ngrx/effects@^19.2.1":
   version "19.2.1"
   resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-19.2.1.tgz#e9ee714deb7f8963b7d4b22bf21e06b2c680cae9"
@@ -9138,6 +9152,13 @@ ngx-cookie-service@^19.1.2:
   integrity sha512-4BFbc5BA7/ryuQVZUfDMHcjdgkHeW8obqfCCknoOEaplefjzlVvMQUx9Hywfjbc8POzZeZD2csS43Hs7rscJcA==
   dependencies:
     tslib "^2.8.0"
+
+ngx-infinite-scroll@^20.0.0:
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-infinite-scroll/-/ngx-infinite-scroll-20.0.0.tgz#928210affe13bcac1e8836760a936bde78ccd681"
+  integrity sha512-Mh7lg85jeDPzZirxPHjyMagCcC3vbk+yPO5uoXHNkmGer8MrO6vOydOX306qY4QYDyMJ+ngIQgpl5HJXfc590A==
+  dependencies:
+    tslib "^2.3.0"
 
 node-abort-controller@^3.0.1:
   version "3.1.1"

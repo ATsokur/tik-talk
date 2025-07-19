@@ -14,9 +14,11 @@ export const profileActions = createActionGroup({
     'me loaded': props<{ me: Profile | null }>(),
     'fetch account': props<{ id: number }>(),
     'account loaded': props<{ account: Profile | null }>(),
+
     'filter events': props<{
       filters: Record<string, any>;
     }>(),
+    'set page': props<{ page?: number }>(),
     'profiles loaded': props<{ profiles: Profile[] }>(),
 
     'fetch my subscribers': props<{ amount: number }>(),

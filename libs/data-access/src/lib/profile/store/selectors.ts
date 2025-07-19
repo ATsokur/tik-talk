@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { profileFeature } from './reducer';
+import { profileFeature, ProfileState } from './reducer';
 import { Profile } from '../profile.interface';
 
 /**
@@ -18,6 +18,21 @@ export const selectFilteredProfiles = createSelector(
       filters
     };
   }
+);
+
+export const selectProfilePageable = createSelector(
+  profileFeature.selectProfileFeatureState,
+  (state: ProfileState) => {
+    return {
+      page: state.page,
+      size: state.size
+    };
+  }
+);
+
+export const selectProfileFilters = createSelector(
+  profileFeature.selectProfileFilters,
+  (filters: Record<string, any>) => filters
 );
 
 export const selectMe = createSelector(

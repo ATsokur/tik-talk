@@ -8,7 +8,12 @@ import { Store } from '@ngrx/store';
 import { Profile } from '../profile.interface';
 import { ProfileService } from '../profile.service';
 import { profileActions } from './actions';
-import { selectFilteredProfiles, selectMySubscriptions } from './selectors';
+import {
+  selectFilteredProfiles,
+  selectMySubscriptions,
+  selectProfileFilters,
+  selectProfilePageable
+} from './selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +32,16 @@ export class ProfileEffects {
    */
   filterProfiles = createEffect(() => {
     return this.actions$.pipe(
-      ofType(profileActions.filterEvents),
-      switchMap(({ filters }) => {
-        return this.#profileService.filterProfiles(filters);
+      ofType(profileActions.filterEvents, profileActions.setPage),
+      withLatestFrom(
+        this.#store.select(selectProfileFilters),
+        this.#store.select(selectProfilePageable)
+      ),
+      switchMap(([_, filters, pageable]) => {
+        return this.#profileService.filterProfiles({
+          ...pageable,
+          ...filters
+        });
       }),
       map((res) => profileActions.profilesLoaded({ profiles: res.items }))
     );

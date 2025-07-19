@@ -17,10 +17,17 @@ import {
 
 import { ProfileCardComponent } from '../../ui';
 import { ProfileFiltersComponent } from '../profile-filters/profile-filters.component';
+import { InfiniteScrollTriggerComponent } from '@tt/common-ui';
+import { WaIntersectionObserver } from '@ng-web-apis/intersection-observer';
 
 @Component({
   selector: 'app-search-page',
-  imports: [ProfileCardComponent, ProfileFiltersComponent],
+  imports: [
+    ProfileCardComponent,
+    ProfileFiltersComponent,
+    InfiniteScrollTriggerComponent,
+    WaIntersectionObserver
+  ],
   templateUrl: './search-page.component.html',
   styleUrl: './search-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -41,6 +48,19 @@ export class SearchPageComponent implements OnInit {
 
   toUnsubscribe(accountId: number) {
     this.#store.dispatch(profileActions.toUnsubscribe({ accountId }));
+  }
+
+  timeToFetch() {
+    this.#store.dispatch(profileActions.setPage({}));
+  }
+
+  onIntersection(entries: IntersectionObserverEntry[]) {
+    if (!entries.length) return;
+
+    if (entries[0].intersectionRatio > 0) {
+      this.timeToFetch();
+    }
+    console.log(entries);
   }
 
   ngOnInit(): void {
