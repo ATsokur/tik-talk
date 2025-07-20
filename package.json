@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx run tik-talk:serve --no-hmr",
+    "start": "nx run tik-talk:serve",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
     "test": "nx test"

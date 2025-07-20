@@ -1,7 +1,14 @@
-import { toFormatDate, toISO } from '@tt/shared';
-import { Chat, Message } from '../chats.interface';
+import {
+  toFormatDate,
+  toISO
+} from '@tt/shared';
+
 import { Profile } from '../../profile';
 import { ChatWSNewMessage } from '../chat-ws-message.interface';
+import {
+  Chat,
+  Message
+} from '../chats.interface';
 
 export const updateActiveChatMessages = (
   activeMessages: Message[][],
@@ -15,7 +22,6 @@ export const updateActiveChatMessages = (
   );
   const currentMessageDate = toFormatDate(message.data.created_at);
 
-  //TODO Еще раз проверить чат на следующий день или откатить изменения
   const lastMessage = {
     id: message.data.id,
     userFromId: message.data.author,

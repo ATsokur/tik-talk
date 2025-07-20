@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,22 +7,23 @@ import {
   OnInit,
   output
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+
+import { WaIntersectionObserver } from '@ng-web-apis/intersection-observer';
+import { Store } from '@ngrx/store';
 import {
   profileActions,
   selectFilteredProfiles,
   selectMe,
   selectMySubscriptions
 } from '@tt/data-access';
+
 import { ProfileCardComponent } from '../../ui/profile-card/profile-card.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { InfiniteScrollTriggerComponent } from '@tt/common-ui';
 
 @Component({
   selector: 'tt-profile-list',
-  imports: [CommonModule, ProfileCardComponent, InfiniteScrollTriggerComponent],
+  imports: [CommonModule, ProfileCardComponent, WaIntersectionObserver],
   templateUrl: './profile-list.component.html',
   styleUrl: './profile-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,6 +54,14 @@ export class ProfileListComponent implements OnInit {
 
   timeToFetch() {
     this.#store.dispatch(profileActions.setPage({}));
+  }
+
+  onIntersection(entries: IntersectionObserverEntry[]) {
+    if (!entries.length) return;
+
+    if (entries[0].intersectionRatio > 0) {
+      this.timeToFetch();
+    }
   }
 
   ngOnInit(): void {
