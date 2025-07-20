@@ -1,0 +1,23 @@
+@for (profile of profiles().profiles; track $index; let last = $last) {
+  @if (me(); as me) {
+    <app-profile-card
+      [me]="me.id === profile.id ? me : null"
+      [profile]="profile"
+      [isSubscribed]="profile.isSubscription ?? false"
+      (chatted)="toChat($event)"
+      (subscriptionCreated)="toSubscribe($event)"
+      (subscriptionDeleted)="toUnsubscribe($event)">
+    </app-profile-card>
+    @if (last) {
+      @defer (on viewport) {
+        <tt-infinite-scroll-trigger
+          (loaded)="timeToFetch()">
+        </tt-infinite-scroll-trigger>
+      }@placeholder {
+        <div>.</div>
+      }
+    }
+  }
+}
+
+
