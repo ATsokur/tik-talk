@@ -10,7 +10,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
-import { WaIntersectionObserver } from '@ng-web-apis/intersection-observer';
 import { Store } from '@ngrx/store';
 import {
   profileActions,
@@ -23,7 +22,7 @@ import { ProfileCardComponent } from '../../ui/profile-card/profile-card.compone
 
 @Component({
   selector: 'tt-profile-list',
-  imports: [CommonModule, ProfileCardComponent, WaIntersectionObserver],
+  imports: [CommonModule, ProfileCardComponent],
   templateUrl: './profile-list.component.html',
   styleUrl: './profile-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -50,18 +49,6 @@ export class ProfileListComponent implements OnInit {
 
   toUnsubscribe(accountId: number) {
     this.#store.dispatch(profileActions.toUnsubscribe({ accountId }));
-  }
-
-  timeToFetch() {
-    this.#store.dispatch(profileActions.setPage({}));
-  }
-
-  onIntersection(entries: IntersectionObserverEntry[]) {
-    if (!entries.length) return;
-
-    if (entries[0].intersectionRatio > 0) {
-      this.timeToFetch();
-    }
   }
 
   ngOnInit(): void {

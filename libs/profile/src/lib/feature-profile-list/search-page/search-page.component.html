@@ -1,5 +1,10 @@
 <app-profile-filters></app-profile-filters>
 <tt-profile-list
   class="profile-card__wrapper"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll()"
+  [scrollWindow]="false"
 >
 </tt-profile-list>
