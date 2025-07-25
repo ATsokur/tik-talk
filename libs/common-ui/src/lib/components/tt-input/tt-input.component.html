@@ -1,0 +1,14 @@
+<label class="tt-control-label">
+  <ng-content></ng-content>
+    <input
+      class="tt-input tt-block"
+      [ngModel]="value"
+      (ngModelChange)="onModelChange($event)"
+      [type]="type()"
+      [placeholder]="placeholder()"
+      (blur)="onTouched()"
+      [disabled]="disabled()"
+      [autocomplete]="type() === 'password' ? 'on': 'off'"
+    />
+</label>
+

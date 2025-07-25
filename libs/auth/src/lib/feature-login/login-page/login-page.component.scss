@@ -15,18 +15,31 @@
   place-self: center;
 }
 
-.login-input,
-.password-input {
+.input-wrapper {
   position: relative;
 }
 
 .telegram-icon,
 .password-eye-btn {
+  width: 20px;
+  height: 20px;
   position: absolute;
-  color: var(--light-transparent-color);
   right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(100% - 47px);
+  transform: translateY(calc((-100% + 47px) / 2));
+}
+
+.telegram-icon {
+  color: var(--light-color);
+}
+
+.password-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.password-eye-btn {
+  color: var(--light-transparent-color);
   border: none;
   background: none;
 }

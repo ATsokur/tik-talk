@@ -12,12 +12,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { isLoginFormValue, LoginForm } from '@tt/data-access';
-import { AuthService } from '@tt/data-access';
+import { SvgIconComponent, TtInputComponent } from '@tt/common-ui';
+import { AuthService, isLoginFormValue, LoginForm } from '@tt/data-access';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TtInputComponent, SvgIconComponent],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -29,13 +29,11 @@ export class LoginPageComponent {
   isPasswordVisible = signal<boolean>(false);
 
   public form = new FormGroup<LoginForm>({
-    username: new FormControl<string>('', {
-      validators: Validators.required,
-      nonNullable: true
+    username: new FormControl<string | null>(null, {
+      validators: Validators.required
     }),
-    password: new FormControl<string>('', {
-      validators: Validators.required,
-      nonNullable: true
+    password: new FormControl<string | null>(null, {
+      validators: Validators.required
     })
   });
 
