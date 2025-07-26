@@ -12,10 +12,16 @@ import { Store } from '@ngrx/store';
 import { profileActions, selectMe } from '@tt/data-access';
 
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
+import { TtStackInputComponent } from '@tt/common-ui';
 
 @Component({
   selector: 'app-settings-page',
-  imports: [ProfileHeaderComponent, ReactiveFormsModule, AvatarUploadComponent],
+  imports: [
+    ProfileHeaderComponent,
+    ReactiveFormsModule,
+    AvatarUploadComponent,
+    TtStackInputComponent
+  ],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -46,16 +52,14 @@ export class SettingsPageComponent {
       }
     ],
     description: [''],
-    stack: ['']
+    stack: [null]
   });
 
   constructor() {
     effect(() => {
       //@ts-ignore
       this.form.patchValue({
-        ...this.profile(),
-        //@ts-ignore
-        stack: this.mergeStack(this.profile()?.stack)
+        ...this.profile()
       });
     });
   }
@@ -77,27 +81,12 @@ export class SettingsPageComponent {
       profileActions.patchProfile({
         //@ts-ignore
         profile: {
-          ...this.form.value,
-          stack: this.splitStack(this.form.value.stack)
+          ...this.form.value
         }
       })
     );
     this.router.navigate(['/profile/me'], {
       queryParams: { param: 'save-settings' }
     });
-  }
-
-  splitStack(stack: string | null | string[] | undefined): string[] {
-    if (!stack) return [];
-    if (Array.isArray(stack)) return stack;
-
-    return stack.split(',');
-  }
-
-  mergeStack(stack: string | null | string[] | undefined): string {
-    if (!stack) return '';
-    if (Array.isArray(stack)) return stack.join(',');
-
-    return stack;
   }
 }

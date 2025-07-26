@@ -1,0 +1,31 @@
+<label class="tt-stack-label">
+  <span class="tt-form-label__text">
+    <ng-content></ng-content>
+  </span>
+
+  <div class="tt-stack-wrapper">
+    @for (skill of stack$ | async; track i; let i = $index) {
+      <div class="stack-tag">
+        <button
+          type="button"
+          class="stack-btn__delete svg16"
+          (click)="onDeleteTag(i)"
+        >
+          <svg class="cross-icon svg10" icon="cross"></svg>
+        </button>
+        <span>
+          {{ skill }}
+        </span>
+      </div>
+    }
+
+    <input
+      type="text"
+      class="stack-ghost-input"
+      [(ngModel)]="innerInput"
+      (blur)="onTouch()"
+    />
+  </div>
+
+</label>
+

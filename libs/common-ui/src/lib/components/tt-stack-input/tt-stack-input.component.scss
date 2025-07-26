@@ -1,0 +1,58 @@
+.tt-stack-label {
+  background-color: var(--dark-color);
+}
+
+.tt-stack-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 0;
+  width: 100%;
+  border-bottom: 1px solid var(--light-color);
+
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--light-color);
+}
+
+.stack-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--light-color);
+  border-radius: 2px;
+  padding: 4px 8px;
+}
+
+.stack-btn__delete {
+  display: grid;
+  place-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.cross-icon {
+  color: var(--light-color);
+}
+
+.stack-ghost-input {
+  flex-grow: 1;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-color);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+:host.disabled {
+  pointer-events: none;
+
+  .tt-stack-wrapper {
+    opacity: 0.5;
+  }
+}

@@ -8,6 +8,7 @@ import {
   Renderer2
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   auditTime,
@@ -28,7 +29,6 @@ import {
 
 import { PostInputComponent } from '../../ui/post-input/post-input.component';
 import { PostComponent } from '../post/post.component';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-feed',
