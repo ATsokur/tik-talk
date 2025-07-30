@@ -1,12 +1,13 @@
 <label class="tt-control-label">
   <ng-content></ng-content>
     <input
-      class="tt-input tt-block"
+      class="custom-input tt-input tt-block"
+      [class.disabled]="disabled()"
       [ngModel]="value"
       (ngModelChange)="onModelChange($event)"
       [type]="type()"
       [placeholder]="placeholder()"
-      (blur)="onTouched()"
+      (blur)="onBlur()"
       [disabled]="disabled()"
       [autocomplete]="type() === 'password' ? 'on': 'off'"
     />

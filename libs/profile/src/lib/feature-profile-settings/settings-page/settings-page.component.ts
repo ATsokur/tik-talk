@@ -9,10 +9,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+import { AddressInputComponent, TtStackInputComponent } from '@tt/common-ui';
 import { profileActions, selectMe } from '@tt/data-access';
 
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
-import { TtStackInputComponent } from '@tt/common-ui';
 
 @Component({
   selector: 'app-settings-page',
@@ -20,7 +20,8 @@ import { TtStackInputComponent } from '@tt/common-ui';
     ProfileHeaderComponent,
     ReactiveFormsModule,
     AvatarUploadComponent,
-    TtStackInputComponent
+    TtStackInputComponent,
+    AddressInputComponent
   ],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.scss',
@@ -52,7 +53,8 @@ export class SettingsPageComponent {
       }
     ],
     description: [''],
-    stack: [null]
+    stack: [null],
+    city: [null]
   });
 
   constructor() {
@@ -67,15 +69,12 @@ export class SettingsPageComponent {
   onSave() {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
-
     if (this.form.invalid) return;
-
     if (this.avatarUploader.avatar) {
       this.#store.dispatch(
         profileActions.uploadAvatar({ file: this.avatarUploader.avatar })
       );
     }
-
     //@ts-ignore
     this.#store.dispatch(
       profileActions.patchProfile({

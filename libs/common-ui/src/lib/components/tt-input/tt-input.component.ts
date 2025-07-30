@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   forwardRef,
+  inject,
   input,
+  output,
   signal
 } from '@angular/core';
 import {
@@ -27,9 +30,16 @@ import {
   ]
 })
 export class TtInputComponent implements ControlValueAccessor {
+  #cd = inject(ChangeDetectorRef);
   type = input<'text' | 'password'>('text');
   placeholder = input<string>();
   disabled = signal<boolean>(false);
+  blurred = output<void>();
+
+  onBlur() {
+    this.blurred.emit();
+    this.onTouched();
+  }
 
   value: string | null = null;
   onChange: any;
@@ -37,6 +47,7 @@ export class TtInputComponent implements ControlValueAccessor {
 
   writeValue(val: any): void {
     this.value = val;
+    this.#cd.markForCheck();
   }
 
   registerOnChange(fn: any): void {

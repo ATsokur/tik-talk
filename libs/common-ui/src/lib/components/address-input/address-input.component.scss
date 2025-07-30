@@ -1,0 +1,33 @@
+:host {
+  position: relative;
+}
+
+.suggestion-dropdown {
+  position: absolute;
+  left: -1px;
+  top: 71px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 20%;
+  background-color: var(--dark-active-color);
+  border-radius: 0 0 4px 4px;
+  border: 1px solid var(--light-color);
+}
+
+.suggestion-dropdown__btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 8px;
+
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--light-color);
+
+  &:hover {
+    background-color: var(--primary-color);
+  }
+}

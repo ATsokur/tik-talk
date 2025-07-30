@@ -1,3 +1,4 @@
+import { AddressInputComponent } from './address-input/address-input.component';
 import { AvatarCircleComponent } from './avatar-circle/avatar-circle.component';
 import { InfiniteScrollTriggerComponent } from './infinite-scroll-trigger/infinite-scroll-trigger.component';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
@@ -9,5 +10,6 @@ export {
   SvgIconComponent,
   InfiniteScrollTriggerComponent,
   TtInputComponent,
-  TtStackInputComponent
+  TtStackInputComponent,
+  AddressInputComponent
 };

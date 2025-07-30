@@ -1,0 +1,34 @@
+<div
+  ttOutsideEl
+  (outsided)="onOutside()"
+>
+  <tt-input
+    class="suggestion-input tt-form-label__text"
+    [class.with-dropdown]="isDropdownOpened()"
+    [formControl]="innerSearchControl"
+    [placeholder]="'Введите адрес'"
+    (blurred)="onBlur()"
+  >
+    <ng-content></ng-content>
+  </tt-input>
+
+
+  @if (suggestion$ | async; as suggestion) {
+    @if (isDropdownOpened()) {
+      <div class="suggestion-dropdown">
+        @for (suggest of suggestion; track $index) {
+          @if (suggest) {
+            <button
+              type="button"
+              class="suggestion-dropdown__btn"
+              (click)="toChooseAddress(suggest)"
+            >
+              {{ suggest }}
+            </button>
+          }
+        }
+      </div>
+    }
+  }
+</div>
+
