@@ -3,13 +3,16 @@
     <ng-content></ng-content>
   </span>
 
-  <div class="tt-stack-wrapper">
+  <div
+    class="tt-stack-wrapper"
+  >
     @for (skill of stack$ | async; track i; let i = $index) {
       <div class="stack-tag">
         <button
           type="button"
           class="stack-btn__delete svg16"
           (click)="onDeleteTag(i)"
+          [tabindex]="isDisabled() ? -1 : 0"
         >
           <svg class="cross-icon svg10" icon="cross"></svg>
         </button>
@@ -24,6 +27,7 @@
       class="stack-ghost-input"
       [(ngModel)]="innerInput"
       (blur)="onTouch()"
+      [tabindex]="isDisabled() ? -1 : 0"
     />
   </div>
 

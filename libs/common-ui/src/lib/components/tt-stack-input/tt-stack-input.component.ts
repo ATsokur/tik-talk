@@ -3,7 +3,8 @@ import {
   Component,
   forwardRef,
   HostBinding,
-  HostListener
+  HostListener,
+  signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -33,7 +34,7 @@ export class TtStackInputComponent implements ControlValueAccessor {
 
   innerInput: string | null = null;
 
-  #disabled = false;
+  isDisabled = signal<boolean>(false);
 
   @HostListener('keydown.enter', ['$event'])
   onEnter(event: KeyboardEvent) {
@@ -49,7 +50,15 @@ export class TtStackInputComponent implements ControlValueAccessor {
 
   @HostBinding('class.disabled')
   get disabled() {
-    return this.#disabled;
+    return this.isDisabled();
+  }
+
+  onDeleteTag(i: number) {
+    const tags = this.stack$.value;
+    tags.splice(i, 1);
+
+    this.stack$.next(tags);
+    this.onChange(this.stack$.value);
   }
 
   writeValue(stack: string[] | null): void {
@@ -70,18 +79,10 @@ export class TtStackInputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.#disabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 
   onChange(value: string[] | null) {}
 
   onTouch() {}
-
-  onDeleteTag(i: number) {
-    const tags = this.stack$.value;
-    tags.splice(i, 1);
-
-    this.stack$.next(tags);
-    this.onChange(this.stack$.value);
-  }
 }
