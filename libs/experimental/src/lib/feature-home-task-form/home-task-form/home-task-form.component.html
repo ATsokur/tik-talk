@@ -1,5 +1,5 @@
 <form
-  class="technical-service__form"
+  class="technical-assistance__form"
   [formGroup]="form"
   (ngSubmit)="onSubmit()">
   <h4 class="h4">Запрос на техническое обслуживание</h4>
@@ -7,10 +7,10 @@
   <div class="personal-data__wrapper">
     <h6 class="h6">Данные инициатора обращения</h6>
 
-    <span class="technical-service__subtitle">Сотрудник:</span>
-    <label class="technical-service__label">
+    <span class="technical-assistance__subtitle">Сотрудник:</span>
+    <label class="technical-assistance__label">
       <input
-        class="technical-service__input"
+        class="technical-assistance__input"
         type="text"
         list="employees"
         placeholder="Введите ФИО сотрудника"
@@ -33,10 +33,10 @@
       }
     </label>
 
-    <span class="technical-service__subtitle">Контактный номер:</span>
-    <label class="technical-service__label">
+    <span class="technical-assistance__subtitle">Контактный номер:</span>
+    <label class="technical-assistance__label">
       <input
-        class="technical-service__input"
+        class="technical-assistance__input"
         type="tel"
         placeholder="Введите контактный номер"
         formControlName="phoneNumber"
@@ -59,26 +59,26 @@
       }
     </label>
 
-    <span class="technical-service__subtitle">Email:</span>
-    <label class="technical-service__label">
+    <span class="technical-assistance__subtitle">Email:</span>
+    <label class="technical-assistance__label">
       <input
-        class="technical-service__input"
+        class="technical-assistance__input"
         type="email"
         formControlName="email"
         [placeholder]="emailPlaceholder" />
       <div class="error-message mt8">Это поле обязательно</div>
     </label>
 
-    <span class="technical-service__subtitle">Наименование отдела</span>
-    <label class="technical-service__label">
-      <select class="technical-service__select" formControlName="department">
+    <span class="technical-assistance__subtitle">Наименование отдела</span>
+    <label class="technical-assistance__label">
+      <select class="technical-assistance__select" formControlName="department">
         @for (department of departments(); track $index) { @if ($first) {
-        <option class="technical-service__option" selected disabled value="">
+        <option class="technical-assistance__option" selected disabled value="">
           {{ department.label }}
         </option>
         } @else {
         <option
-          class="technical-service__option"
+          class="technical-assistance__option"
           [selected]="department.value === null ? department.label : ''"
           [value]="department.value">
           {{ department.label }}
@@ -93,52 +93,52 @@
   </div>
 
   <button
-    class="technical-service__btn appeal-btn"
+    class="technical-assistance__btn appeal-btn"
     type="button"
     (click)="addAppeal()">
     Добавить обращение
   </button>
-  @for (control of this.form.controls.appeal.controls; track indexAppeal; let
+  @for (control of this.form.controls.appeals.controls; track indexAppeal; let
   indexAppeal = $index) {
   <div class="appeal__wrapper" [formGroup]="control">
     <h6 class="h6">Обращение</h6>
-    <span class="technical-service__subtitle">Услуга</span>
-    <label class="technical-service__label">
-      <select class="technical-service__select" formControlName="service">
-        @for (service of services(); track $index) { @if ($first) {
+    <span class="technical-assistance__subtitle">Услуга</span>
+    <label class="technical-assistance__label">
+      <select class="technical-assistance__select" formControlName="assistance">
+        @for (assistance of assistances(); track $index) { @if ($first) {
         <option
-          class="technical-service__option"
+          class="technical-assistance__option"
           selected
           disabled
-          [value]="service.type.value">
-          {{ service.type.label }}
+          [value]="assistance.type.value">
+          {{ assistance.type.label }}
         </option>
         } @else {
-        <option class="technical-service__option" [value]="service.type.value">
-          {{ service.type.label }}
+        <option class="technical-assistance__option" [value]="assistance.type.value">
+          {{ assistance.type.label }}
         </option>
         } }
       </select>
-      @if (control.controls.service.touched && control.controls.service.value
+      @if (control.controls.assistance.touched && control.controls.assistance.value
       === null) {
       <div class="error-message mt8">Это поле обязательно</div>
       }
     </label>
 
-    <span class="technical-service__subtitle">Состав услуги</span>
-    <label class="technical-service__label">
-      <select class="technical-service__select" formControlName="compound">
+    <span class="technical-assistance__subtitle">Состав услуги</span>
+    <label class="technical-assistance__label">
+      <select class="technical-assistance__select" formControlName="compound">
         @for (compound of currentCompoundsOptions()[indexAppeal]; track $index)
         { @if ($first) {
         <option
-          class="technical-service__option"
+          class="technical-assistance__option"
           selected
           disabled
           [value]="compound.value">
           {{ compound.label }}
         </option>
         } @else {
-        <option class="technical-service__option" [value]="compound.value">
+        <option class="technical-assistance__option" [value]="compound.value">
           {{ compound.label }}
         </option>
         } }
@@ -149,10 +149,10 @@
       }
     </label>
 
-    <span class="technical-service__subtitle">Описание запроса</span>
-    <label class="technical-service__label">
+    <span class="technical-assistance__subtitle">Описание запроса</span>
+    <label class="technical-assistance__label">
       <textarea
-        class="technical-service__input technical-service__textarea"
+        class="technical-assistance__input technical-assistance__textarea"
         rows="6"
         formControlName="requestDescription">
       </textarea>
@@ -161,12 +161,12 @@
     </label>
   </div>
   <button
-    class="technical-service__btn appeal-btn mb32"
+    class="technical-assistance__btn appeal-btn mb32"
     type="button"
     (click)="deleteAppeal(indexAppeal)">
     Удалить обращение
   </button>
-  } @if (form.controls.appeal.controls.length) {
-  <button class="technical-service__btn" type="submit">Зарегистрировать</button>
+  } @if (form.controls.appeals.controls.length) {
+  <button class="technical-assistance__btn" type="submit">Зарегистрировать</button>
   }
 </form>

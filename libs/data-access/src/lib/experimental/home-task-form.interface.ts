@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms';
 
 export interface Appeal {
-  service: FormControl<string | null>;
+  assistance: FormControl<string | null>;
   compound: FormControl<string | null>;
   requestDescription: FormControl<string | null>;
 }
@@ -17,7 +17,7 @@ export interface Option {
   label: string;
   value: string | null;
 }
-export interface Service {
+export interface Assistance {
   type: Option;
   compounds: Option[];
 }

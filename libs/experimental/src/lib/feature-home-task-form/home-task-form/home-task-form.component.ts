@@ -33,7 +33,7 @@ import {
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
-    service: new FormControl<string | null>(null, [Validators.required]),
+    assistance: new FormControl<string | null>(null, [Validators.required]),
     compound: new FormControl<string | null>(null, [Validators.required]),
     requestDescription: new FormControl<string>('', [Validators.required])
   });
@@ -61,14 +61,14 @@ export class HomeTaskFormComponent implements AfterViewInit {
       return `${secondName} ${firstName} ${lastName}`;
     });
   });
-  services = this.#homeTaskFormMockService.services;
-  compounds = this.#homeTaskFormMockService.compoundServices;
+  assistances = this.#homeTaskFormMockService.assistances;
+  compounds = this.#homeTaskFormMockService.compoundAssistances;
   currentCompounds = signal<CurrentCompounds>({});
   currentCompoundsOptions = computed<Option[][]>(() => {
     return Object.values(this.currentCompounds());
   });
-  servicesObservables: Observable<string | null>[] = [];
-  servicesSubscriptions: Subscription[] = [];
+  assistancesObservables: Observable<string | null>[] = [];
+  assistancesSubscriptions: Subscription[] = [];
   readonly maskitoPhoneOptions: MaskitoOptions = phoneMask;
 
   form = new FormGroup({
@@ -85,7 +85,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
     ]),
     email: new FormControl<string>({ value: '', disabled: true }),
     department: new FormControl<string | null>('', Validators.required),
-    appeal: new FormArray<FormGroup<Appeal>>([])
+    appeals: new FormArray<FormGroup<Appeal>>([])
   });
 
   constructor() {
@@ -128,17 +128,17 @@ export class HomeTaskFormComponent implements AfterViewInit {
       });
   }
 
-  serviceControlChange(index: number, isDelete?: boolean) {
-    const updateCompound = (index: number, choseService: string | null) => {
-      this.services().forEach(({ type, compounds }) => {
-        if (choseService === type.value) {
+  assistanceControlChange(index: number, isDelete?: boolean) {
+    const updateCompound = (index: number, chooseAssistance: string | null) => {
+      this.assistances().forEach(({ type, compounds }) => {
+        if (chooseAssistance === type.value) {
           this.currentCompounds.update((value) => {
             value[index] = compounds;
             return { ...value };
           });
         }
       });
-      this.form.controls.appeal.controls[index].controls.compound.patchValue(
+      this.form.controls.appeals.controls[index].controls.compound.patchValue(
         this.currentCompounds()[index][0].value,
         {
           emitEvent: false
@@ -146,30 +146,30 @@ export class HomeTaskFormComponent implements AfterViewInit {
       );
     };
 
-    //Заполняю serviceObservables новыми service.valueChanges и подписываюсь на них + заполняю subscriptions
-    const addSubsOnService = () => {
-      this.form.controls.appeal.controls.forEach((formGroup, i) => {
-        if (!this.servicesObservables[i]) {
-          this.servicesObservables.push(
-            formGroup.controls.service.valueChanges
+    //Заполняю assistanceObservables новыми assistance.valueChanges и подписываюсь на них + заполняю subscriptions
+    const addSubsOnAssistance = () => {
+      this.form.controls.appeals.controls.forEach((formGroup, i) => {
+        if (!this.assistancesObservables[i]) {
+          this.assistancesObservables.push(
+            formGroup.controls.assistance.valueChanges
           );
-          const subscription = formGroup.controls.service.valueChanges
+          const subscription = formGroup.controls.assistance.valueChanges
             .pipe(takeUntilDestroyed(this.#destroyRef))
-            .subscribe((choseService) => {
-              updateCompound(i, choseService);
+            .subscribe((chooseAssistance) => {
+              updateCompound(i, chooseAssistance);
             });
-          this.servicesSubscriptions.push(subscription);
+          this.assistancesSubscriptions.push(subscription);
         }
       });
     };
 
     if (isDelete) {
-      this.servicesSubscriptions.forEach((sub, i) => {
+      this.assistancesSubscriptions.forEach((sub, i) => {
         if (i >= index) sub.unsubscribe();
       });
-      this.servicesSubscriptions.splice(index);
+      this.assistancesSubscriptions.splice(index);
 
-      this.form.controls.appeal.controls.forEach((_, i) => {
+      this.form.controls.appeals.controls.forEach((_, i) => {
         if (+Object.keys(this.currentCompounds())[i] !== i) {
           this.currentCompounds.update((value) => {
             value[i] = value[i + 1];
@@ -178,50 +178,40 @@ export class HomeTaskFormComponent implements AfterViewInit {
           });
         }
       });
-      addSubsOnService();
+      addSubsOnAssistance();
       return;
     } else {
-      this.servicesObservables.push(
-        this.form.controls.appeal.controls[index].controls.service.valueChanges
+      this.assistancesObservables.push(
+        this.form.controls.appeals.controls[index].controls.assistance
+          .valueChanges
       );
     }
 
-    const subscription = this.servicesObservables[index]
+    const subscription = this.assistancesObservables[index]
       .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe((choseService) => {
-        updateCompound(index, choseService);
+      .subscribe((chooseAssistance) => {
+        updateCompound(index, chooseAssistance);
       });
-    this.servicesSubscriptions.push(subscription);
+    this.assistancesSubscriptions.push(subscription);
   }
 
   addAppeal() {
-    const formPosition: number = this.form.controls.appeal.length;
+    const formPosition: number = this.form.controls.appeals.length;
 
-    this.form.controls.appeal.insert(formPosition, addAppealForm());
+    this.form.controls.appeals.insert(formPosition, addAppealForm());
     this.currentCompounds.update((value) => {
       value[formPosition] = [this.compounds()[0][0]];
       return { ...value };
     });
 
-    this.serviceControlChange(formPosition);
+    this.assistanceControlChange(formPosition);
   }
 
   //Удаление работает на конкретную форму, которую мы хотим удалить
   deleteAppeal(index: number) {
-    let formPositions: string[] = Object.keys(this.currentCompounds());
-
-    formPositions = formPositions.filter((position, i) => {
-      if (index === i) {
-        this.currentCompounds.update((value) => {
-          delete value[position];
-          return { ...value };
-        });
-      }
-      return index !== i;
-    });
-    this.form.controls.appeal.removeAt(index);
-    this.servicesObservables.splice(index);
-    this.serviceControlChange(index, true);
+    this.form.controls.appeals.removeAt(index);
+    this.assistancesObservables.splice(index);
+    this.assistanceControlChange(index, true);
   }
 
   onMaskEmployee(event: KeyboardEvent) {
@@ -296,6 +286,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
     if (this.form.invalid) return;
 
     console.log(this.form.getRawValue());
+    console.log(this.form.value);
   }
 
   resizeForm() {

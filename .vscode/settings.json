@@ -1,5 +1,5 @@
 {
   "nxConsole.generateAiAgentRules": true,
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "cSpell.words": ["dadata", "outsided"]
+  "cSpell.words": ["assistances", "dadata", "outsided"]
 }

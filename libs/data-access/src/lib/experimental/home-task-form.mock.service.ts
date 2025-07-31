@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 
 import { map, Observable, of, tap } from 'rxjs';
 
-import { Employee, Option, Service } from './home-task-form.interface';
+import { Employee, Option, Assistance } from './home-task-form.interface';
 
 enum ReceiverDepartments {
   Analytics = 'Analytics',
@@ -10,14 +10,14 @@ enum ReceiverDepartments {
   Logistics = 'Logistics'
 }
 
-enum ReceiverServices {
+enum ReceiverAssistance {
   Computer = 'Computer',
   Printer = 'Printer',
   Email = 'Email',
   Apps = 'Apps'
 }
 
-enum ReceiverCompoundServices {
+enum ReceiverCompoundAssistance {
   NotEnable = 'NotEnable',
   NetworkDrive = 'NetworkDrive',
   Monitor = 'Monitor',
@@ -47,100 +47,100 @@ const Departments: Option[] = [
   }
 ];
 
-const services: Service[] = [
+const assistances: Assistance[] = [
   {
     type: {
       label: 'Персональный компьютер',
-      value: ReceiverServices.Computer
+      value: ReceiverAssistance.Computer
     },
     compounds: [
       {
         label: 'Не включается/Перезагружается',
-        value: ReceiverCompoundServices.NotEnable
+        value: ReceiverCompoundAssistance.NotEnable
       },
       {
         label: 'Недоступен сетевой диск',
-        value: ReceiverCompoundServices.NetworkDrive
+        value: ReceiverCompoundAssistance.NetworkDrive
       },
       {
         label: 'Монитор',
-        value: ReceiverCompoundServices.Monitor
+        value: ReceiverCompoundAssistance.Monitor
       },
       {
         label: 'Прочее',
-        value: ReceiverCompoundServices.Other
+        value: ReceiverCompoundAssistance.Other
       }
     ]
   },
   {
     type: {
       label: 'Принтер',
-      value: ReceiverServices.Printer
+      value: ReceiverAssistance.Printer
     },
     compounds: [
       {
         label: 'Не включается',
-        value: ReceiverCompoundServices.NotEnable
+        value: ReceiverCompoundAssistance.NotEnable
       },
       {
         label: 'Замятие бумаги',
-        value: ReceiverCompoundServices.PaperJam
+        value: ReceiverCompoundAssistance.PaperJam
       },
       {
         label: 'Механическое повреждение',
-        value: ReceiverCompoundServices.MechanicalDamage
+        value: ReceiverCompoundAssistance.MechanicalDamage
       },
       {
         label: 'Закончился тонер',
-        value: ReceiverCompoundServices.TonerOut
+        value: ReceiverCompoundAssistance.TonerOut
       },
       {
         label: 'Прочее',
-        value: ReceiverCompoundServices.Other
+        value: ReceiverCompoundAssistance.Other
       }
     ]
   },
   {
     type: {
       label: 'Электронная почта',
-      value: ReceiverServices.Email
+      value: ReceiverAssistance.Email
     },
     compounds: [
       {
         label: 'Не открывается',
-        value: ReceiverCompoundServices.NotOpen
+        value: ReceiverCompoundAssistance.NotOpen
       },
       {
         label: 'Не отправляются письма',
-        value: ReceiverCompoundServices.NotSend
+        value: ReceiverCompoundAssistance.NotSend
       },
       {
         label: 'Не приходят письма',
-        value: ReceiverCompoundServices.NotReceive
+        value: ReceiverCompoundAssistance.NotReceive
       },
       {
         label: 'Прочее',
-        value: ReceiverCompoundServices.Other
+        value: ReceiverCompoundAssistance.Other
       }
     ]
   },
   {
     type: {
       label: 'Специальное ПО',
-      value: ReceiverServices.Apps
+      value: ReceiverAssistance.Apps
     },
     compounds: [
       {
         label: 'Не открывается MS Word',
-        value: ReceiverCompoundServices.MsWord
+        value: ReceiverCompoundAssistance.MsWord
       },
       {
         label: 'Не открывается MS Excel',
-        value: ReceiverCompoundServices.MsExcel
+        value: ReceiverCompoundAssistance.MsExcel
       },
       {
         label: 'Прочее',
-        value: ReceiverCompoundServices.Other
+        value: ReceiverCompoundAssistance.Other
       }
     ]
   }
@@ -148,16 +148,16 @@ const services: Service[] = [
 
 @Injectable()
 export class HomeTaskFormMockService {
-  services = signal<Service[]>([]);
-  serviceName = signal<string[]>([]);
+  assistances = signal<Assistance[]>([]);
+  assistanceName = signal<string[]>([]);
   departments = signal<Option[]>([]);
   employees = signal<Employee[]>([]);
-  compoundServices = signal<Option[][]>([[]]);
+  compoundAssistances = signal<Option[][]>([[]]);
 
   getSectionServices() {
-    return of(services).pipe(
-      map((services) => {
-        const voidService: Service = {
+    return of(assistances).pipe(
+      map((assistances) => {
+        const voidAssistance: Assistance = {
           type: {
             label: '--Выберете услугу--',
             value: null
@@ -169,17 +169,17 @@ export class HomeTaskFormMockService {
             }
           ]
         };
-        const patchServices = services.map(({ type, compounds }) => {
+        const patchAssistances = assistances.map(({ type, compounds }) => {
           return {
             type,
-            compounds: [...voidService.compounds, ...compounds]
+            compounds: [...voidAssistance.compounds, ...compounds]
           };
         });
-        const allCompounds = patchServices.map(({ compounds }) => compounds);
-        this.compoundServices.set(allCompounds);
-        return [voidService, ...patchServices];
+        const allCompounds = patchAssistances.map(({ compounds }) => compounds);
+        this.compoundAssistances.set(allCompounds);
+        return [voidAssistance, ...patchAssistances];
       }),
-      tap((services) => this.services.set(services))
+      tap((assistances) => this.assistances.set(assistances))
     );
   }
 
