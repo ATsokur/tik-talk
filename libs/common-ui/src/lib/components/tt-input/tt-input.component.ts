@@ -4,20 +4,22 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  HostBinding,
   inject,
   input,
-  output,
-  signal
+  output
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule
 } from '@angular/forms';
 
 @Component({
   selector: 'tt-input',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tt-input.component.html',
   styleUrl: './tt-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,24 +32,38 @@ import {
   ]
 })
 export class TtInputComponent implements ControlValueAccessor {
-  #cd = inject(ChangeDetectorRef);
+  #cdr = inject(ChangeDetectorRef);
   type = input<'text' | 'password'>('text');
   placeholder = input<string>();
-  disabled = signal<boolean>(false);
+  #disabled = false;
   blurred = output<void>();
+
+  ttInputControl = new FormControl();
+
+  onChange: any;
+  onTouched: any;
+
+  @HostBinding('class.disabled')
+  get disabled() {
+    return this.#disabled;
+  }
+
+  constructor() {
+    this.ttInputControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((val) => this.onChange(val));
+  }
 
   onBlur() {
     this.blurred.emit();
     this.onTouched();
   }
 
-  value: string | null = null;
-  onChange: any;
-  onTouched: any;
-
   writeValue(val: any): void {
-    this.value = val;
-    this.#cd.markForCheck();
+    this.ttInputControl.patchValue(val, {
+      emitEvent: false
+    });
+    this.#cdr.markForCheck();
   }
 
   registerOnChange(fn: any): void {
@@ -59,10 +75,9 @@ export class TtInputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
-  }
-
-  onModelChange(val: string) {
-    this.onChange(val);
+    this.#disabled = isDisabled;
+    if (isDisabled) {
+      this.ttInputControl.disable();
+    }
   }
 }
