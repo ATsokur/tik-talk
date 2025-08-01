@@ -100,7 +100,7 @@ export class HomeTaskFormComponent implements AfterViewInit {
       .subscribe();
 
     this.#homeTaskFormMockService
-      .getSectionServices()
+      .getSectionAssistances()
       .pipe(takeUntilDestroyed())
       .subscribe();
 
@@ -209,6 +209,16 @@ export class HomeTaskFormComponent implements AfterViewInit {
 
   //Удаление работает на конкретную форму, которую мы хотим удалить
   deleteAppeal(index: number) {
+    const formPositions: string[] = Object.keys(this.currentCompounds());
+
+    formPositions.forEach((position, i) => {
+      if (index === i) {
+        this.currentCompounds.update((value) => {
+          delete value[position];
+          return { ...value };
+        });
+      }
+    });
     this.form.controls.appeals.removeAt(index);
     this.assistancesObservables.splice(index);
     this.assistanceControlChange(index, true);

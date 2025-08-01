@@ -154,7 +154,7 @@ export class HomeTaskFormMockService {
   employees = signal<Employee[]>([]);
   compoundAssistances = signal<Option[][]>([[]]);
 
-  getSectionServices() {
+  getSectionAssistances() {
     return of(assistances).pipe(
       map((assistances) => {
         const voidAssistance: Assistance = {
