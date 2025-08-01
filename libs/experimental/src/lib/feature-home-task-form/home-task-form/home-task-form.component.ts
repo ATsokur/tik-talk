@@ -128,100 +128,101 @@ export class HomeTaskFormComponent implements AfterViewInit {
       });
   }
 
-  assistanceControlChange(index: number, isDelete?: boolean) {
-    const updateCompound = (index: number, chooseAssistance: string | null) => {
-      this.assistances().forEach(({ type, compounds }) => {
-        if (chooseAssistance === type.value) {
-          this.currentCompounds.update((value) => {
-            value[index] = compounds;
-            return { ...value };
-          });
-        }
-      });
-      this.form.controls.appeals.controls[index].controls.compound.patchValue(
-        this.currentCompounds()[index][0].value,
-        {
-          emitEvent: false
-        }
-      );
-    };
+  updateCurrentCompounds(index: number, chooseAssistance: string | null) {
+    this.assistances().forEach(({ type, compounds }) => {
+      if (chooseAssistance === type.value) {
+        this.currentCompounds.update((value) => {
+          value[index] = compounds;
+          return { ...value };
+        });
+      }
+    });
+    this.form.controls.appeals.controls[index].controls.compound.patchValue(
+      this.currentCompounds()[index][0].value,
+      {
+        emitEvent: false
+      }
+    );
+  }
 
-    //Заполняю assistanceObservables новыми assistance.valueChanges и подписываюсь на них + заполняю subscriptions
-    const addSubsOnAssistance = () => {
-      this.form.controls.appeals.controls.forEach((formGroup, i) => {
-        if (!this.assistancesObservables[i]) {
-          this.assistancesObservables.push(
-            formGroup.controls.assistance.valueChanges
-          );
-          const subscription = formGroup.controls.assistance.valueChanges
-            .pipe(takeUntilDestroyed(this.#destroyRef))
-            .subscribe((chooseAssistance) => {
-              updateCompound(i, chooseAssistance);
-            });
-          this.assistancesSubscriptions.push(subscription);
-        }
-      });
-    };
+  addZeroCompound(index: number) {
+    this.currentCompounds.update((value) => {
+      value[index] = [this.compounds()[0][0]];
+      return { ...value };
+    });
+  }
 
-    if (isDelete) {
-      this.assistancesSubscriptions.forEach((sub, i) => {
-        if (i >= index) sub.unsubscribe();
-      });
-      this.assistancesSubscriptions.splice(index);
+  toUnsubscribeAssistanceControl(index: number) {
+    this.assistancesSubscriptions.forEach((sub, i) => {
+      if (i >= index) sub.unsubscribe();
+    });
+    this.assistancesSubscriptions.splice(index);
+  }
 
-      this.form.controls.appeals.controls.forEach((_, i) => {
-        if (+Object.keys(this.currentCompounds())[i] !== i) {
-          this.currentCompounds.update((value) => {
-            value[i] = value[i + 1];
-            delete value[i + 1];
-            return { ...value };
-          });
-        }
-      });
-      addSubsOnAssistance();
-      return;
-    } else {
-      this.assistancesObservables.push(
-        this.form.controls.appeals.controls[index].controls.assistance
-          .valueChanges
-      );
-    }
+  //После удаления формы из appeals обновляем key и value в currentCompounds
+  updateCompoundsAfterDeleteAppeal(index: number) {
+    const currentCompounds = this.currentCompounds();
+    const formPositions: string[] = Object.keys(currentCompounds);
+    let isDeletedCompound = false;
+    formPositions.forEach((pos) => {
+      const numPos = Number(pos);
+      if (index === numPos) {
+        delete currentCompounds[numPos];
+        isDeletedCompound = true;
+        return;
+      }
 
+      if (isDeletedCompound) {
+        currentCompounds[numPos - 1] = currentCompounds[numPos];
+        delete currentCompounds[numPos];
+      }
+    });
+    this.currentCompounds.set({ ...currentCompounds });
+  }
+
+  //Заполняю assistanceObservables новыми assistance.valueChanges и подписываюсь на них + заполняю subscriptions
+  addSubsOnAssistance() {
+    this.form.controls.appeals.controls.forEach((formGroup, i) => {
+      if (!this.assistancesObservables[i]) {
+        this.assistancesObservables.push(
+          formGroup.controls.assistance.valueChanges
+        );
+        this.addAssistancesSubscriptions(i);
+      }
+    });
+  }
+
+  addAssistancesObservables(index: number) {
+    this.assistancesObservables.push(
+      this.form.controls.appeals.controls[index].controls.assistance
+        .valueChanges
+    );
+  }
+
+  addAssistancesSubscriptions(index: number) {
     const subscription = this.assistancesObservables[index]
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe((chooseAssistance) => {
-        updateCompound(index, chooseAssistance);
+        this.updateCurrentCompounds(index, chooseAssistance);
       });
     this.assistancesSubscriptions.push(subscription);
   }
 
   addAppeal() {
     const formPosition: number = this.form.controls.appeals.length;
-
     this.form.controls.appeals.insert(formPosition, addAppealForm());
-    this.currentCompounds.update((value) => {
-      value[formPosition] = [this.compounds()[0][0]];
-      return { ...value };
-    });
-
-    this.assistanceControlChange(formPosition);
+    this.addZeroCompound(formPosition);
+    this.addAssistancesObservables(formPosition);
+    this.addAssistancesSubscriptions(formPosition);
   }
 
   //Удаление работает на конкретную форму, которую мы хотим удалить
   deleteAppeal(index: number) {
-    const formPositions: string[] = Object.keys(this.currentCompounds());
-
-    formPositions.forEach((position, i) => {
-      if (index === i) {
-        this.currentCompounds.update((value) => {
-          delete value[position];
-          return { ...value };
-        });
-      }
-    });
+    this.updateCompoundsAfterDeleteAppeal(index);
     this.form.controls.appeals.removeAt(index);
     this.assistancesObservables.splice(index);
-    this.assistanceControlChange(index, true);
+    this.toUnsubscribeAssistanceControl(index);
+    this.addSubsOnAssistance();
   }
 
   onMaskEmployee(event: KeyboardEvent) {
