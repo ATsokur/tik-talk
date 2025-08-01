@@ -286,7 +286,6 @@ export class HomeTaskFormComponent implements AfterViewInit {
     if (this.form.invalid) return;
 
     console.log(this.form.getRawValue());
-    console.log(this.form.value);
   }
 
   resizeForm() {

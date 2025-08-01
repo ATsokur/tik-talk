@@ -11,14 +11,15 @@
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
+        [class.disabled]="this.form.controls.employee.disabled"
         type="text"
         list="employees"
-        placeholder="Введите ФИО сотрудника"
+        placeholder="Выберете сотрудника"
         formControlName="employee"
         (keydown)="onMaskEmployee($event)" />
       <datalist id="employees">
         @for (employeeFullName of employeesFullNames(); track $index) {
-        <option [value]="employeeFullName"></option>
+          <option [value]="employeeFullName"></option>
         }
       </datalist>
 
@@ -37,6 +38,7 @@
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
+        [class.disabled]="this.form.controls.phoneNumber.disabled"
         type="tel"
         placeholder="Введите контактный номер"
         formControlName="phoneNumber"
@@ -63,15 +65,22 @@
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
+        [class.disabled]="this.form.controls.email.disabled"
         type="email"
         formControlName="email"
         [placeholder]="emailPlaceholder" />
-      <div class="error-message mt8">Это поле обязательно</div>
+      @if (this.form.controls.email.pristine) {
+        <div class="error-message mt8">Это поле обязательно</div>
+      }
     </label>
 
     <span class="technical-assistance__subtitle">Наименование отдела</span>
     <label class="technical-assistance__label">
-      <select class="technical-assistance__select" formControlName="department">
+      <select
+        class="technical-assistance__select"
+        [class.disabled]="this.form.controls.department.disabled"
+        formControlName="department"
+      >
         @for (department of departments(); track $index) { @if ($first) {
         <option class="technical-assistance__option" selected disabled value="">
           {{ department.label }}
@@ -80,7 +89,8 @@
         <option
           class="technical-assistance__option"
           [selected]="department.value === null ? department.label : ''"
-          [value]="department.value">
+          [value]="department.value"
+        >
           {{ department.label }}
         </option>
         } }
@@ -95,16 +105,20 @@
   <button
     class="technical-assistance__btn appeal-btn"
     type="button"
-    (click)="addAppeal()">
+    (click)="addAppeal()"
+  >
     Добавить обращение
   </button>
-  @for (control of this.form.controls.appeals.controls; track indexAppeal; let
+  @for (appeal of this.form.controls.appeals.controls; track indexAppeal; let
   indexAppeal = $index) {
-  <div class="appeal__wrapper" [formGroup]="control">
+  <div class="appeal__wrapper" [formGroup]="appeal">
     <h6 class="h6">Обращение</h6>
     <span class="technical-assistance__subtitle">Услуга</span>
     <label class="technical-assistance__label">
-      <select class="technical-assistance__select" formControlName="assistance">
+      <select
+        class="technical-assistance__select"
+        formControlName="assistance"
+      >
         @for (assistance of assistances(); track $index) { @if ($first) {
         <option
           class="technical-assistance__option"
@@ -119,7 +133,7 @@
         </option>
         } }
       </select>
-      @if (control.controls.assistance.touched && control.controls.assistance.value
+      @if (appeal.controls.assistance.touched && appeal.controls.assistance.value
       === null) {
       <div class="error-message mt8">Это поле обязательно</div>
       }
@@ -127,7 +141,10 @@
 
     <span class="technical-assistance__subtitle">Состав услуги</span>
     <label class="technical-assistance__label">
-      <select class="technical-assistance__select" formControlName="compound">
+      <select
+        class="technical-assistance__select"
+        formControlName="compound"
+      >
         @for (compound of currentCompoundsOptions()[indexAppeal]; track $index)
         { @if ($first) {
         <option
@@ -143,7 +160,7 @@
         </option>
         } }
       </select>
-      @if (control.controls.compound.touched && control.controls.compound.value
+      @if (appeal.controls.compound.touched && appeal.controls.compound.value
       === null) {
       <div class="error-message mt8">Это поле обязательно</div>
       }
@@ -154,7 +171,8 @@
       <textarea
         class="technical-assistance__input technical-assistance__textarea"
         rows="6"
-        formControlName="requestDescription">
+        formControlName="requestDescription"
+      >
       </textarea>
 
       <div class="error-message mt8">Это поле обязательно</div>
@@ -167,6 +185,11 @@
     Удалить обращение
   </button>
   } @if (form.controls.appeals.controls.length) {
-  <button class="technical-assistance__btn" type="submit">Зарегистрировать</button>
+  <button
+    class="technical-assistance__btn"
+    type="submit"
+  >
+    Зарегистрировать
+  </button>
   }
 </form>
