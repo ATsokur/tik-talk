@@ -30,13 +30,20 @@ import {
   HomeTaskFormMockService,
   Option
 } from '@tt/data-access';
-import { AddressInputComponent, TtInputComponent } from '@tt/common-ui';
+import {
+  AddressInputComponent,
+  TtInputComponent,
+  TtStackInputComponent
+} from '@tt/common-ui';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
     assistance: new FormControl<string | null>(null, [Validators.required]),
     compound: new FormControl<string | null>(null, [Validators.required]),
-    requestDescription: new FormControl<string>('', [Validators.required])
+    requestDescription: new FormControl<string | null>(null, [
+      Validators.required
+    ]),
+    tags: new FormControl<string[] | null>(null, [Validators.required])
   });
 }
 
@@ -46,7 +53,8 @@ function addAppealForm(): FormGroup<Appeal> {
     ReactiveFormsModule,
     MaskitoDirective,
     AddressInputComponent,
-    TtInputComponent
+    TtInputComponent,
+    TtStackInputComponent
   ],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',

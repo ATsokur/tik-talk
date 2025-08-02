@@ -250,7 +250,19 @@
 
       <div class="error-message mt8">Это поле обязательно</div>
     </label>
+
+    <tt-stack-input
+      formControlName="tags"
+      class="technical-assistance__custom-input"
+    >
+      Теги обращения
+    </tt-stack-input>
+    @if (appeal.controls.tags.hasError('required') && appeal.controls.tags.touched) {
+      <div class="error-message mt8">Это поле обязательно</div>
+    }
   </div>
+
+
   <button
     class="technical-assistance__btn appeal-btn mb32"
     type="button"

@@ -4,6 +4,7 @@ export interface Appeal {
   assistance: FormControl<string | null>;
   compound: FormControl<string | null>;
   requestDescription: FormControl<string | null>;
+  tags: FormControl<string[] | null>;
 }
 
 export interface Employee {

@@ -56,3 +56,10 @@
     opacity: 0.5;
   }
 }
+
+:host.ng-pristine.ng-touched.ng-invalid,
+:host.ng-dirty.ng-touched.ng-invalid {
+  .tt-stack-wrapper {
+    border-bottom: 2px solid #ce4d3c;
+  }
+}
