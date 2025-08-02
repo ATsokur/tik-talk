@@ -4,6 +4,7 @@ import {
   forwardRef,
   HostBinding,
   HostListener,
+  input,
   signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,10 +32,9 @@ import { SvgIconComponent } from '../svg-icon/svg-icon.component';
 })
 export class TtStackInputComponent implements ControlValueAccessor {
   stack$ = new BehaviorSubject<string[]>([]);
-
-  innerInput: string | null = null;
-
+  placeholder = input.required<string>();
   isDisabled = signal<boolean>(false);
+  innerInput: string | null = null;
 
   @HostListener('keydown.enter', ['$event'])
   onEnter(event: KeyboardEvent) {

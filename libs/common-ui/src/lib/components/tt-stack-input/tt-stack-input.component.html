@@ -25,6 +25,7 @@
     <input
       type="text"
       class="stack-ghost-input"
+      [placeholder]="placeholder()"
       [(ngModel)]="innerInput"
       (blur)="onTouch()"
       [tabindex]="isDisabled() ? -1 : 0"
