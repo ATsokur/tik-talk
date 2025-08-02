@@ -7,7 +7,11 @@
   <div class="personal-data__wrapper">
     <h6 class="h6">Данные инициатора обращения</h6>
 
-    <span class="technical-assistance__subtitle">Сотрудник:</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text"
+    >
+      Сотрудник:
+    </span>
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
@@ -34,7 +38,11 @@
       }
     </label>
 
-    <span class="technical-assistance__subtitle">Контактный номер:</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text"
+    >
+      Контактный номер:
+    </span>
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
@@ -61,7 +69,10 @@
       }
     </label>
 
-    <span class="technical-assistance__subtitle">Email:</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text">
+      Email:
+    </span>
     <label class="technical-assistance__label">
       <input
         class="technical-assistance__input"
@@ -74,7 +85,10 @@
       }
     </label>
 
-    <span class="technical-assistance__subtitle">Наименование отдела</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text">
+      Наименование отдела
+    </span>
     <label class="technical-assistance__label">
       <select
         class="technical-assistance__select"
@@ -102,6 +116,56 @@
     </label>
   </div>
 
+  <tt-address-input
+    formControlName="address"
+    class="technical-assistance__custom-input"
+    [placeholder]="'Введите адрес офиса'"
+  >
+    Адрес офиса
+  </tt-address-input>
+  @if(this.form.controls.address.hasError('required') && this.form.controls.address.touched) {
+    <div class="error-message">
+      Это поле обязательно
+    </div>
+  }
+
+  <tt-input
+    formControlName="city"
+    class="tt-form-label__text technical-assistance__custom-input"
+    [placeholder]="'Введите город'"
+  >
+    Город
+  </tt-input>
+  @if(this.form.controls.city.hasError('required') && this.form.controls.city.touched) {
+    <div class="error-message">
+      Это поле обязательно
+    </div>
+  }
+  <tt-input
+    formControlName="street"
+    class="tt-form-label__text technical-assistance__custom-input"
+    [placeholder]="'Введите улицу'"
+  >
+    Улица
+  </tt-input>
+  @if(this.form.controls.street.hasError('required') && this.form.controls.street.touched) {
+    <div class="error-message">
+      Это поле обязательно
+    </div>
+  }
+  <tt-input
+    formControlName="house"
+    class="tt-form-label__text technical-assistance__custom-input"
+    [placeholder]="'Введите дом'"
+  >
+    Дом
+  </tt-input>
+  @if(this.form.controls.house.hasError('required') && this.form.controls.house.touched) {
+    <div class="error-message">
+      Это поле обязательно
+    </div>
+  }
+
   <button
     class="technical-assistance__btn appeal-btn"
     type="button"
@@ -113,7 +177,10 @@
   indexAppeal = $index) {
   <div class="appeal__wrapper" [formGroup]="appeal">
     <h6 class="h6">Обращение</h6>
-    <span class="technical-assistance__subtitle">Услуга</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text">
+      Услуга
+    </span>
     <label class="technical-assistance__label">
       <select
         class="technical-assistance__select"
@@ -139,7 +206,10 @@
       }
     </label>
 
-    <span class="technical-assistance__subtitle">Состав услуги</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text">
+      Состав услуги
+    </span>
     <label class="technical-assistance__label">
       <select
         class="technical-assistance__select"
@@ -166,7 +236,10 @@
       }
     </label>
 
-    <span class="technical-assistance__subtitle">Описание запроса</span>
+    <span
+      class="technical-assistance__subtitle tt-form-label__text">
+      Описание запроса
+    </span>
     <label class="technical-assistance__label">
       <textarea
         class="technical-assistance__input technical-assistance__textarea"

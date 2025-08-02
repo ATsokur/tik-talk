@@ -12,7 +12,7 @@ export class DadataService {
   #apiUrl =
     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
 
-  getSuggestion(query: string) {
+  getSuggestionCities(query: string) {
     return this.#http
       .post<{ suggestions: Suggestion[] }>(
         `${this.#apiUrl}`,
@@ -25,13 +25,22 @@ export class DadataService {
       )
       .pipe(
         map((suggestions) => {
-          return Array.from(
-            new Set(
-              suggestions.suggestions.map(({ data: { city } }) => {
-                return city;
-              })
-            )
+          const addresses = suggestions.suggestions.map(
+            ({ data: { city, street, house } }) => {
+              city = city ? city : '';
+              street = street ? street : '';
+              house = house ? house : '';
+
+              if (city || street || house) {
+                return `${city}\n${street}\n${house}`;
+              }
+
+              return null;
+            }
           );
+
+          const uniqueAddresses = Array.from(new Set(addresses));
+          return uniqueAddresses;
         })
       );
   }

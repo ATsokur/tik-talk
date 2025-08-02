@@ -6,7 +6,7 @@
     class="suggestion-input tt-form-label__text"
     [class.with-dropdown]="isDropdownOpened()"
     [formControl]="innerSearchControl"
-    [placeholder]="'Введите адрес'"
+    [placeholder]="placeholder()"
     (blurred)="onBlur()"
   >
     <ng-content></ng-content>
@@ -17,7 +17,7 @@
     @if (isDropdownOpened()) {
       <div class="suggestion-dropdown">
         @for (suggest of suggestion; track $index) {
-          @if (suggest) {
+          @if (suggest && suggest !== divider) {
             <button
               type="button"
               class="suggestion-dropdown__btn"

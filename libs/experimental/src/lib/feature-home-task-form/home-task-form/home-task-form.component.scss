@@ -34,11 +34,16 @@
   font-weight: 700;
 }
 
+.technical-assistance__custom-input + .error-message {
+  display: block;
+}
+
 .technical-assistance__input.ng-touched.ng-pristine + .error-message,
 .technical-assistance__input.ng-touched.ng-invalid ~ .error-message,
 .technical-assistance__select.ng-touched.ng-invalid + .error-message {
   display: block;
 }
+
 .technical-assistance__select,
 .technical-assistance__input,
 .technical-assistance__option,

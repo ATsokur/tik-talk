@@ -30,6 +30,7 @@ import {
   HomeTaskFormMockService,
   Option
 } from '@tt/data-access';
+import { AddressInputComponent, TtInputComponent } from '@tt/common-ui';
 
 function addAppealForm(): FormGroup<Appeal> {
   return new FormGroup<Appeal>({
@@ -41,7 +42,12 @@ function addAppealForm(): FormGroup<Appeal> {
 
 @Component({
   selector: 'app-home-task-form',
-  imports: [ReactiveFormsModule, MaskitoDirective],
+  imports: [
+    ReactiveFormsModule,
+    MaskitoDirective,
+    AddressInputComponent,
+    TtInputComponent
+  ],
   templateUrl: './home-task-form.component.html',
   styleUrl: './home-task-form.component.scss',
   providers: [HomeTaskFormMockService, ValidateFullName],
@@ -85,25 +91,43 @@ export class HomeTaskFormComponent implements AfterViewInit {
     ]),
     email: new FormControl<string>({ value: '', disabled: true }),
     department: new FormControl<string | null>('', Validators.required),
+    address: new FormControl<string | null>('', Validators.required),
+    city: new FormControl<string | null>('', Validators.required),
+    street: new FormControl<string | null>('', Validators.required),
+    house: new FormControl<string | null>('', Validators.required),
     appeals: new FormArray<FormGroup<Appeal>>([])
   });
 
   constructor() {
+    this.getDepartments();
+    this.getEmployees();
+    this.getSectionAssistances();
+    this.toSubscribeEmployeeControl();
+    this.toSubscribeAddressControl();
+  }
+
+  getDepartments() {
     this.#homeTaskFormMockService
       .getDepartments()
       .pipe(takeUntilDestroyed())
       .subscribe();
+  }
 
+  getEmployees() {
     this.#homeTaskFormMockService
       .getEmployees()
       .pipe(takeUntilDestroyed())
       .subscribe();
+  }
 
+  getSectionAssistances() {
     this.#homeTaskFormMockService
       .getSectionAssistances()
       .pipe(takeUntilDestroyed())
       .subscribe();
+  }
 
+  toSubscribeEmployeeControl() {
     this.form.controls.employee.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe((fullName) => {
@@ -125,6 +149,37 @@ export class HomeTaskFormComponent implements AfterViewInit {
             }
           }
         );
+      });
+  }
+
+  toSubscribeAddressControl() {
+    this.form.controls.address.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((address) => {
+        if (!address) return;
+
+        const addressArr = address.split('\n');
+        const city = addressArr[0];
+        const street = addressArr.slice(1)[0];
+        const house = addressArr.at(-1);
+
+        this.form.controls.city.patchValue(city, {
+          emitEvent: false
+        });
+
+        if (!street) return;
+
+        this.form.controls.street.patchValue(street, {
+          emitEvent: false
+        });
+
+        if (!house) return;
+
+        if (street !== house) {
+          this.form.controls.house.patchValue(house, {
+            emitEvent: false
+          });
+        }
       });
   }
 

@@ -4,6 +4,7 @@ import {
   Component,
   forwardRef,
   inject,
+  input,
   signal
 } from '@angular/core';
 import {
@@ -13,7 +14,7 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 
-import { debounceTime, switchMap, tap } from 'rxjs';
+import { debounceTime, map, switchMap, tap } from 'rxjs';
 
 import { DadataService } from '@tt/data-access';
 
@@ -43,15 +44,21 @@ export class AddressInputComponent implements ControlValueAccessor {
   #dadataService = inject(DadataService);
   innerSearchControl = new FormControl();
   isDropdownOpened = signal<boolean>(false);
+  placeholder = input.required<string>();
+  divider = '\n';
 
   suggestion$ = this.innerSearchControl.valueChanges.pipe(
-    debounceTime(500),
+    debounceTime(2000),
     switchMap((address) => {
-      return this.#dadataService
-        .getSuggestion(address)
-        .pipe(
-          tap((suggestions) => this.isDropdownOpened.set(!!suggestions.length))
-        );
+      return this.#dadataService.getSuggestionCities(address).pipe(
+        map((suggestions) => {
+          return suggestions.map((suggestion) => {
+            if (!suggestion) return '\n';
+            return suggestion;
+          });
+        }),
+        tap((suggestions) => this.isDropdownOpened.set(!!suggestions.length))
+      );
     })
   );
 
@@ -64,7 +71,8 @@ export class AddressInputComponent implements ControlValueAccessor {
   }
 
   toChooseAddress(address: string) {
-    this.innerSearchControl.patchValue(address, {
+    const patchAddress = address.split(this.divider).join(' ');
+    this.innerSearchControl.patchValue(patchAddress, {
       emitEvent: false
     });
     this.onChange(address);

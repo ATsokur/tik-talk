@@ -34,7 +34,7 @@ import {
 export class TtInputComponent implements ControlValueAccessor {
   #cdr = inject(ChangeDetectorRef);
   type = input<'text' | 'password'>('text');
-  placeholder = input<string>();
+  placeholder = input.required<string>();
   #disabled = false;
   blurred = output<void>();
 

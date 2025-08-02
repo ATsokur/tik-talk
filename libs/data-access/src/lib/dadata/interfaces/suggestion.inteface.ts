@@ -24,7 +24,7 @@ export interface Suggestion {
     city_with_type: string;
     city_type: string;
     city_type_full: string;
-    city: string;
+    city: string | null;
     city_area: null;
     city_district_fias_id: null;
     city_district_kladr_id: null;
@@ -43,7 +43,7 @@ export interface Suggestion {
     street_with_type: null;
     street_type: null;
     street_type_full: null;
-    street: null;
+    street: string | null;
     stead_fias_id: null;
     stead_cadnum: null;
     stead_type: null;
@@ -55,7 +55,7 @@ export interface Suggestion {
     house_flat_count: null;
     house_type: null;
     house_type_full: null;
-    house: null;
+    house: string | null;
     block_type: null;
     block_type_full: null;
     block: null;
